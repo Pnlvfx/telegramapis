@@ -1,6 +1,6 @@
 {
   "name": "telegramapis",
-  "description": "Node telegram bot api interaction.",
+  "description": "Node telegram bot api interaction with only 1 dependency.",
   "version": "2023.7.6",
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
