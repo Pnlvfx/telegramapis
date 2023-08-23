@@ -10,11 +10,11 @@
     "dev": "tsc -w --module commonjs --outDir dist/cjs & node --watch .",
     "start": "node .",
     "lint": "eslint ./src",
-    "build": "rimraf dist && yarn build:esm && yarn build:cjs",
+    "build": "rimraf dist && npm run build:esm && npm run build:cjs",
     "build:esm": "tsc",
     "build:cjs": "tsc --module commonjs --outDir dist/cjs",
-    "prepare": "yarn build",
-    "prepublishOnly": "yarn test && yarn lint"
+    "prepare": "npm run build",
+    "prepublishOnly": "npm run test && npm run lint"
   },
   "files": [
     "dist",
@@ -22,16 +22,16 @@
     "README.md"
   ],
   "devDependencies": {
-    "@types/node": "^20.4.0",
-    "@typescript-eslint/eslint-plugin": "^5.61.0",
-    "@typescript-eslint/parser": "^5.61.0",
-    "eslint": "^8.44.0",
-    "eslint-config-prettier": "^8.8.0",
-    "eslint-plugin-import": "^2.27.5",
-    "eslint-plugin-prettier": "^5.0.0-alpha.2",
-    "eslint-plugin-sonarjs": "^0.19.0",
-    "eslint-plugin-unicorn": "^47.0.0",
-    "prettier": "^3.0.0",
+    "@types/node": "^20.5.3",
+    "@typescript-eslint/eslint-plugin": "^6.4.1",
+    "@typescript-eslint/parser": "^6.4.1",
+    "eslint": "^8.47.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-import": "^2.28.1",
+    "eslint-plugin-prettier": "^5.0.0",
+    "eslint-plugin-sonarjs": "^0.21.0",
+    "eslint-plugin-unicorn": "^48.0.1",
+    "prettier": "^3.0.2",
     "rimraf": "^5.0.1",
     "typescript": "^5.1.6"
   },
