@@ -54,7 +54,7 @@ export const sendMedia = async (
         if (parsedResponse.ok) {
           resolve(parsedResponse);
         } else {
-          reject(parsedResponse);
+          reject(parsedResponse || `${res.statusCode} ${res.statusMessage}`);
         }
       });
     });
