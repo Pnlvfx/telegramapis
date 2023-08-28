@@ -15,7 +15,7 @@ export const telegramHeaders = {
   'Content-Type': 'application/x-www-form-urlencoded',
 };
 
-const telegramapis = (token: string) => {
+export const telegramapis = (token: string) => {
   const buildUrl = (METHOD: METHODPROPS, query?: string) => {
     const base_url = 'https://api.telegram.org';
     let url = `${base_url}/bot${token}/${METHOD}`;
