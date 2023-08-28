@@ -3,10 +3,10 @@ import FormData from 'form-data';
 import https from 'node:https';
 import { SendPhotoOptions, SendVideoOptions } from '../types';
 import { Stream } from 'node:stream';
-import { telegramHeaders } from '..';
 import fs from 'node:fs';
 import { ResOk, TelegramResponse } from '../types/response';
 import { Message } from '../types/webhook';
+import { telegramHeaders } from './config';
 
 export const sendMedia = async (
   type: 'photo' | 'video',
