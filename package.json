@@ -6,9 +6,16 @@
     "email": "simonegauli@gmail.com",
     "name": "Simone Gauli"
   },
-  "main": "./dist/esm/index.js",
+  "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
   "types": "./dist/esm/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/esm/index.d.ts",
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js"
+    }
+  },
   "type": "module",
   "license": "MIT",
   "scripts": {
