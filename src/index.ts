@@ -1,4 +1,4 @@
-import { connect } from './lib';
+import { connect } from './lib/index.js';
 
 const telegramapis = {
   connect,

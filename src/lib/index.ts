@@ -2,11 +2,11 @@ import { Stream } from 'node:stream';
 import fs from 'node:fs';
 import https from 'node:https';
 import { BotCommand, METHODPROPS, SendMessageOptions, SendPhotoOptions, SendVideoOptions } from '../types';
-import { sendMedia } from './media';
+import { sendMedia } from './media.js';
 import { CommandResponse, DownloadRes, TelegramResponse, WebhookResponse } from '../types/response';
 import { Message } from '../types/webhook';
 import path from 'node:path';
-import { telegramError, telegramHeaders } from './config';
+import { telegramError, telegramHeaders } from './config.js';
 
 export const connect = (token: string) => {
   const buildUrl = (METHOD: METHODPROPS, query?: string) => {

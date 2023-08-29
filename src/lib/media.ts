@@ -6,7 +6,7 @@ import { Stream } from 'node:stream';
 import fs from 'node:fs';
 import { ResOk, TelegramResponse } from '../types/response';
 import { Message } from '../types/webhook';
-import { telegramHeaders } from './config';
+import { telegramHeaders } from './config.js';
 
 export const sendMedia = async (
   type: 'photo' | 'video',

@@ -1,13 +1,18 @@
 {
   "name": "telegramapis",
   "description": "Node telegram bot api interaction with only 1 dependency.",
-  "version": "2023.7.6",
+  "version": "2023.8.29",
+  "author": {
+    "email": "simonegauli@gmail.com",
+    "name": "Simone Gauli"
+  },
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
   "types": "./dist/esm/index.d.ts",
+  "type": "module",
   "license": "MIT",
   "scripts": {
-    "dev": "tsc -w --module commonjs --outDir dist/cjs & node --watch .",
+    "dev": "tsc -w --outDir dist/esm & node --watch .",
     "start": "node .",
     "lint": "eslint ./src",
     "build": "rimraf dist && npm run build:esm && npm run build:cjs",
