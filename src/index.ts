@@ -1,10 +1,10 @@
 import { Stream } from 'node:stream';
 import fs from 'node:fs';
 import https from 'node:https';
-import { BotCommand, METHODPROPS, SendMessageOptions, SendPhotoOptions, SendVideoOptions } from './types';
+import { BotCommand, METHODPROPS, SendMessageOptions, SendPhotoOptions, SendVideoOptions } from './types/index.js';
 import { sendMedia } from './lib/media.js';
-import { CommandResponse, DownloadRes, TelegramResponse, WebhookResponse } from './types/response';
-import { Message } from './types/webhook';
+import { CommandResponse, DownloadRes, TelegramResponse, WebhookResponse } from './types/response.js';
+import { Message } from './types/webhook.js';
 import path from 'node:path';
 import { telegramError, telegramHeaders } from './lib/config.js';
 

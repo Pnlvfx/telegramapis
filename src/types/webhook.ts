@@ -1,4 +1,4 @@
-import { InlineKeyboardMarkup, PollType } from '.';
+import { InlineKeyboardMarkup, PollType } from './index.js';
 
 export interface CallbackQuery {
   id: string;

@@ -1,4 +1,4 @@
-import { FileBase } from './webhook';
+import { FileBase } from './webhook.js';
 
 export type TelegramResponse<T> = TelegramError | ResOk<T>;
 

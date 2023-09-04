@@ -1,11 +1,11 @@
 /* eslint-disable sonarjs/cognitive-complexity */
 import FormData from 'form-data';
 import https from 'node:https';
-import { SendPhotoOptions, SendVideoOptions } from '../types';
+import { SendPhotoOptions, SendVideoOptions } from '../types/index.js';
 import { Stream } from 'node:stream';
 import fs from 'node:fs';
-import { ResOk, TelegramResponse } from '../types/response';
-import { Message } from '../types/webhook';
+import { ResOk, TelegramResponse } from '../types/response.js';
+import { Message } from '../types/webhook.js';
 import { telegramHeaders } from './config.js';
 
 export const sendMedia = async (
