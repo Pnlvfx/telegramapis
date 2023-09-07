@@ -34,10 +34,11 @@
     "url": "git+https://github.com/Pnlvfx/telegramapis.git"
   },
   "scripts": {
+    "generate:package.json": "tsx ./tools/generate-commonjs-package-json.ts dist/cjs/package.json",
     "dev": "tsc -w --outDir dist/esm & node --watch .",
     "start": "node .",
     "lint": "eslint ./src",
-    "build": "rimraf dist && npm run lint && npm run build:esm && npm run build:cjs",
+    "build": "rimraf dist && npm run lint && npm run build:esm && npm run build:cjs && npm run generate:package.json",
     "build:esm": "tsc",
     "build:cjs": "tsc --module commonjs --moduleResolution node --outDir dist/cjs",
     "prepare": "npm run build",
