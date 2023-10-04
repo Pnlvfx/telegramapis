@@ -19,7 +19,7 @@ const telegramapis = (token: string) => {
   };
   return {
     sendMessage: async (chatId: number, text: string, options?: SendMessageOptions) => {
-      const query = new URLSearchParams({ chat_id: chatId.toString(), text: text.replaceAll('\n', '%0A') });
+      const query = new URLSearchParams({ chat_id: chatId.toString(), text });
       if (options) {
         for (const [key, value] of Object.entries(options)) {
           if (value === undefined) continue;
