@@ -31,7 +31,7 @@ export const sendMedia = async (
       if (value === undefined) continue;
       const parsed = typeof value === 'string' ? value : JSON.stringify(value);
       if (query.toString()) {
-        query.append(key, encodeURIComponent(parsed));
+        query.append(key, parsed);
       } else {
         form.append(key, parsed);
       }

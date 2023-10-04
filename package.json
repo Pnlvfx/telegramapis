@@ -1,12 +1,12 @@
 {
   "name": "telegramapis",
   "description": "Node telegram Bot API.",
-  "version": "2023.8.29",
+  "version": "2023.10.4",
   "author": {
     "email": "simonegauli@gmail.com",
     "name": "Simone Gauli"
   },
-  "main": "./dist/cjs/index.js",
+  "main": "./dist/esm/index.js",
   "module": "./dist/esm/index.js",
   "types": "./dist/esm/index.d.ts",
   "exports": {
@@ -35,7 +35,7 @@
   },
   "scripts": {
     "generate:package.json": "tsx ./tools/generate-commonjs-package-json.ts dist/cjs/package.json",
-    "dev": "tsc -w --outDir dist/esm & node --watch .",
+    "dev": "tsc -w --outDir dist/esm & node --env-file .env --watch .",
     "start": "node .",
     "lint": "eslint ./src",
     "build": "rimraf dist && npm run lint && npm run build:esm && npm run build:cjs && npm run generate:package.json",

@@ -24,7 +24,7 @@ const telegramapis = (token: string) => {
         for (const [key, value] of Object.entries(options)) {
           if (value === undefined) continue;
           const parsed = typeof value === 'string' ? value : JSON.stringify(value);
-          query.append(key, encodeURIComponent(parsed));
+          query.append(key, parsed);
         }
       }
       const url = buildUrl('sendMessage', query.toString());
@@ -133,3 +133,8 @@ const telegramapis = (token: string) => {
 };
 
 export default telegramapis;
+
+// const tg = telegramapis(process.env.TELEGRAM_TOKEN);
+// await tg.sendMessage(Number('-914836534'), "Per verificare l'abbonamento collega il tuo account twitch cliccando il pulsante qui sotto", {
+//   reply_markup: { inline_keyboard: [[{ text: "Verifica l'account", url: 'https://www.porcodio.com' }]] },
+// });
