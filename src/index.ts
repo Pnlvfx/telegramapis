@@ -1,10 +1,10 @@
-import { Stream } from 'node:stream';
+import type { Stream } from 'node:stream';
 import fs from 'node:fs';
 import https from 'node:https';
-import { BotCommand, METHODPROPS, SendMessageOptions, SendPhotoOptions, SendVideoOptions } from './types/index.js';
+import type { BotCommand, METHODPROPS, SendMessageOptions, SendPhotoOptions, SendVideoOptions } from './types/index.js';
 import { sendMedia } from './lib/media.js';
-import { CommandResponse, DownloadRes, TelegramResponse, WebhookResponse } from './types/response.js';
-import { Message } from './types/webhook.js';
+import type { CommandResponse, DownloadRes, TelegramResponse, WebhookResponse } from './types/response.js';
+import type { Message } from './types/webhook.js';
 import path from 'node:path';
 import { telegramError, telegramHeaders } from './lib/config.js';
 
@@ -19,15 +19,15 @@ const telegramapis = (token: string) => {
   };
   return {
     sendMessage: async (chatId: number, text: string, options?: SendMessageOptions) => {
-      let query = `chat_id=${chatId}&text=${text.replaceAll('\n', '%0A')}`;
+      const query = new URLSearchParams({ chat_id: chatId.toString(), text: encodeURIComponent(text) });
       if (options) {
-        const usedOptions = Object.entries(options).filter(([, value]) => value !== undefined);
-        for (const [key, value] of usedOptions) {
+        for (const [key, value] of Object.entries(options)) {
+          if (value === undefined) continue;
           const parsed = typeof value === 'string' ? value : JSON.stringify(value);
-          query += `&${key}=${parsed}`;
+          query.append(key, encodeURIComponent(parsed));
         }
       }
-      const url = buildUrl('sendMessage', query);
+      const url = buildUrl('sendMessage', query.toString());
       const res = await fetch(url, {
         method: 'POST',
         headers: telegramHeaders,
@@ -93,7 +93,6 @@ const telegramapis = (token: string) => {
           });
           res.on('end', () => {
             const response: TelegramResponse<DownloadRes> = JSON.parse(data);
-            console.log(response);
             if (!response.ok) return reject(response);
             const filePath = response.result.file_path;
             const mediaUrl = `https://api.telegram.org/file/bot${token}/${filePath}`;

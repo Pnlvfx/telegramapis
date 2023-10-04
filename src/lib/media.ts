@@ -1,4 +1,3 @@
-/* eslint-disable sonarjs/cognitive-complexity */
 import FormData from 'form-data';
 import https from 'node:https';
 import { SendPhotoOptions, SendVideoOptions } from '../types/index.js';
@@ -14,32 +13,36 @@ export const sendMedia = async (
   req_options: https.RequestOptions,
   chatId: string | number,
   options?: SendPhotoOptions | SendVideoOptions,
+  // eslint-disable-next-line sonarjs/cognitive-complexity
 ) => {
   const form = new FormData();
-  let data = '';
+  const query = new URLSearchParams();
   if (input instanceof Stream || !input.startsWith('http')) {
     form.append('chat_id', chatId);
     form.append(type, input instanceof Stream ? input : fs.createReadStream(input));
     req_options.headers = form.getHeaders();
   } else {
-    data = `${type}=${input}&chat_id=${chatId}`;
-    req_options.headers = {
-      ...telegramHeaders,
-      'Content-Length': Buffer.byteLength(data),
-    };
+    query.append(type, input);
+    query.append('chat_id', chatId.toString());
   }
 
   if (options) {
     for (const [key, value] of Object.entries(options)) {
-      if (value !== undefined) {
-        const parsed = typeof value === 'string' ? value : JSON.stringify(value);
-        if (data) {
-          data += `&${key}=${parsed}`;
-        } else {
-          form.append(key, parsed);
-        }
+      if (value === undefined) continue;
+      const parsed = typeof value === 'string' ? value : JSON.stringify(value);
+      if (query.toString()) {
+        query.append(key, encodeURIComponent(parsed));
+      } else {
+        form.append(key, parsed);
       }
     }
+  }
+
+  if (query.toString()) {
+    req_options.headers = {
+      ...telegramHeaders,
+      'Content-Length': Buffer.byteLength(query.toString()),
+    };
   }
 
   return new Promise<ResOk<Message>>((resolve, reject) => {
@@ -61,8 +64,8 @@ export const sendMedia = async (
     req.on('error', (error) => {
       reject(`Error: ${error.message}`);
     });
-    if (data) {
-      req.write(data);
+    if (query.toString()) {
+      req.write(query.toString());
     } else {
       form.pipe(req);
     }

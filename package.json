@@ -52,9 +52,9 @@
   ],
   "devDependencies": {
     "@types/jest": "^29.5.5",
-    "@types/node": "^20.7.0",
-    "@typescript-eslint/eslint-plugin": "^6.7.3",
-    "@typescript-eslint/parser": "^6.7.3",
+    "@types/node": "^20.8.2",
+    "@typescript-eslint/eslint-plugin": "^6.7.4",
+    "@typescript-eslint/parser": "^6.7.4",
     "eslint": "^8.50.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-import": "^2.28.1",
@@ -63,7 +63,7 @@
     "eslint-plugin-unicorn": "^48.0.1",
     "jest": "^29.7.0",
     "prettier": "^3.0.3",
-    "rimraf": "^5.0.4",
+    "rimraf": "^5.0.5",
     "ts-jest": "^29.1.1",
     "tsx": "^3.13.0",
     "typescript": "^5.2.2"
