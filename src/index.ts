@@ -1,10 +1,10 @@
 import type { Stream } from 'node:stream';
-import fs from 'node:fs';
-import https from 'node:https';
-import type { BotCommand, METHODPROPS, SendMessageOptions, SendPhotoOptions, SendVideoOptions } from './types/index.js';
-import { sendMedia } from './lib/media.js';
 import type { CommandResponse, DownloadRes, TelegramResponse, WebhookResponse } from './types/response.js';
 import type { Message } from './types/webhook.js';
+import type { BotCommand, METHODPROPS, SendMessageOptions, SendPhotoOptions, SendVideoOptions } from './types/index.js';
+import fs from 'node:fs';
+import https from 'node:https';
+import { sendMedia } from './lib/media.js';
 import path from 'node:path';
 import { telegramError, telegramHeaders } from './lib/config.js';
 
@@ -133,8 +133,3 @@ const telegramapis = (token: string) => {
 };
 
 export default telegramapis;
-
-// const tg = telegramapis(process.env.TELEGRAM_TOKEN);
-// await tg.sendMessage(Number('-914836534'), "Per verificare l'abbonamento collega il tuo account twitch cliccando il pulsante qui sotto", {
-//   reply_markup: { inline_keyboard: [[{ text: "Verifica l'account", url: 'https://www.porcodio.com' }]] },
-// });
