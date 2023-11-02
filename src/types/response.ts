@@ -13,13 +13,13 @@ export interface ResOk<T> {
   result: T;
 }
 
-export interface Ok {
+export interface OkResponse {
   ok: true;
   result: true;
 }
 
-export type WebhookResponse = TelegramError | (Ok & { description: string });
-export type CommandResponse = TelegramError | Ok;
+export type WebhookResponse = TelegramError | (OkResponse & { description: string });
+export type CommandResponse = TelegramError | OkResponse;
 export interface DownloadRes extends FileBase {
   file_path: string;
 }
