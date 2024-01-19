@@ -1,4 +1,4 @@
-export type METHODPROPS = 'sendMessage' | 'deleteMessage' | 'sendPhoto' | 'getUpdates' | 'setWebhook' | 'setMyCommands' | 'getFile';
+export type METHODPROPS = 'sendMessage' | 'deleteMessage' | 'sendPhoto' | 'getUpdates' | 'setWebhook' | 'deleteWebhook' | 'setMyCommands' | 'getFile';
 
 export type PollType = 'regular' | 'quiz';
 

@@ -7,10 +7,10 @@ import https from 'node:https';
 import { sendMedia } from './lib/media.js';
 import path from 'node:path';
 import { telegramError, telegramHeaders } from './lib/config.js';
+const base_url = 'https://api.telegram.org';
 
 const telegramapis = (token: string) => {
   const buildUrl = (METHOD: METHODPROPS, query?: string) => {
-    const base_url = 'https://api.telegram.org';
     let url = `${base_url}/bot${token}/${METHOD}`;
     if (query) {
       url = `${url}?${query}`;
@@ -56,6 +56,16 @@ const telegramapis = (token: string) => {
     },
     setWebHook: async (url: string): Promise<WebhookResponse> => {
       const _url = buildUrl('setWebhook', `url=${url}`);
+      const res = await fetch(_url, {
+        method: 'POST',
+        headers: telegramHeaders,
+      });
+      const data: WebhookResponse = await res.json();
+      if (!data.ok) throw telegramError(data);
+      return data;
+    },
+    deleteWebHook: async (): Promise<WebhookResponse> => {
+      const _url = buildUrl('deleteWebhook');
       const res = await fetch(_url, {
         method: 'POST',
         headers: telegramHeaders,
