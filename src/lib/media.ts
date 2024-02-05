@@ -1,4 +1,4 @@
-import type { SendPhotoOptions, SendVideoOptions } from '../types/index.js';
+import type { ChatId, SendPhotoOptions, SendVideoOptions } from '../types/index.js';
 import type { ResOk, TelegramResponse } from '../types/response.js';
 import type { Message } from '../types/webhook.js';
 import FormData from 'form-data';
@@ -11,7 +11,7 @@ export const sendMedia = async (
   type: 'photo' | 'video',
   input: Stream | string,
   req_options: https.RequestOptions,
-  chatId: string | number,
+  chatId: ChatId,
   options?: SendPhotoOptions | SendVideoOptions,
   // eslint-disable-next-line sonarjs/cognitive-complexity
 ) => {

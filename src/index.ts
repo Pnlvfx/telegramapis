@@ -1,7 +1,7 @@
 import type { Stream } from 'node:stream';
 import type { CommandResponse, DownloadRes, TelegramResponse, WebhookResponse } from './types/response.js';
 import type { Message } from './types/webhook.js';
-import type { BotCommand, METHODPROPS, SendMessageOptions, SendPhotoOptions, SendVideoOptions } from './types/index.js';
+import type { BotCommand, ChatId, Endpoint, SendMessageOptions, SendPhotoOptions, SendVideoOptions } from './types/index.js';
 import fs from 'node:fs';
 import https from 'node:https';
 import { sendMedia } from './lib/media.js';
@@ -10,7 +10,7 @@ import { telegramError, telegramHeaders } from './lib/config.js';
 const base_url = 'https://api.telegram.org';
 
 const telegramapis = (token: string) => {
-  const buildUrl = (METHOD: METHODPROPS, query?: string) => {
+  const buildUrl = (METHOD: Endpoint, query?: string) => {
     let url = `${base_url}/bot${token}/${METHOD}`;
     if (query) {
       url = `${url}?${query}`;
@@ -18,7 +18,7 @@ const telegramapis = (token: string) => {
     return url;
   };
   return {
-    sendMessage: async (chatId: number, text: string, options?: SendMessageOptions) => {
+    sendMessage: async (chatId: ChatId, text: string, options?: SendMessageOptions) => {
       const query = new URLSearchParams({ chat_id: chatId.toString(), text });
       if (options) {
         for (const [key, value] of Object.entries(options)) {
@@ -36,7 +36,7 @@ const telegramapis = (token: string) => {
       if (!data.ok) throw telegramError(data);
       return data;
     },
-    sendPhoto: (chatId: number, photo: string | Stream, options?: SendPhotoOptions) => {
+    sendPhoto: (chatId: ChatId, photo: string | Stream, options?: SendPhotoOptions) => {
       const req_options = {
         host: 'api.telegram.org',
         path: `/bot${token}/sendPhoto`,
@@ -45,7 +45,7 @@ const telegramapis = (token: string) => {
       };
       return sendMedia('photo', photo, req_options, chatId, options);
     },
-    sendVideo: (chatId: number, video: string | Stream, options?: SendVideoOptions) => {
+    sendVideo: (chatId: ChatId, video: string | Stream, options?: SendVideoOptions) => {
       const req_options = {
         host: 'api.telegram.org',
         path: `/bot${token}/sendVideo`,
@@ -121,7 +121,7 @@ const telegramapis = (token: string) => {
         });
       });
     },
-    deleteMessage: async (chatId: number, message_id: string | number) => {
+    deleteMessage: async (chatId: ChatId, message_id: string | number) => {
       const url = buildUrl('deleteMessage', `chat_id=${chatId}&message_id=${message_id}`);
       console.log(url);
       const res = await fetch(url, {

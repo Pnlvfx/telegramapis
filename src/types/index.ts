@@ -1,4 +1,6 @@
-export type METHODPROPS = 'sendMessage' | 'deleteMessage' | 'sendPhoto' | 'getUpdates' | 'setWebhook' | 'deleteWebhook' | 'setMyCommands' | 'getFile';
+export type ChatId = string | number;
+
+export type Endpoint = 'sendMessage' | 'deleteMessage' | 'sendPhoto' | 'getUpdates' | 'setWebhook' | 'deleteWebhook' | 'setMyCommands' | 'getFile';
 
 export type PollType = 'regular' | 'quiz';
 
