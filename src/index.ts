@@ -11,21 +11,18 @@ const base_url = 'https://api.telegram.org';
 
 const telegramapis = (token: string) => {
   const buildUrl = (METHOD: Endpoint, query?: string) => {
-    let url = `${base_url}/bot${token}/${METHOD}`;
-    if (query) {
-      url = `${url}?${query}`;
-    }
-    return url;
+    const url = `${base_url}/bot${token}/${METHOD}`;
+    return query ? `${url}?${query}` : url;
   };
   return {
     sendMessage: async (chatId: ChatId, text: string, options?: SendMessageOptions) => {
       const query = new URLSearchParams({ chat_id: chatId.toString(), text });
       if (options) {
-        for (const [key, value] of Object.entries(options)) {
-          if (value === undefined) continue;
+        Object.entries(options).map(([key, value]) => {
+          if (!value) return;
           const parsed = typeof value === 'string' ? value : JSON.stringify(value);
           query.append(key, parsed);
-        }
+        });
       }
       const url = buildUrl('sendMessage', query.toString());
       const res = await fetch(url, {
@@ -98,9 +95,7 @@ const telegramapis = (token: string) => {
           res.on('data', (chunk) => {
             data += chunk;
           });
-          res.on('error', (err) => {
-            reject(err);
-          });
+          res.on('error', (err) => reject(err));
           res.on('end', () => {
             const response: TelegramResponse<DownloadRes> = JSON.parse(data);
             if (!response.ok) return reject(response);
@@ -110,12 +105,8 @@ const telegramapis = (token: string) => {
             if (!extension) return reject('Telegram error: Missing media extension!');
             const filename = path.join(downloadDir, `${response.result.file_unique_id}.${extension}`);
             https.get(mediaUrl, (response) => {
-              console.log(2, response);
               response.pipe(fs.createWriteStream(filename));
-              response.on('end', () => {
-                console.log(filename);
-                resolve(filename);
-              });
+              response.on('end', () => resolve(filename));
             });
           });
         });
@@ -123,7 +114,6 @@ const telegramapis = (token: string) => {
     },
     deleteMessage: async (chatId: ChatId, message_id: string | number) => {
       const url = buildUrl('deleteMessage', `chat_id=${chatId}&message_id=${message_id}`);
-      console.log(url);
       const res = await fetch(url, {
         method: 'DELETE',
         headers: telegramHeaders,

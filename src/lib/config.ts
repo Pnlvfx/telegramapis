@@ -1,4 +1,4 @@
-import { TelegramError } from '../types/response.js';
+import type { TelegramError } from '../types/response.js';
 
 export const telegramError = (err: TelegramError) => {
   throw new Error(`Error code: ${err.error_code}, ${err.description}`);
