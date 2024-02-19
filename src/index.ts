@@ -133,3 +133,17 @@ const telegramapis = (token: string) => {
 };
 
 export default telegramapis;
+
+export type {
+  BotCommand,
+  ChatId,
+  Endpoint,
+  InlineKeyboardMarkup,
+  PollType,
+  SendMessageOptions,
+  SendPhotoOptions,
+  SendVideoOptions,
+} from './types/index.js';
+
+export type { CommandResponse, DownloadRes, OkResponse, ResOk, TelegramError, TelegramResponse, WebhookResponse } from './types/response.js';
+export type { CallbackQuery, FileBase, Message, Update } from './types/webhook.js';
