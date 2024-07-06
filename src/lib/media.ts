@@ -56,7 +56,7 @@ export const sendMedia = async (
         else reject(parsedResponse || `${res.statusCode} ${res.statusMessage}`);
       });
     });
-    req.on('error', (error) => reject(`Error: ${error.message}`));
+    req.on('error', reject);
     if (query.toString()) req.write(query.toString());
     else form.pipe(req);
   });

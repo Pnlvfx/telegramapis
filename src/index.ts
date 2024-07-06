@@ -7,6 +7,7 @@ import https from 'node:https';
 import { sendMedia } from './lib/media.js';
 import path from 'node:path';
 import { telegramError, telegramHeaders } from './lib/config.js';
+
 const base_url = 'https://api.telegram.org';
 
 const telegramapis = (token: string) => {
