@@ -13,7 +13,6 @@ export const sendMedia = async (
   req_options: https.RequestOptions,
   chatId: ChatId,
   options?: SendPhotoOptions | SendVideoOptions,
-  // eslint-disable-next-line sonarjs/cognitive-complexity
 ) => {
   const form = new FormData();
   const query = new URLSearchParams();

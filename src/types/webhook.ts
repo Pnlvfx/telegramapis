@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-empty-object-type */
 import type { InlineKeyboardMarkup, PollType } from './index.js';
 
 export interface CallbackQuery {
@@ -473,7 +474,6 @@ interface ForumTopicCreated {
   icon_custom_emoji_id: string;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface ForumTopicClosed {}
 
 interface ForumTopicEdited {
@@ -481,13 +481,10 @@ interface ForumTopicEdited {
   icon_custom_emoji_id: string;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface ForumTopicReopened {}
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface GeneralForumTopicHidden {}
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface GeneralForumTopicUnhidden {}
 
 interface UserShared {
