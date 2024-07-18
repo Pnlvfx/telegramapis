@@ -38,7 +38,7 @@
     "dev": "tsc -w & node --env-file .env --watch .",
     "start": "node .",
     "lint": "eslint ./src",
-    "build": "rimraf dist && npm run lint && npm run build:esm && npm run build:cjs && npm run generate:package.json",
+    "build": "rimraf dist && eslint . && tsc && npm run build:cjs && npm run generate:package.json",
     "build:esm": "tsc",
     "build:cjs": "tsc --module commonjs --moduleResolution node --outDir dist/cjs",
     "prepare": "npm run build",
