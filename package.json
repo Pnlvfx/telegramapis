@@ -66,9 +66,10 @@
     "ts-jest": "^29.2.2",
     "tsx": "^4.16.2",
     "typescript": "^5.5.3",
-    "typescript-eslint": "^8.0.0-alpha.41"
+    "typescript-eslint": "^8.0.0-alpha.45"
   },
   "peerDependencies": {
     "form-data": "^4.0.0"
-  }
+  },
+  "packageManager": "yarn@4.3.1"
 }
