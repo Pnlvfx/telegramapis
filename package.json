@@ -70,6 +70,5 @@
   },
   "peerDependencies": {
     "form-data": "^4.0.0"
-  },
-  "packageManager": "yarn@4.3.1"
+  }
 }
