@@ -1,7 +1,5 @@
 import eslint from '@eslint/js';
 import tseslint from 'typescript-eslint';
-import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
-import eslintConfigPrettier from 'eslint-config-prettier';
 import eslintPluginUnicorn from 'eslint-plugin-unicorn';
 import sonarjs from 'eslint-plugin-sonarjs';
 
@@ -11,22 +9,10 @@ export default tseslint.config(
   },
   eslint.configs.recommended,
   eslintPluginUnicorn.configs['flat/recommended'],
-  eslintConfigPrettier,
   sonarjs.configs.recommended,
-  eslintPluginPrettierRecommended,
   ...tseslint.configs.recommended,
   {
     rules: {
-      'prettier/prettier': [
-        1,
-        {
-          trailingComma: 'all',
-          singleQuote: true,
-          semi: true,
-          printWidth: 150,
-          tabWidth: 2,
-        },
-      ],
       'no-var': 'error',
       semi: 'error',
       indent: ['error', 2, { SwitchCase: 1 }],

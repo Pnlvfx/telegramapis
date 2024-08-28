@@ -1,3 +1,4 @@
+/* eslint-disable sonarjs/no-nested-functions */
 import type { Stream } from 'node:stream';
 import type { CommandResponse, DownloadRes, TelegramResponse, WebhookResponse } from './types/response.js';
 import type { Message } from './types/webhook.js';
@@ -96,7 +97,7 @@ const telegramapis = (token: string) => {
           res.on('data', (chunk) => {
             data += chunk;
           });
-          res.on('error', (err) => reject(err));
+          res.on('error', reject);
           res.on('end', () => {
             const response: TelegramResponse<DownloadRes> = JSON.parse(data);
             if (!response.ok) return reject(response);
