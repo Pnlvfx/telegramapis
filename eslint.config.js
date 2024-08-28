@@ -57,7 +57,7 @@ export default tseslint.config(
     },
   },
   {
-    files: ['**/*.js'],
+    files: ['**/*.js', '__tests__/**/*.ts'],
     ...tseslint.configs.disableTypeChecked,
   },
 );
