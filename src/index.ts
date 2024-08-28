@@ -8,6 +8,7 @@ import https from 'node:https';
 import { sendMedia } from './lib/media.js';
 import path from 'node:path';
 import { telegramError, telegramHeaders } from './lib/config.js';
+import { getEntries } from 'coraline';
 
 const base_url = 'https://api.telegram.org';
 
@@ -20,19 +21,19 @@ const telegramapis = (token: string) => {
     sendMessage: async (chatId: ChatId, text: string, options?: SendMessageOptions) => {
       const query = new URLSearchParams({ chat_id: chatId.toString(), text });
       if (options) {
-        Object.entries(options).map(([key, value]) => {
-          if (!value) return;
+        for (const [key, value] of getEntries(options)) {
+          if (!value) continue;
           const parsed = typeof value === 'string' ? value : JSON.stringify(value);
           query.append(key, parsed);
-        });
+        }
       }
       const url = buildUrl('sendMessage', query.toString());
       const res = await fetch(url, {
         method: 'POST',
         headers: telegramHeaders,
       });
-      const data: TelegramResponse<Message> = await res.json();
-      if (!data.ok) throw telegramError(data);
+      const data = (await res.json()) as TelegramResponse<Message>;
+      if (!data.ok) throw new Error(telegramError(data));
       return data;
     },
     sendPhoto: (chatId: ChatId, photo: string | Stream, options?: SendPhotoOptions) => {
@@ -59,8 +60,8 @@ const telegramapis = (token: string) => {
         method: 'POST',
         headers: telegramHeaders,
       });
-      const data: WebhookResponse = await res.json();
-      if (!data.ok) throw telegramError(data);
+      const data = (await res.json()) as WebhookResponse;
+      if (!data.ok) throw new Error(telegramError(data));
       return data;
     },
     deleteWebHook: async (): Promise<WebhookResponse> => {
@@ -69,14 +70,16 @@ const telegramapis = (token: string) => {
         method: 'POST',
         headers: telegramHeaders,
       });
-      const data: WebhookResponse = await res.json();
-      if (!data.ok) throw telegramError(data);
+      const data = (await res.json()) as WebhookResponse;
+      if (!data.ok) throw new Error(telegramError(data));
       return data;
     },
     setMyCommands: async (commands: BotCommand[]) => {
-      commands.map((_) => {
-        if (!_.command.match('/')) _.command = '/' + _.command;
-      });
+      for (const a of commands) {
+        if (!a.command.includes('/')) {
+          a.command = '/' + a.command;
+        }
+      }
       const url = buildUrl('setMyCommands');
       const res = await fetch(url, {
         method: 'POST',
@@ -85,8 +88,8 @@ const telegramapis = (token: string) => {
         },
         body: JSON.stringify({ commands }),
       });
-      const data: CommandResponse = await res.json();
-      if (!data.ok) throw telegramError(data);
+      const data = (await res.json()) as CommandResponse;
+      if (!data.ok) throw new Error(telegramError(data));
       return data;
     },
     downloadFile: (fileId: string, downloadDir: string) => {
@@ -94,43 +97,51 @@ const telegramapis = (token: string) => {
         const url = buildUrl('getFile', `file_id=${fileId}`);
         https.get(url, (res) => {
           let data = '';
-          res.on('data', (chunk) => {
-            data += chunk;
+          res.on('data', (chunk: Buffer) => {
+            data += chunk.toString();
           });
           res.on('error', reject);
           res.on('end', () => {
-            const response: TelegramResponse<DownloadRes> = JSON.parse(data);
-            if (!response.ok) return reject(response);
+            const response = JSON.parse(data) as TelegramResponse<DownloadRes>;
+            if (!response.ok) {
+              reject(new Error(response.description));
+              return;
+            }
             const filePath = response.result.file_path;
             const mediaUrl = `https://api.telegram.org/file/bot${token}/${filePath}`;
             const extension = filePath.split('.').pop()?.toLowerCase();
-            if (!extension) return reject('Telegram error: Missing media extension!');
+            if (!extension) {
+              reject(new Error('Telegram error: Missing media extension!'));
+              return;
+            }
             const filename = path.join(downloadDir, `${response.result.file_unique_id}.${extension}`);
             https.get(mediaUrl, (response) => {
               response.pipe(fs.createWriteStream(filename));
-              response.on('end', () => resolve(filename));
+              response.on('end', () => {
+                resolve(filename);
+              });
             });
           });
         });
       });
     },
     deleteMessage: async (chatId: ChatId, message_id: string | number) => {
-      const url = buildUrl('deleteMessage', `chat_id=${chatId}&message_id=${message_id}`);
+      const url = buildUrl('deleteMessage', `chat_id=${chatId.toString()}&message_id=${message_id.toString()}`);
       const res = await fetch(url, {
         method: 'DELETE',
         headers: telegramHeaders,
       });
-      if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
+      if (!res.ok) throw new Error(`${res.status.toString()} ${res.statusText}`);
     },
-    getUpdates: async () => {
-      const url = buildUrl('getUpdates');
-      const res = await fetch(url, {
-        method: 'POST',
-        headers: telegramHeaders,
-      });
-      const data = await res.json();
-      if (!res.ok) throw telegramError(data);
-    },
+    // getUpdates: async () => {
+    //   const url = buildUrl('getUpdates');
+    //   const res = await fetch(url, {
+    //     method: 'POST',
+    //     headers: telegramHeaders,
+    //   });
+    //   const data = (await res.json()) as unknown;
+    //   if (!res.ok) throw new Error(`${res.status.toString()} ${res.statusText}`);
+    // },
   };
 };
 

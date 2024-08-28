@@ -4,35 +4,35 @@ import type { InlineKeyboardMarkup, PollType } from './index.js';
 export interface CallbackQuery {
   id: string;
   from: User;
-  message?: Message | undefined;
-  inline_message_id?: string | undefined;
+  message?: Message;
+  inline_message_id?: string;
   chat_instance: string;
-  data?: string | undefined;
-  game_short_name?: string | undefined;
+  data?: string;
+  game_short_name?: string;
 }
 
 export interface Update {
   update_id: number;
-  message?: Message | undefined;
-  edited_message?: Message | undefined;
-  channel_post?: Message | undefined;
-  edited_channel_post?: Message | undefined;
-  inline_query?: InlineQuery | undefined;
-  chosen_inline_result?: ChosenInlineResult | undefined;
-  callback_query?: CallbackQuery | undefined;
-  shipping_query?: ShippingQuery | undefined;
-  pre_checkout_query?: PreCheckoutQuery | undefined;
-  poll?: Poll | undefined;
-  poll_answer?: PollAnswer | undefined;
-  my_chat_member?: ChatMemberUpdated | undefined;
-  chat_member?: ChatMemberUpdated | undefined;
-  chat_join_request?: ChatJoinRequest | undefined;
+  message?: Message;
+  edited_message?: Message;
+  channel_post?: Message;
+  edited_channel_post?: Message;
+  inline_query?: InlineQuery;
+  chosen_inline_result?: ChosenInlineResult;
+  callback_query?: CallbackQuery;
+  shipping_query?: ShippingQuery;
+  pre_checkout_query?: PreCheckoutQuery;
+  poll?: Poll;
+  poll_answer?: PollAnswer;
+  my_chat_member?: ChatMemberUpdated;
+  chat_member?: ChatMemberUpdated;
+  chat_join_request?: ChatJoinRequest;
 }
 
 interface InlineQuery {
   id: string;
   from: User;
-  location?: Location | undefined;
+  location?: Location;
   query: string;
   offset: string;
 }
@@ -40,8 +40,8 @@ interface InlineQuery {
 interface ChosenInlineResult {
   result_id: string;
   from: User;
-  location?: Location | undefined;
-  inline_message_id?: string | undefined;
+  location?: Location;
+  inline_message_id?: string;
   query: string;
 }
 
@@ -62,10 +62,10 @@ interface ShippingQuery {
 }
 
 interface OrderInfo {
-  name?: string | undefined;
-  phone_number?: string | undefined;
-  email?: string | undefined;
-  shipping_address?: ShippingAddress | undefined;
+  name?: string;
+  phone_number?: string;
+  email?: string;
+  shipping_address?: ShippingAddress;
 }
 
 interface PreCheckoutQuery {
@@ -74,8 +74,8 @@ interface PreCheckoutQuery {
   currency: string;
   total_amount: number;
   invoice_payload: string;
-  shipping_option_id?: string | undefined;
-  order_info?: OrderInfo | undefined;
+  shipping_option_id?: string;
+  order_info?: OrderInfo;
 }
 
 interface PollOption {
@@ -115,22 +115,22 @@ interface ChatInviteLink {
 interface ChatMember {
   user: User;
   status: ChatMemberStatus;
-  until_date?: number | undefined;
-  can_be_edited?: boolean | undefined;
-  can_post_messages?: boolean | undefined;
-  can_edit_messages?: boolean | undefined;
-  can_delete_messages?: boolean | undefined;
-  can_restrict_members?: boolean | undefined;
-  can_promote_members?: boolean | undefined;
-  can_change_info?: boolean | undefined;
-  can_invite_users?: boolean | undefined;
-  can_pin_messages?: boolean | undefined;
-  is_member?: boolean | undefined;
-  can_send_messages?: boolean | undefined;
-  can_send_media_messages?: boolean | undefined;
-  can_send_polls?: boolean | undefined;
-  can_send_other_messages?: boolean | undefined;
-  can_add_web_page_previews?: boolean | undefined;
+  until_date?: number;
+  can_be_edited?: boolean;
+  can_post_messages?: boolean;
+  can_edit_messages?: boolean;
+  can_delete_messages?: boolean;
+  can_restrict_members?: boolean;
+  can_promote_members?: boolean;
+  can_change_info?: boolean;
+  can_invite_users?: boolean;
+  can_pin_messages?: boolean;
+  is_member?: boolean;
+  can_send_messages?: boolean;
+  can_send_media_messages?: boolean;
+  can_send_polls?: boolean;
+  can_send_other_messages?: boolean;
+  can_add_web_page_previews?: boolean;
 }
 
 interface ChatMemberUpdated {
@@ -147,83 +147,83 @@ interface ChatJoinRequest {
   from: User;
   user_chat_id: number;
   date: number;
-  bio?: string | undefined;
-  invite_link?: ChatInviteLink | undefined;
+  bio?: string;
+  invite_link?: ChatInviteLink;
 }
 
 export interface Message {
   message_id: number;
-  message_thread_id?: number | undefined;
-  from?: User | undefined;
+  message_thread_id?: number;
+  from?: User;
   date: number;
   chat: Chat;
-  sender_chat?: Chat | undefined;
-  forward_from?: User | undefined;
-  forward_from_chat?: Chat | undefined;
-  forward_from_message_id?: number | undefined;
-  forward_signature?: string | undefined;
-  forward_sender_name?: string | undefined;
-  forward_date?: number | undefined;
-  is_topic_message?: boolean | undefined;
-  reply_to_message?: Message | undefined;
-  edit_date?: number | undefined;
-  media_group_id?: string | undefined;
-  author_signature?: string | undefined;
-  text?: string | undefined;
-  entities?: MessageEntity[] | undefined;
-  caption_entities?: MessageEntity[] | undefined;
-  audio?: Audio | undefined;
-  document?: Document | undefined;
-  animation?: Animation | undefined;
-  game?: Game | undefined;
-  photo?: PhotoSize[] | undefined;
-  sticker?: Sticker | undefined;
-  video?: Video | undefined;
-  voice?: Voice | undefined;
-  video_note?: VideoNote | undefined;
-  caption?: string | undefined;
-  contact?: Contact | undefined;
-  location?: Location | undefined;
-  venue?: Venue | undefined;
-  poll?: Poll | undefined;
-  new_chat_members?: User[] | undefined;
-  left_chat_member?: User | undefined;
-  new_chat_title?: string | undefined;
-  new_chat_photo?: PhotoSize[] | undefined;
-  delete_chat_photo?: boolean | undefined;
-  group_chat_created?: boolean | undefined;
-  supergroup_chat_created?: boolean | undefined;
-  channel_chat_created?: boolean | undefined;
-  migrate_to_chat_id?: number | undefined;
-  migrate_from_chat_id?: number | undefined;
-  pinned_message?: Message | undefined;
-  invoice?: Invoice | undefined;
-  successful_payment?: SuccessfulPayment | undefined;
-  connected_website?: string | undefined;
-  passport_data?: PassportData | undefined;
-  reply_markup?: InlineKeyboardMarkup | undefined;
-  web_app_data?: WebAppData | undefined;
-  is_automatic_forward?: boolean | undefined;
-  has_protected_content?: boolean | undefined;
-  dice?: Dice | undefined;
-  forum_topic_created?: ForumTopicCreated | undefined;
-  forum_topic_edited?: ForumTopicEdited | undefined;
-  forum_topic_closed?: ForumTopicClosed | undefined;
-  forum_topic_reopened?: ForumTopicReopened | undefined;
-  general_forum_topic_hidden?: GeneralForumTopicHidden | undefined;
-  general_forum_topic_unhidden?: GeneralForumTopicUnhidden | undefined;
-  has_media_spoiler?: boolean | undefined;
-  user_shared?: UserShared | undefined;
-  chat_shared?: ChatShared | undefined;
+  sender_chat?: Chat;
+  forward_from?: User;
+  forward_from_chat?: Chat;
+  forward_from_message_id?: number;
+  forward_signature?: string;
+  forward_sender_name?: string;
+  forward_date?: number;
+  is_topic_message?: boolean;
+  reply_to_message?: Message;
+  edit_date?: number;
+  media_group_id?: string;
+  author_signature?: string;
+  text?: string;
+  entities?: MessageEntity[];
+  caption_entities?: MessageEntity[];
+  audio?: Audio;
+  document?: Document;
+  animation?: Animation;
+  game?: Game;
+  photo?: PhotoSize[];
+  sticker?: Sticker;
+  video?: Video;
+  voice?: Voice;
+  video_note?: VideoNote;
+  caption?: string;
+  contact?: Contact;
+  location?: Location;
+  venue?: Venue;
+  poll?: Poll;
+  new_chat_members?: User[];
+  left_chat_member?: User;
+  new_chat_title?: string;
+  new_chat_photo?: PhotoSize[];
+  delete_chat_photo?: boolean;
+  group_chat_created?: boolean;
+  supergroup_chat_created?: boolean;
+  channel_chat_created?: boolean;
+  migrate_to_chat_id?: number;
+  migrate_from_chat_id?: number;
+  pinned_message?: Message;
+  invoice?: Invoice;
+  successful_payment?: SuccessfulPayment;
+  connected_website?: string;
+  passport_data?: PassportData;
+  reply_markup?: InlineKeyboardMarkup;
+  web_app_data?: WebAppData;
+  is_automatic_forward?: boolean;
+  has_protected_content?: boolean;
+  dice?: Dice;
+  forum_topic_created?: ForumTopicCreated;
+  forum_topic_edited?: ForumTopicEdited;
+  forum_topic_closed?: ForumTopicClosed;
+  forum_topic_reopened?: ForumTopicReopened;
+  general_forum_topic_hidden?: GeneralForumTopicHidden;
+  general_forum_topic_unhidden?: GeneralForumTopicUnhidden;
+  has_media_spoiler?: boolean;
+  user_shared?: UserShared;
+  chat_shared?: ChatShared;
 }
 
 interface User {
   id: number;
   is_bot: boolean;
   first_name: string;
-  last_name?: string | undefined;
-  username?: string | undefined;
-  language_code?: string | undefined;
+  last_name?: string;
+  username?: string;
+  language_code?: string;
 }
 
 type ChatType = 'private' | 'group' | 'supergroup' | 'channel';
@@ -234,20 +234,20 @@ interface ChatPhoto {
 }
 
 interface ChatPermissions {
-  can_send_messages?: boolean | undefined;
-  can_send_audios?: boolean | undefined;
-  can_send_documents?: boolean | undefined;
-  can_send_photos?: boolean | undefined;
-  can_send_videos?: boolean | undefined;
-  can_send_video_notes?: boolean | undefined;
-  can_send_voice_notes?: boolean | undefined;
-  can_send_polls?: boolean | undefined;
-  can_send_other_messages?: boolean | undefined;
-  can_add_web_page_previews?: boolean | undefined;
-  can_change_info?: boolean | undefined;
-  can_invite_users?: boolean | undefined;
-  can_pin_messages?: boolean | undefined;
-  can_manage_topics?: boolean | undefined;
+  can_send_messages?: boolean;
+  can_send_audios?: boolean;
+  can_send_documents?: boolean;
+  can_send_photos?: boolean;
+  can_send_videos?: boolean;
+  can_send_video_notes?: boolean;
+  can_send_voice_notes?: boolean;
+  can_send_polls?: boolean;
+  can_send_other_messages?: boolean;
+  can_add_web_page_previews?: boolean;
+  can_change_info?: boolean;
+  can_invite_users?: boolean;
+  can_pin_messages?: boolean;
+  can_manage_topics?: boolean;
 }
 
 interface ChatLocation {
@@ -263,36 +263,36 @@ interface Location {
 interface Chat {
   id: number;
   type: ChatType;
-  title?: string | undefined;
-  username?: string | undefined;
-  first_name?: string | undefined;
-  last_name?: string | undefined;
-  is_forum?: boolean | undefined;
-  photo?: ChatPhoto | undefined;
-  active_usernames?: string[] | undefined;
-  emoji_status_custom_emoji_id?: string | undefined;
-  bio?: string | undefined;
-  has_restricted_voice_and_video_messages?: boolean | undefined;
-  join_to_send_messages?: boolean | undefined;
-  join_by_request?: boolean | undefined;
-  description?: string | undefined;
-  invite_link?: string | undefined;
-  has_aggressive_anti_spam_enabled?: boolean | undefined;
-  has_hidden_members?: boolean | undefined;
-  pinned_message?: Message | undefined;
-  permissions?: ChatPermissions | undefined;
-  can_set_sticker_set?: boolean | undefined;
-  sticker_set_name?: string | undefined;
-  has_private_forwards?: boolean | undefined;
-  has_protected_content?: boolean | undefined;
-  slow_mode_delay?: number | undefined;
-  message_auto_delete_time?: number | undefined;
-  linked_chat_id?: number | undefined;
-  location?: ChatLocation | undefined;
+  title?: string;
+  username?: string;
+  first_name?: string;
+  last_name?: string;
+  is_forum?: boolean;
+  photo?: ChatPhoto;
+  active_usernames?: string[];
+  emoji_status_custom_emoji_id?: string;
+  bio?: string;
+  has_restricted_voice_and_video_messages?: boolean;
+  join_to_send_messages?: boolean;
+  join_by_request?: boolean;
+  description?: string;
+  invite_link?: string;
+  has_aggressive_anti_spam_enabled?: boolean;
+  has_hidden_members?: boolean;
+  pinned_message?: Message;
+  permissions?: ChatPermissions;
+  can_set_sticker_set?: boolean;
+  sticker_set_name?: string;
+  has_private_forwards?: boolean;
+  has_protected_content?: boolean;
+  slow_mode_delay?: number;
+  message_auto_delete_time?: number;
+  linked_chat_id?: number;
+  location?: ChatLocation;
   /**
    * @deprecated since version Telegram Bot API 4.4 - July 29, 2019
    */
-  all_members_are_administrators?: boolean | undefined;
+  all_members_are_administrators?: boolean;
 }
 
 type MessageEntityType =
@@ -318,16 +318,16 @@ interface MessageEntity {
   type: MessageEntityType;
   offset: number;
   length: number;
-  url?: string | undefined;
-  user?: User | undefined;
-  language?: string | undefined;
-  custom_emoji_id?: string | undefined;
+  url?: string;
+  user?: User;
+  language?: string;
+  custom_emoji_id?: string;
 }
 
 export interface FileBase {
   file_id: string;
   file_unique_id: string;
-  file_size?: number | undefined;
+  file_size?: number;
 }
 
 interface PhotoSize extends FileBase {
@@ -337,19 +337,19 @@ interface PhotoSize extends FileBase {
 
 interface Audio extends FileBase {
   duration: number;
-  performer?: string | undefined;
-  title?: string | undefined;
-  mime_type?: string | undefined;
-  thumb?: PhotoSize | undefined;
+  performer?: string;
+  title?: string;
+  mime_type?: string;
+  thumb?: PhotoSize;
 }
 
 interface Game {
   title: string;
   description: string;
   photo: PhotoSize[];
-  text?: string | undefined;
-  text_entities?: MessageEntity[] | undefined;
-  animation?: Animation | undefined;
+  text?: string;
+  text_entities?: MessageEntity[];
+  animation?: Animation;
 }
 
 interface MaskPosition {
@@ -367,12 +367,12 @@ interface Sticker extends FileBase {
   is_video: boolean;
   width: number;
   height: number;
-  thumb?: PhotoSize | undefined;
-  emoji?: string | undefined;
-  set_name?: string | undefined;
-  premium_animation?: File | undefined;
-  mask_position?: MaskPosition | undefined;
-  custom_emoji_id?: string | undefined;
+  thumb?: PhotoSize;
+  emoji?: string;
+  set_name?: string;
+  premium_animation?: File;
+  mask_position?: MaskPosition;
+  custom_emoji_id?: string;
 }
 
 interface Invoice {
@@ -387,43 +387,43 @@ interface Video extends FileBase {
   width: number;
   height: number;
   duration: number;
-  thumb?: PhotoSize | undefined;
-  mime_type?: string | undefined;
+  thumb?: PhotoSize;
+  mime_type?: string;
 }
 
 interface Voice extends FileBase {
   duration: number;
-  mime_type?: string | undefined;
+  mime_type?: string;
 }
 
 interface VideoNote extends FileBase {
   length: number;
   duration: number;
-  thumb?: PhotoSize | undefined;
+  thumb?: PhotoSize;
 }
 
 interface Contact {
   phone_number: string;
   first_name: string;
-  last_name?: string | undefined;
-  user_id?: number | undefined;
-  vcard?: string | undefined;
+  last_name?: string;
+  user_id?: number;
+  vcard?: string;
 }
 
 interface Venue {
   location: Location;
   title: string;
   address: string;
-  foursquare_id?: string | undefined;
-  foursquare_type?: string | undefined;
+  foursquare_id?: string;
+  foursquare_type?: string;
 }
 
 interface SuccessfulPayment {
   currency: string;
   total_amount: number;
   invoice_payload: string;
-  shipping_option_id?: string | undefined;
-  order_info?: OrderInfo | undefined;
+  shipping_option_id?: string;
+  order_info?: OrderInfo;
   telegram_payment_charge_id: string;
   provider_payment_charge_id: string;
 }
@@ -436,14 +436,14 @@ interface PassportFile {
 
 interface EncryptedPassportElement {
   type: string;
-  data?: string | undefined;
-  phone_number?: string | undefined;
-  email?: string | undefined;
-  files?: PassportFile[] | undefined;
-  front_side?: PassportFile | undefined;
-  reverse_side?: PassportFile | undefined;
-  selfie?: PassportFile | undefined;
-  translation?: PassportFile[] | undefined;
+  data?: string;
+  phone_number?: string;
+  email?: string;
+  files?: PassportFile[];
+  front_side?: PassportFile;
+  reverse_side?: PassportFile;
+  selfie?: PassportFile;
+  translation?: PassportFile[];
   hash: string;
 }
 

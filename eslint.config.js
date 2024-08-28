@@ -1,16 +1,28 @@
 import eslint from '@eslint/js';
 import tseslint from 'typescript-eslint';
-import eslintPluginUnicorn from 'eslint-plugin-unicorn';
+import unicorn from 'eslint-plugin-unicorn';
 import sonarjs from 'eslint-plugin-sonarjs';
+import globals from 'globals';
 
 export default tseslint.config(
   {
-    ignores: ['dist'],
+    ignores: ['dist', 'tools'],
   },
   eslint.configs.recommended,
-  eslintPluginUnicorn.configs['flat/recommended'],
+  unicorn.configs['flat/recommended'],
   sonarjs.configs.recommended,
-  ...tseslint.configs.recommended,
+  ...tseslint.configs.recommendedTypeChecked,
+  ...tseslint.configs.strictTypeChecked,
+  ...tseslint.configs.stylisticTypeChecked,
+  {
+    languageOptions: {
+      parserOptions: {
+        project: true,
+        tsconfigRootDir: import.meta.dirname,
+      },
+      globals: globals.builtin,
+    },
+  },
   {
     rules: {
       'no-var': 'error',
@@ -39,8 +51,13 @@ export default tseslint.config(
 
       'no-unused-vars': 'off',
       '@typescript-eslint/no-unused-vars': 'off',
+      'sonarjs/sonar-no-unused-vars': 'off',
       'unicorn/prevent-abbreviations': 'off',
       'unicorn/catch-error-name': 'off',
     },
+  },
+  {
+    files: ['**/*.js'],
+    ...tseslint.configs.disableTypeChecked,
   },
 );

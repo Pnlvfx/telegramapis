@@ -68,5 +68,8 @@
   },
   "peerDependencies": {
     "form-data": "^4.0.0"
+  },
+  "dependencies": {
+    "coraline": "github:Pnlvfx/coraline"
   }
 }

@@ -49,11 +49,13 @@ export const sendMedia = async (
     const req = https.request(req_options, (res) => {
       res.setEncoding('utf8');
       let response = '';
-      res.on('data', (chunk) => (response += chunk));
+      res.on('data', (chunk: Buffer) => {
+        response += chunk.toString();
+      });
       res.on('end', () => {
-        const parsedResponse: TelegramResponse<Message> = JSON.parse(response);
+        const parsedResponse = JSON.parse(response) as TelegramResponse<Message>;
         if (parsedResponse.ok) resolve(parsedResponse);
-        else reject(parsedResponse || `${res.statusCode} ${res.statusMessage}`);
+        else reject(new Error(parsedResponse.description));
       });
     });
     req.on('error', reject);
