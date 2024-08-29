@@ -2,7 +2,7 @@
 import type { Stream } from 'node:stream';
 import type { CommandResponse, DownloadRes, TelegramResponse, WebhookResponse } from './types/response.js';
 import type { Message } from './types/webhook.js';
-import type { BotCommand, ChatId, Endpoint, SendMessageOptions, SendPhotoOptions, SendVideoOptions } from './types/index.js';
+import type { BotCommand, ChatId, SendMessageOptions, SendPhotoOptions, SendVideoOptions } from './types/index.js';
 import fs from 'node:fs';
 import https from 'node:https';
 import { sendMedia } from './lib/media.js';
@@ -13,7 +13,7 @@ import { getEntries } from 'coraline';
 const base_url = 'https://api.telegram.org';
 
 const telegramapis = (token: string) => {
-  const buildUrl = (METHOD: Endpoint, query?: string) => {
+  const buildUrl = (METHOD: string, query?: string) => {
     const url = `${base_url}/bot${token}/${METHOD}`;
     return query ? `${url}?${query}` : url;
   };
@@ -41,7 +41,6 @@ const telegramapis = (token: string) => {
         host: 'api.telegram.org',
         path: `/bot${token}/sendPhoto`,
         method: 'POST',
-        headers: {},
       };
       return sendMedia('photo', photo, req_options, chatId, options);
     },
@@ -50,7 +49,6 @@ const telegramapis = (token: string) => {
         host: 'api.telegram.org',
         path: `/bot${token}/sendVideo`,
         method: 'POST',
-        headers: {},
       };
       return sendMedia('video', video, req_options, chatId, options);
     },
@@ -147,16 +145,6 @@ const telegramapis = (token: string) => {
 
 export default telegramapis;
 
-export type {
-  BotCommand,
-  ChatId,
-  Endpoint,
-  InlineKeyboardMarkup,
-  PollType,
-  SendMessageOptions,
-  SendPhotoOptions,
-  SendVideoOptions,
-} from './types/index.js';
-
-export type { CommandResponse, DownloadRes, OkResponse, ResOk, TelegramError, TelegramResponse, WebhookResponse } from './types/response.js';
-export type { CallbackQuery, FileBase, Message, Update } from './types/webhook.js';
+export type { BotCommand, ChatId, InlineKeyboardMarkup, PollType, SendMessageOptions, SendPhotoOptions, SendVideoOptions } from './types/index.js';
+export type { CommandResponse, DownloadRes, TelegramError, TelegramResponse, WebhookResponse } from './types/response.js';
+export type { FileBase, Message } from './types/webhook.js';

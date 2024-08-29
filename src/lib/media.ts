@@ -6,6 +6,7 @@ import https from 'node:https';
 import { Stream } from 'node:stream';
 import fs from 'node:fs';
 import { telegramHeaders } from './config.js';
+import { getEntries } from 'coraline';
 
 export const sendMedia = async (
   type: 'photo' | 'video',
@@ -27,7 +28,7 @@ export const sendMedia = async (
   }
 
   if (options) {
-    for (const [key, value] of Object.entries(options)) {
+    for (const [key, value] of getEntries(options)) {
       if (value === undefined) continue;
       const parsed = typeof value === 'string' ? value : JSON.stringify(value);
       if (query.toString()) {
@@ -38,10 +39,12 @@ export const sendMedia = async (
     }
   }
 
-  if (query.toString()) {
+  const queryStr = query.toString();
+
+  if (queryStr) {
     req_options.headers = {
       ...telegramHeaders,
-      'Content-Length': Buffer.byteLength(query.toString()),
+      'Content-Length': Buffer.byteLength(queryStr),
     };
   }
 
@@ -59,7 +62,7 @@ export const sendMedia = async (
       });
     });
     req.on('error', reject);
-    if (query.toString()) req.write(query.toString());
+    if (queryStr) req.write(queryStr);
     else form.pipe(req);
   });
 };

@@ -1,6 +1,9 @@
 import type { FileBase } from './webhook.js';
 
-export type TelegramResponse<T> = TelegramError | ResOk<T>;
+export interface ResOk<T> {
+  ok: true;
+  result: T;
+}
 
 export interface TelegramError {
   ok: false;
@@ -8,18 +11,10 @@ export interface TelegramError {
   description: string;
 }
 
-export interface ResOk<T> {
-  ok: true;
-  result: T;
-}
+export type TelegramResponse<T> = TelegramError | ResOk<T>;
 
-export interface OkResponse {
-  ok: true;
-  result: true;
-}
-
-export type WebhookResponse = TelegramError | (OkResponse & { description: string });
-export type CommandResponse = TelegramError | OkResponse;
+export type WebhookResponse = TelegramError | (ResOk<true> & { description: string });
+export type CommandResponse = TelegramError | ResOk<true>;
 export interface DownloadRes extends FileBase {
   file_path: string;
 }

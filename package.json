@@ -6,7 +6,7 @@
     "email": "simonegauli@gmail.com",
     "name": "Simone Gauli"
   },
-  "main": "./dist/esm/index.js",
+  "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
   "types": "./dist/esm/index.d.ts",
   "exports": {
@@ -35,7 +35,7 @@
   },
   "scripts": {
     "generate:package.json": "tsx ./tools/generate-commonjs-package-json.ts dist/cjs/package.json",
-    "dev": "tsc -w & node --env-file .env --watch .",
+    "dev": "tsc -w & node --env-file .env --watch ./dist/esm/dev.js",
     "start": "node .",
     "lint": "eslint ./src",
     "build": "rimraf dist && eslint . && tsc && npm run build:cjs && npm run generate:package.json",
@@ -67,9 +67,7 @@
     "typescript-eslint": "^8.3.0"
   },
   "peerDependencies": {
+    "coraline": "github:Pnlvfx/coraline",
     "form-data": "^4.0.0"
-  },
-  "dependencies": {
-    "coraline": "github:Pnlvfx/coraline"
   }
 }
