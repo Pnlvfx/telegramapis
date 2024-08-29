@@ -6,7 +6,7 @@ import globals from 'globals';
 
 export default tseslint.config(
   {
-    ignores: ['dist', 'tools'],
+    ignores: ['dist', 'tools', 'coverage'],
   },
   eslint.configs.recommended,
   unicorn.configs['flat/recommended'],
@@ -54,6 +54,9 @@ export default tseslint.config(
       'sonarjs/sonar-no-unused-vars': 'off',
       'unicorn/prevent-abbreviations': 'off',
       'unicorn/catch-error-name': 'off',
+
+      // enable back when sonar fix it
+      'sonarjs/sonar-no-fallthrough': 'off',
     },
   },
   {
