@@ -166,6 +166,17 @@ const telegramapis = (token: string) => {
 
 export default telegramapis;
 
-export type { BotCommand, ChatId, InlineKeyboardMarkup, PollType, SendMessageOptions, SendPhotoOptions, SendVideoOptions } from './types/index.js';
+export type {
+  BotCommand,
+  ChatId,
+  InlineKeyboardMarkup,
+  PollType,
+  SendMessageOptions,
+  SendPhotoOptions,
+  SendVideoOptions,
+  ParseMode,
+} from './types/index.js';
 export type { CommandResponse, DownloadRes, TelegramError, ResOk, TelegramResponse, WebhookResponse } from './types/response.js';
-export type { FileBase, Message, Update, CallbackQuery } from './types/webhook.js';
+export type { FileBase, Message, Update, CallbackQuery, MessageEntity } from './types/webhook.js';
+export type { InputMedia, SendMediaGroupOptions } from './types/media-group.js';
+export type { InputMediaType } from './lib/media.js';
