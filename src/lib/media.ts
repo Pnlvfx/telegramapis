@@ -2,54 +2,50 @@ import type { ChatId, SendPhotoOptions, SendVideoOptions } from '../types/index.
 import type { ResOk, TelegramResponse } from '../types/response.js';
 import type { Message } from '../types/webhook.js';
 import FormData from 'form-data';
-import https from 'node:https';
+import https, { RequestOptions } from 'node:https';
 import { Stream } from 'node:stream';
 import fs from 'node:fs';
 import { telegramHeaders } from './config.js';
 import { getEntries } from 'coraline';
 
-export const sendMedia = async (
-  type: 'photo' | 'video',
-  input: Stream | string,
-  req_options: https.RequestOptions,
-  chatId: ChatId,
-  options?: SendPhotoOptions | SendVideoOptions,
-  // eslint-disable-next-line sonarjs/cognitive-complexity
-) => {
-  const form = new FormData();
-  const query = new URLSearchParams();
+type MediaOptions = SendPhotoOptions | SendVideoOptions;
+
+export type InputMediaType = string | Stream;
+
+export const addMediaOptions = (collector: FormData | URLSearchParams, options?: MediaOptions) => {
+  if (!options) return;
+  for (const [key, value] of getEntries(options)) {
+    if (value === undefined) continue;
+    const parsed = typeof value === 'string' ? value : JSON.stringify(value);
+    collector.append(key, parsed);
+  }
+};
+
+export const getMedia = (type: 'photo' | 'video', input: InputMediaType, reqOptions: RequestOptions, chatId: ChatId, options?: MediaOptions) => {
+  let form;
+  let query;
   if (input instanceof Stream || !input.startsWith('http')) {
+    form = new FormData();
     form.append('chat_id', chatId);
     form.append(type, input instanceof Stream ? input : fs.createReadStream(input));
-    req_options.headers = form.getHeaders();
+    reqOptions.headers = form.getHeaders();
+    addMediaOptions(form, options);
   } else {
+    query = new URLSearchParams();
     query.append(type, input);
     query.append('chat_id', chatId.toString());
-  }
-
-  if (options) {
-    for (const [key, value] of getEntries(options)) {
-      if (value === undefined) continue;
-      const parsed = typeof value === 'string' ? value : JSON.stringify(value);
-      if (query.toString()) {
-        query.append(key, parsed);
-      } else {
-        form.append(key, parsed);
-      }
-    }
-  }
-
-  const queryStr = query.toString();
-
-  if (queryStr) {
-    req_options.headers = {
+    addMediaOptions(query, options);
+    reqOptions.headers = {
       ...telegramHeaders,
-      'Content-Length': Buffer.byteLength(queryStr),
+      'Content-Length': Buffer.byteLength(query.toString()),
     };
   }
+  return { form, query, reqOptions };
+};
 
+export const sendMedia = (options: RequestOptions, form?: FormData, query?: URLSearchParams) => {
   return new Promise<ResOk<Message>>((resolve, reject) => {
-    const req = https.request(req_options, (res) => {
+    const req = https.request(options, (res) => {
       res.setEncoding('utf8');
       let response = '';
       res.on('data', (chunk: Buffer) => {
@@ -62,7 +58,8 @@ export const sendMedia = async (
       });
     });
     req.on('error', reject);
-    if (queryStr) req.write(queryStr);
-    else form.pipe(req);
+    if (query) req.write(query.toString());
+    else if (form) form.pipe(req);
+    else reject(new Error('One between query and form has to be provided.'));
   });
 };

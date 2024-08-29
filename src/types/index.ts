@@ -82,7 +82,7 @@ interface ForceReply {
   selective?: boolean;
 }
 
-type ParseMode = 'Markdown' | 'MarkdownV2' | 'HTML';
+export type ParseMode = 'Markdown' | 'MarkdownV2' | 'HTML';
 
 interface SendBasicOptions {
   message_thread_id?: number;

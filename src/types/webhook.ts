@@ -314,7 +314,7 @@ type MessageEntityType =
   | 'spoiler'
   | 'custom_emoji';
 
-interface MessageEntity {
+export interface MessageEntity {
   type: MessageEntityType;
   offset: number;
   length: number;

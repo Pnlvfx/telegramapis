@@ -1,14 +1,16 @@
 /* eslint-disable sonarjs/no-nested-functions */
-import type { Stream } from 'node:stream';
 import type { Message } from './types/webhook.js';
 import type { CommandResponse, DownloadRes, TelegramResponse, WebhookResponse } from './types/response.js';
 import type { BotCommand, ChatId, SendMessageOptions, SendPhotoOptions, SendVideoOptions } from './types/index.js';
+import type { InputMedia, SendMediaGroupOptions } from './types/media-group.js';
 import fs from 'node:fs';
 import https from 'node:https';
-import { sendMedia } from './lib/media.js';
+import { addMediaOptions, getMedia, InputMediaType, sendMedia } from './lib/media.js';
 import path from 'node:path';
 import { telegramError, telegramHeaders } from './lib/config.js';
 import { getEntries } from 'coraline';
+import FormData from 'form-data';
+import { Stream } from 'node:stream';
 
 const base_url = 'https://api.telegram.org';
 
@@ -36,21 +38,49 @@ const telegramapis = (token: string) => {
       if (!data.ok) throw new Error(telegramError(data));
       return data;
     },
-    sendPhoto: (chatId: ChatId, photo: string | Stream, options?: SendPhotoOptions) => {
+    sendPhoto: (chatId: ChatId, photo: InputMediaType, options?: SendPhotoOptions) => {
       const req_options = {
         host: 'api.telegram.org',
         path: `/bot${token}/sendPhoto`,
         method: 'POST',
       };
-      return sendMedia('photo', photo, req_options, chatId, options);
+      const { form, query, reqOptions } = getMedia('photo', photo, req_options, chatId, options);
+      return sendMedia(reqOptions, form, query);
     },
-    sendVideo: (chatId: ChatId, video: string | Stream, options?: SendVideoOptions) => {
+    sendVideo: (chatId: ChatId, video: InputMediaType, options?: SendVideoOptions) => {
       const req_options = {
         host: 'api.telegram.org',
         path: `/bot${token}/sendVideo`,
         method: 'POST',
       };
-      return sendMedia('video', video, req_options, chatId, options);
+      const { form, query, reqOptions } = getMedia('video', video, req_options, chatId, options);
+      return sendMedia(reqOptions, form, query);
+    },
+    sendMediaGroup: (chatId: ChatId, media: readonly InputMedia[], options?: SendMediaGroupOptions) => {
+      const req_options = {
+        host: 'api.telegram.org',
+        path: `/bot${token}/sendMediaGroup`,
+        method: 'POST',
+        headers: {},
+      };
+      const inputMedia = [];
+      const form = new FormData();
+      form.append('chat_id', chatId.toString());
+      for (const [i, input] of media.entries()) {
+        const payload = { ...input };
+        if (input.media instanceof Stream || !input.media.startsWith('http')) {
+          const attachName = `attach://${i.toString()}`;
+          form.append(i.toString(), input.media instanceof Stream ? input.media : fs.createReadStream(input.media));
+          payload.media = attachName;
+        }
+        inputMedia.push(payload);
+      }
+      form.append('media', JSON.stringify(inputMedia));
+      if (options) {
+        addMediaOptions(form, options);
+      }
+      req_options.headers = form.getHeaders();
+      return sendMedia(req_options, form);
     },
     setWebHook: async (url: string): Promise<WebhookResponse> => {
       const _url = buildUrl('setWebhook', `url=${url}`);
