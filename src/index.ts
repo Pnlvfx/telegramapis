@@ -1,7 +1,7 @@
 /* eslint-disable sonarjs/no-nested-functions */
 import type { Stream } from 'node:stream';
-import type { CommandResponse, DownloadRes, TelegramResponse, WebhookResponse } from './types/response.js';
 import type { Message } from './types/webhook.js';
+import type { CommandResponse, DownloadRes, TelegramResponse, WebhookResponse } from './types/response.js';
 import type { BotCommand, ChatId, SendMessageOptions, SendPhotoOptions, SendVideoOptions } from './types/index.js';
 import fs from 'node:fs';
 import https from 'node:https';
