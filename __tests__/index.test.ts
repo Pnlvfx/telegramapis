@@ -2,6 +2,8 @@ import { describe, it } from '@jest/globals';
 import telegramapis from '../src/index.js';
 import { TG_GROUP_LOG } from 'coraline';
 
+if (!process.env.TELEGRAM_TOKEN) throw new Error('No env found.');
+
 const telegram = telegramapis(process.env.TELEGRAM_TOKEN);
 const photoUrl = 'https://res.cloudinary.com/bbabystyle/image/upload/v1724335266/ninja_art_qu3kkj.webp';
 const videoUrl = 'https://cdn.openai.com/sora/videos/paper-airplanes.mp4';

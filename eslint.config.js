@@ -6,7 +6,7 @@ import globals from 'globals';
 
 export default tseslint.config(
   {
-    ignores: ['dist', 'tools', 'coverage'],
+    ignores: ['dist', 'tools', 'coverage', '__tests__', 'jest.config.ts'],
   },
   eslint.configs.recommended,
   unicorn.configs['flat/recommended'],
