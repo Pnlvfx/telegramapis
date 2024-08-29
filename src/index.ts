@@ -131,15 +131,6 @@ const telegramapis = (token: string) => {
       });
       if (!res.ok) throw new Error(`${res.status.toString()} ${res.statusText}`);
     },
-    // getUpdates: async () => {
-    //   const url = buildUrl('getUpdates');
-    //   const res = await fetch(url, {
-    //     method: 'POST',
-    //     headers: telegramHeaders,
-    //   });
-    //   const data = (await res.json()) as unknown;
-    //   if (!res.ok) throw new Error(`${res.status.toString()} ${res.statusText}`);
-    // },
   };
 };
 
