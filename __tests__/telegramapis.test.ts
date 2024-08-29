@@ -1,7 +1,8 @@
 import { describe, it } from '@jest/globals';
-import telegramapis from '../src';
+import telegramapis from '../src/index.js';
+
 describe('telegramapis', () => {
-  it('Should connect to telegram', () => {
-    telegramapis('TEST-TOKEN');
+  it('Should initialize telegram', () => {
+    telegramapis(process.env.TELEGRAM_TOKEN);
   });
 });
