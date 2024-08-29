@@ -147,4 +147,4 @@ export default telegramapis;
 
 export type { BotCommand, ChatId, InlineKeyboardMarkup, PollType, SendMessageOptions, SendPhotoOptions, SendVideoOptions } from './types/index.js';
 export type { CommandResponse, DownloadRes, TelegramError, TelegramResponse, WebhookResponse } from './types/response.js';
-export type { FileBase, Message } from './types/webhook.js';
+export type { FileBase, Message, Update } from './types/webhook.js';

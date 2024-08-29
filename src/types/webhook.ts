@@ -1,6 +1,50 @@
 /* eslint-disable @typescript-eslint/no-empty-object-type */
 import type { InlineKeyboardMarkup, PollType } from './index.js';
 
+export interface CallbackQuery {
+  id: string;
+  from: User;
+  message?: Message;
+  inline_message_id?: string;
+  chat_instance: string;
+  data?: string;
+  game_short_name?: string;
+}
+
+export interface Update {
+  update_id: number;
+  message?: Message;
+  edited_message?: Message;
+  channel_post?: Message;
+  edited_channel_post?: Message;
+  inline_query?: InlineQuery;
+  chosen_inline_result?: ChosenInlineResult;
+  callback_query?: CallbackQuery;
+  shipping_query?: ShippingQuery;
+  pre_checkout_query?: PreCheckoutQuery;
+  poll?: Poll;
+  poll_answer?: PollAnswer;
+  my_chat_member?: ChatMemberUpdated;
+  chat_member?: ChatMemberUpdated;
+  chat_join_request?: ChatJoinRequest;
+}
+
+interface InlineQuery {
+  id: string;
+  from: User;
+  location?: Location;
+  query: string;
+  offset: string;
+}
+
+interface ChosenInlineResult {
+  result_id: string;
+  from: User;
+  location?: Location;
+  inline_message_id?: string;
+  query: string;
+}
+
 interface ShippingAddress {
   country_code: string;
   state: string;
@@ -10,11 +54,28 @@ interface ShippingAddress {
   post_code: string;
 }
 
+interface ShippingQuery {
+  id: string;
+  from: User;
+  invoice_payload: string;
+  shipping_address: ShippingAddress;
+}
+
 interface OrderInfo {
   name?: string;
   phone_number?: string;
   email?: string;
   shipping_address?: ShippingAddress;
+}
+
+interface PreCheckoutQuery {
+  id: string;
+  from: User;
+  currency: string;
+  total_amount: number;
+  invoice_payload: string;
+  shipping_option_id?: string;
+  order_info?: OrderInfo;
 }
 
 interface PollOption {
@@ -31,6 +92,63 @@ interface Poll {
   allows_multiple_answers: boolean;
   type: PollType;
   total_voter_count: number;
+}
+
+interface PollAnswer {
+  poll_id: string;
+  user: User;
+  option_ids: number[];
+}
+
+type ChatMemberStatus = 'creator' | 'administrator' | 'member' | 'restricted' | 'left' | 'kicked';
+
+interface ChatInviteLink {
+  invite_link: string;
+  creator: User;
+  is_primary: boolean;
+  is_revoked: boolean;
+  expire_date?: number;
+  member_limit?: number;
+  name?: string;
+}
+
+interface ChatMember {
+  user: User;
+  status: ChatMemberStatus;
+  until_date?: number;
+  can_be_edited?: boolean;
+  can_post_messages?: boolean;
+  can_edit_messages?: boolean;
+  can_delete_messages?: boolean;
+  can_restrict_members?: boolean;
+  can_promote_members?: boolean;
+  can_change_info?: boolean;
+  can_invite_users?: boolean;
+  can_pin_messages?: boolean;
+  is_member?: boolean;
+  can_send_messages?: boolean;
+  can_send_media_messages?: boolean;
+  can_send_polls?: boolean;
+  can_send_other_messages?: boolean;
+  can_add_web_page_previews?: boolean;
+}
+
+interface ChatMemberUpdated {
+  chat: Chat;
+  from: User;
+  date: number;
+  old_chat_member: ChatMember;
+  new_chat_member: ChatMember;
+  invite_link?: ChatInviteLink;
+}
+
+interface ChatJoinRequest {
+  chat: Chat;
+  from: User;
+  user_chat_id: number;
+  date: number;
+  bio?: string;
+  invite_link?: ChatInviteLink;
 }
 
 export interface Message {
