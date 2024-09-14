@@ -217,7 +217,7 @@ export interface Message {
   chat_shared?: ChatShared;
 }
 
-interface User {
+export interface User {
   id: number;
   is_bot: boolean;
   first_name: string;

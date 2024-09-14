@@ -177,6 +177,6 @@ export type {
   ParseMode,
 } from './types/index.js';
 export type { CommandResponse, DownloadRes, TelegramError, ResOk, TelegramResponse, WebhookResponse } from './types/response.js';
-export type { FileBase, Message, Update, CallbackQuery, MessageEntity } from './types/webhook.js';
+export type { FileBase, Message, Update, CallbackQuery, MessageEntity, User } from './types/webhook.js';
 export type { InputMedia, SendMediaGroupOptions } from './types/media-group.js';
 export type { InputMediaType } from './lib/media.js';
