@@ -1,7 +1,7 @@
 import coraline from 'coraline';
 
 const unused = coraline.findUnusedExports({
-  ignoreFiles: ['telegram.ts'],
+  ignoreFiles: ['telegram.ts', 'eslint.config.js', 'jest.config.ts'],
   ignoreVars: [],
 });
 

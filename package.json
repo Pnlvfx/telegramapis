@@ -6,6 +6,19 @@
     "email": "simonegauli@gmail.com",
     "name": "Simone Gauli"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Pnlvfx/telegramapis.git"
+  },
+  "keywords": [
+    "telegram",
+    "telegram bot",
+    "telegram bot api",
+    "bot",
+    "telegram api"
+  ],
+  "license": "MIT",
+  "type": "module",
   "main": "./dist/cjs/telegram.js",
   "module": "./dist/esm/telegram.js",
   "types": "./dist/esm/telegram.d.ts",
@@ -14,31 +27,17 @@
     "import": "./dist/esm/telegram.js",
     "require": "./dist/cjs/telegram.js"
   },
-  "type": "module",
-  "license": "MIT",
-  "keywords": [
-    "telegram",
-    "telegram bot",
-    "telegram bot api",
-    "bot",
-    "telegram api"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Pnlvfx/telegramapis.git"
-  },
   "scripts": {
-    "tsc": "tsc",
+    "tsc": "tsc --noEmit true",
     "generate:package.json": "tsx ./tools/generate-commonjs-package-json.ts dist/cjs/package.json",
     "unused": "tsx ./tools/unused.ts",
-    "dev": "tsc -w & node --env-file .env --watch ./dist/esm/dev.js",
-    "start": "node .",
+    "test": "jest --coverage",
     "lint": "eslint",
-    "build": "rimraf dist && npm run unused && eslint && tsc && npm run build:cjs && npm run generate:package.json",
-    "build:cjs": "tsc --module CommonJS --moduleResolution Node --outDir dist/cjs",
+    "build": "rimraf dist && npm run unused && eslint && npm run build:esm && npm run build:cjs && npm run generate:package.json",
+    "build:esm": "tsc -p tsconfig.build.json",
+    "build:cjs": "tsc -p tsconfig.build.json --module CommonJS --moduleResolution Node --outDir dist/cjs",
     "prepare": "npm run build",
-    "prepublishOnly": "npm run test && npm run lint",
-    "test": "jest --coverage"
+    "prepublishOnly": "npm run test && npm run lint"
   },
   "files": [
     "dist",
