@@ -7,7 +7,7 @@ import fs from 'node:fs';
 import https from 'node:https';
 import { addMediaOptions, getMedia, InputMediaType, sendMedia } from './lib/media.js';
 import path from 'node:path';
-import { telegramError, telegramHeaders } from './lib/config.js';
+import { telegramError, headers } from './lib/config.js';
 import { getEntries } from 'coraline';
 import FormData from 'form-data';
 import { Stream } from 'node:stream';
@@ -32,7 +32,7 @@ const telegramapis = (token: string) => {
       const url = buildUrl('sendMessage', query.toString());
       const res = await fetch(url, {
         method: 'POST',
-        headers: telegramHeaders,
+        headers,
       });
       const data = (await res.json()) as TelegramResponse<Message>;
       if (!data.ok) throw new Error(telegramError(data));
@@ -86,7 +86,7 @@ const telegramapis = (token: string) => {
       const _url = buildUrl('setWebhook', `url=${url}`);
       const res = await fetch(_url, {
         method: 'POST',
-        headers: telegramHeaders,
+        headers,
       });
       const data = (await res.json()) as WebhookResponse;
       if (!data.ok) throw new Error(telegramError(data));
@@ -96,7 +96,7 @@ const telegramapis = (token: string) => {
       const _url = buildUrl('deleteWebhook');
       const res = await fetch(_url, {
         method: 'POST',
-        headers: telegramHeaders,
+        headers,
       });
       const data = (await res.json()) as WebhookResponse;
       if (!data.ok) throw new Error(telegramError(data));
@@ -136,7 +136,7 @@ const telegramapis = (token: string) => {
               return;
             }
             const filePath = response.result.file_path;
-            const mediaUrl = `https://api.telegram.org/file/bot${token}/${filePath}`;
+            const mediaUrl = `${base_url}/file/bot${token}/${filePath}`;
             const extension = filePath.split('.').pop()?.toLowerCase();
             if (!extension) {
               reject(new Error('Telegram error: Missing media extension!'));
@@ -157,7 +157,7 @@ const telegramapis = (token: string) => {
       const url = buildUrl('deleteMessage', `chat_id=${chatId.toString()}&message_id=${message_id.toString()}`);
       const res = await fetch(url, {
         method: 'DELETE',
-        headers: telegramHeaders,
+        headers,
       });
       if (!res.ok) throw new Error(`${res.status.toString()} ${res.statusText}`);
     },

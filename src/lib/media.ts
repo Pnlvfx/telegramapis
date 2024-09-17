@@ -5,7 +5,7 @@ import FormData from 'form-data';
 import https, { RequestOptions } from 'node:https';
 import { Stream } from 'node:stream';
 import fs from 'node:fs';
-import { telegramHeaders } from './config.js';
+import { headers } from './config.js';
 import { getEntries } from 'coraline';
 
 type MediaOptions = SendPhotoOptions | SendVideoOptions;
@@ -36,7 +36,7 @@ export const getMedia = (type: 'photo' | 'video', input: InputMediaType, reqOpti
     query.append('chat_id', chatId.toString());
     addMediaOptions(query, options);
     reqOptions.headers = {
-      ...telegramHeaders,
+      ...headers,
       'Content-Length': Buffer.byteLength(query.toString()),
     };
   }
