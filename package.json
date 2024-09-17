@@ -6,13 +6,13 @@
     "email": "simonegauli@gmail.com",
     "name": "Simone Gauli"
   },
-  "main": "./dist/cjs/index.js",
-  "module": "./dist/esm/index.js",
-  "types": "./dist/esm/index.d.ts",
+  "main": "./dist/cjs/telegram.js",
+  "module": "./dist/esm/telegram.js",
+  "types": "./dist/esm/telegram.d.ts",
   "exports": {
-    "types": "./dist/esm/index.d.ts",
-    "import": "./dist/esm/index.js",
-    "require": "./dist/cjs/index.js"
+    "types": "./dist/esm/telegram.d.ts",
+    "import": "./dist/esm/telegram.js",
+    "require": "./dist/cjs/telegram.js"
   },
   "type": "module",
   "license": "MIT",
@@ -30,12 +30,12 @@
   "scripts": {
     "tsc": "tsc",
     "generate:package.json": "tsx ./tools/generate-commonjs-package-json.ts dist/cjs/package.json",
+    "unused": "tsx ./tools/unused.ts",
     "dev": "tsc -w & node --env-file .env --watch ./dist/esm/dev.js",
     "start": "node .",
-    "lint": "eslint .",
-    "build": "rimraf dist && eslint . && tsc && npm run build:cjs && npm run generate:package.json",
-    "build:esm": "tsc",
-    "build:cjs": "tsc --module commonjs --moduleResolution node --outDir dist/cjs",
+    "lint": "eslint",
+    "build": "rimraf dist && npm run unused && eslint && tsc && npm run build:cjs && npm run generate:package.json",
+    "build:cjs": "tsc --module CommonJS --moduleResolution Node --outDir dist/cjs",
     "prepare": "npm run build",
     "prepublishOnly": "npm run test && npm run lint",
     "test": "jest --coverage"
