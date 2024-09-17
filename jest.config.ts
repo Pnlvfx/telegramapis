@@ -1,7 +1,6 @@
 import type { JestConfigWithTsJest } from 'ts-jest';
 
 const jestConfig: JestConfigWithTsJest = {
-  setupFiles: ['dotenv/config'],
   verbose: true,
   // detectOpenHandles: true,
   extensionsToTreatAsEsm: ['.ts'],
@@ -13,9 +12,11 @@ const jestConfig: JestConfigWithTsJest = {
       'ts-jest',
       {
         useESM: true,
+        isolatedModules: true,
       },
     ],
   },
+  testMatch: ['**/?(*.)+(test).ts'],
 };
 
 export default jestConfig;

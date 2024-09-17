@@ -9,7 +9,7 @@ import unicorn from 'eslint-plugin-unicorn';
 
 export default tseslint.config(
   {
-    ignores: ['dist'],
+    ignores: ['dist', 'coverage'],
   },
   eslint.configs.recommended,
   unicorn.configs['flat/all'],
