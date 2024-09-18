@@ -8,7 +8,7 @@ const telegram = telegramapis(process.env.TELEGRAM_TOKEN);
 const localImage = path.resolve(process.cwd(), 'test-media', 'image.jpg');
 const localVideo = path.resolve(process.cwd(), 'test-media', 'video.mp4');
 const photoUrl = 'https://res.cloudinary.com/bbabystyle/image/upload/v1724335266/ninja_art_qu3kkj.webp';
-const videoUrl = ''; // FIND A NEW VIDEO
+const videoUrl = 'https://samplelib.com/lib/preview/mp4/sample-5s.mp4';
 
 describe('sendMessage', () => {
   it('Should send a message successfully.', async () => {

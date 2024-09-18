@@ -2,7 +2,7 @@ import type { ChatId, SendPhotoOptions, SendVideoOptions } from '../types/index.
 import type { ResOk, TelegramResponse } from '../types/response.js';
 import type { Message } from '../types/webhook.js';
 import FormData from 'form-data';
-import https, { RequestOptions } from 'node:https';
+import https, { type RequestOptions } from 'node:https';
 import { Stream } from 'node:stream';
 import fs from 'node:fs';
 import { headers } from './config.js';
