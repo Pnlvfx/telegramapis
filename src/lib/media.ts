@@ -44,6 +44,7 @@ export const getMedia = (type: 'photo' | 'video', input: InputMediaType, reqOpti
 };
 
 export const sendMedia = (options: RequestOptions, form?: FormData, query?: URLSearchParams) => {
+  if (!form && !query) throw new Error('One between query and form has to be provided.');
   return new Promise<ResOk<Message>>((resolve, reject) => {
     const req = https.request(options, (res) => {
       res.setEncoding('utf8');
@@ -60,6 +61,5 @@ export const sendMedia = (options: RequestOptions, form?: FormData, query?: URLS
     req.on('error', reject);
     if (query) req.write(query.toString());
     else if (form) form.pipe(req);
-    else reject(new Error('One between query and form has to be provided.'));
   });
 };
