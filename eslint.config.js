@@ -58,10 +58,6 @@ export default tseslint.config(
       'unicorn/prevent-abbreviations': 'off',
       'unicorn/catch-error-name': 'off',
       'sonarjs/no-misused-promises': 'off',
-
-      // enable back when sonar fix it
-      'sonarjs/sonar-no-fallthrough': 'off',
-      'sonarjs/pluginRules-of-hooks': 'off',
     },
   },
   {
