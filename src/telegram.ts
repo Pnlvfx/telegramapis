@@ -166,6 +166,8 @@ const telegramapis = (token: string) => {
 
 export default telegramapis;
 
+export type TelegramApi = ReturnType<typeof telegramapis>;
+
 export type {
   BotCommand,
   ChatId,
