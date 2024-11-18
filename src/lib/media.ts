@@ -37,7 +37,7 @@ export const getMedia = (type: 'photo' | 'video', input: InputMediaType, reqOpti
     addMediaOptions(query, options);
     reqOptions.headers = {
       ...headers,
-      'Content-Length': Buffer.byteLength(query.toString()),
+      'content-length': Buffer.byteLength(query.toString()),
     };
   }
   return { form, query, reqOptions };
