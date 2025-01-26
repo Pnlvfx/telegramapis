@@ -45,11 +45,11 @@
     "README.md"
   ],
   "devDependencies": {
-    "@eslint/js": "^9.18.0",
+    "@eslint/js": "^9.19.0",
     "@types/eslint__js": "^8.42.3",
-    "@types/node": "^22.10.7",
+    "@types/node": "^22.10.10",
     "dotenv": "^16.4.7",
-    "eslint": "^9.18.0",
+    "eslint": "^9.19.0",
     "eslint-plugin-sonarjs": "^3.0.1",
     "eslint-plugin-unicorn": "^56.0.1",
     "form-data": "^4.0.1",
