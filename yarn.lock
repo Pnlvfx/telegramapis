@@ -6914,6 +6914,7 @@ __metadata:
     typescript: "npm:^5.7.3"
     typescript-eslint: "npm:^8.21.0"
   peerDependencies:
+    coraline: "*"
     form-data: ^4.0.1
   languageName: unknown
   linkType: soft
