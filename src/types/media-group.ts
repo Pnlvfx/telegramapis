@@ -1,4 +1,3 @@
-import { Stream } from 'node:stream';
 import type { ParseMode } from './index.js';
 import type { MessageEntity } from './webhook.js';
 
@@ -8,7 +7,7 @@ export interface SendMediaGroupOptions {
 }
 
 interface InputMediaBase {
-  media: string | Stream;
+  media: string | Blob;
   has_spoiler?: boolean;
   caption?: string;
   caption_entities?: MessageEntity[];

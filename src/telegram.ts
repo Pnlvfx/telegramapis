@@ -1,24 +1,29 @@
-/* eslint-disable sonarjs/no-nested-functions */
 import type { Message } from './types/webhook.js';
-import type { CommandResponse, DownloadRes, TelegramResponse, WebhookResponse } from './types/response.js';
+import type { CommandResponse, TelegramResponse, WebhookResponse } from './types/response.js';
 import type { BotCommand, ChatId, SendMessageOptions, SendPhotoOptions, SendVideoOptions } from './types/index.js';
 import type { InputMedia, SendMediaGroupOptions } from './types/media-group.js';
-import fs from 'node:fs';
-import https from 'node:https';
-import { addMediaOptions, getMedia, InputMediaType, sendMedia } from './lib/media.js';
-import path from 'node:path';
+import fs from 'node:fs/promises';
+import { addMediaOptions, getMedia, InputMediaType } from './lib/media.js';
 import { telegramError, headers } from './lib/config.js';
 import { getEntries } from 'coraline';
-import FormData from 'form-data';
-import { Stream } from 'node:stream';
 
-const base_url = 'https://api.telegram.org';
+const BASE_URL = 'https://api.telegram.org';
+
+type MediaEndpoint = 'sendPhoto' | 'sendVideo' | 'sendMediaGroup';
 
 const telegramapis = (token: string) => {
-  const buildUrl = (METHOD: string, query?: string) => {
-    const url = `${base_url}/bot${token}/${METHOD}`;
-    return query ? `${url}?${query}` : url;
+  const buildUrl = (METHOD: string, query?: URLSearchParams) => {
+    const url = `${BASE_URL}/bot${token}/${METHOD}`;
+    return query ? `${url}?${query.toString()}` : url;
   };
+
+  const sendMedia = async (endpoint: MediaEndpoint, headers?: HeadersInit, form?: FormData, query?: URLSearchParams) => {
+    if (!form && !query) throw new Error('One between query and form has to be provided.');
+    const res = await fetch(buildUrl(endpoint, query), { method: 'POST', body: form, headers });
+    if (!res.ok) throw new Error(`${res.status.toString()}: ${res.statusText}`);
+    return res.json() as Promise<TelegramResponse<Message>>;
+  };
+
   return {
     sendMessage: async (chatId: ChatId, text: string, options?: SendMessageOptions) => {
       const query = new URLSearchParams({ chat_id: chatId.toString(), text });
@@ -29,7 +34,7 @@ const telegramapis = (token: string) => {
           query.append(key, parsed);
         }
       }
-      const url = buildUrl('sendMessage', query.toString());
+      const url = buildUrl('sendMessage', query);
       const res = await fetch(url, {
         method: 'POST',
         headers,
@@ -38,39 +43,23 @@ const telegramapis = (token: string) => {
       if (!data.ok) throw new Error(telegramError(data));
       return data;
     },
-    sendPhoto: (chatId: ChatId, photo: InputMediaType, options?: SendPhotoOptions) => {
-      const req_options = {
-        host: 'api.telegram.org',
-        path: `/bot${token}/sendPhoto`,
-        method: 'POST',
-      };
-      const { form, query, reqOptions } = getMedia('photo', photo, req_options, chatId, options);
-      return sendMedia(reqOptions, form, query);
+    sendPhoto: async (chatId: ChatId, photo: InputMediaType, options?: SendPhotoOptions) => {
+      const { form, query, headers } = await getMedia('photo', photo, chatId, options);
+      return sendMedia('sendPhoto', headers, form, query);
     },
-    sendVideo: (chatId: ChatId, video: InputMediaType, options?: SendVideoOptions) => {
-      const req_options = {
-        host: 'api.telegram.org',
-        path: `/bot${token}/sendVideo`,
-        method: 'POST',
-      };
-      const { form, query, reqOptions } = getMedia('video', video, req_options, chatId, options);
-      return sendMedia(reqOptions, form, query);
+    sendVideo: async (chatId: ChatId, video: InputMediaType, options?: SendVideoOptions) => {
+      const { form, query, headers } = await getMedia('video', video, chatId, options);
+      return sendMedia('sendVideo', headers, form, query);
     },
-    sendMediaGroup: (chatId: ChatId, media: readonly InputMedia[], options?: SendMediaGroupOptions) => {
-      const req_options = {
-        host: 'api.telegram.org',
-        path: `/bot${token}/sendMediaGroup`,
-        method: 'POST',
-        headers: {},
-      };
+    sendMediaGroup: async (chatId: ChatId, media: readonly InputMedia[], options?: SendMediaGroupOptions) => {
       const inputMedia = [];
       const form = new FormData();
       form.append('chat_id', chatId.toString());
       for (const [i, input] of media.entries()) {
         const payload = { ...input };
-        if (input.media instanceof Stream || !input.media.startsWith('http')) {
+        if (input.media instanceof Blob || !input.media.startsWith('http')) {
           const attachName = `attach://${i.toString()}`;
-          form.append(i.toString(), input.media instanceof Stream ? input.media : fs.createReadStream(input.media));
+          form.append(i.toString(), input.media instanceof Blob ? input.media : new Blob([await fs.readFile(input.media)]));
           payload.media = attachName;
         }
         inputMedia.push(payload);
@@ -79,11 +68,10 @@ const telegramapis = (token: string) => {
       if (options) {
         addMediaOptions(form, options);
       }
-      req_options.headers = form.getHeaders();
-      return sendMedia(req_options, form);
+      return sendMedia('sendMediaGroup', {}, form);
     },
     setWebHook: async (url: string): Promise<WebhookResponse> => {
-      const _url = buildUrl('setWebhook', `url=${url}`);
+      const _url = buildUrl('setWebhook', new URLSearchParams({ url }));
       const res = await fetch(_url, {
         method: 'POST',
         headers,
@@ -120,41 +108,9 @@ const telegramapis = (token: string) => {
       if (!data.ok) throw new Error(telegramError(data));
       return data;
     },
-    downloadFile: (fileId: string, downloadDir: string) => {
-      return new Promise<string>((resolve, reject) => {
-        const url = buildUrl('getFile', `file_id=${fileId}`);
-        https.get(url, (res) => {
-          let data = '';
-          res.on('data', (chunk: Buffer) => {
-            data += chunk.toString();
-          });
-          res.on('error', reject);
-          res.on('end', () => {
-            const response = JSON.parse(data) as TelegramResponse<DownloadRes>;
-            if (!response.ok) {
-              reject(new Error(response.description));
-              return;
-            }
-            const filePath = response.result.file_path;
-            const mediaUrl = `${base_url}/file/bot${token}/${filePath}`;
-            const extension = filePath.split('.').pop()?.toLowerCase();
-            if (!extension) {
-              reject(new Error('Telegram error: Missing media extension!'));
-              return;
-            }
-            const filename = path.join(downloadDir, `${response.result.file_unique_id}.${extension}`);
-            https.get(mediaUrl, (response) => {
-              response.pipe(fs.createWriteStream(filename));
-              response.on('end', () => {
-                resolve(filename);
-              });
-            });
-          });
-        });
-      });
-    },
     deleteMessage: async (chatId: ChatId, message_id: string | number) => {
-      const url = buildUrl('deleteMessage', `chat_id=${chatId.toString()}&message_id=${message_id.toString()}`);
+      const q = new URLSearchParams({ chat_id: chatId.toString(), message_id: message_id.toString() });
+      const url = buildUrl('deleteMessage', q);
       const res = await fetch(url, {
         method: 'DELETE',
         headers,
@@ -178,7 +134,7 @@ export type {
   SendVideoOptions,
   ParseMode,
 } from './types/index.js';
-export type { CommandResponse, DownloadRes, TelegramError, ResOk, TelegramResponse, WebhookResponse } from './types/response.js';
+export type { CommandResponse, TelegramError, ResOk, TelegramResponse, WebhookResponse } from './types/response.js';
 export type { FileBase, Message, Update, CallbackQuery, MessageEntity, User } from './types/webhook.js';
 export type { InputMedia, SendMediaGroupOptions } from './types/media-group.js';
 export type { InputMediaType } from './lib/media.js';
