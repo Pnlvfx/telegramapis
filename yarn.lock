@@ -2304,7 +2304,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*, @types/node@npm:^22.10.10":
+"@types/node@npm:*, @types/node@npm:^22.12.0":
   version: 22.12.0
   resolution: "@types/node@npm:22.12.0"
   dependencies:
@@ -6862,7 +6862,7 @@ __metadata:
   dependencies:
     "@eslint/js": "npm:^9.19.0"
     "@types/eslint__js": "npm:^8.42.3"
-    "@types/node": "npm:^22.10.10"
+    "@types/node": "npm:^22.12.0"
     coraline: "github:Pnlvfx/coraline#workspace=@coraline/base"
     dotenv: "npm:^16.4.7"
     eslint: "npm:^9.19.0"
@@ -6877,7 +6877,7 @@ __metadata:
     ts-node: "npm:^10.9.2"
     tsx: "npm:^4.19.2"
     typescript: "npm:^5.7.3"
-    typescript-eslint: "npm:^8.21.0"
+    typescript-eslint: "npm:^8.22.0"
   peerDependencies:
     coraline: "*"
   languageName: unknown
@@ -7129,7 +7129,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript-eslint@npm:^8.21.0":
+"typescript-eslint@npm:^8.22.0":
   version: 8.22.0
   resolution: "typescript-eslint@npm:8.22.0"
   dependencies:
