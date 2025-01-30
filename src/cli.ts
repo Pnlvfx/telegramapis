@@ -1,4 +1,4 @@
-import coraline from 'coraline';
+import { input } from 'coraline/node/input';
 import telegramapis from './telegram.js';
 import path from 'node:path';
 
@@ -11,8 +11,8 @@ const photoUrl = 'https://res.cloudinary.com/bbabystyle/image/upload/v1724335266
 const videoUrl = 'https://samplelib.com/lib/preview/mp4/sample-5s.mp4';
 
 const run = async () => {
-  const input = await coraline.input.create();
-  switch (input) {
+  const text = await input.create();
+  switch (text) {
     case '0': {
       await telegram.sendPhoto(process.env.TELEGRAM_GROUP_LOG, photoUrl, { caption: 'Testing send photo url...' });
       break;

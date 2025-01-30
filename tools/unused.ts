@@ -1,4 +1,4 @@
-import { findUnusedExports } from 'coraline';
+import { findUnusedExports } from 'coraline/node/ts-unused-exports';
 
 const unused = findUnusedExports({
   ignoreFiles: ['telegram.ts', 'eslint.config.js', 'jest.config.ts'],

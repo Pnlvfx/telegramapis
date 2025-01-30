@@ -1,8 +1,3 @@
-**_ MANTAINERS ONLY _**
-yarn up coraline@github:Pnlvfx/coraline#workspace=@coraline/base
-
----
-
 <h1 align="center">Node.js Telegram Bot API</h1>
 
 <div align="center">

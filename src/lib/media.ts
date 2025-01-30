@@ -1,7 +1,7 @@
 import type { ChatId, SendPhotoOptions, SendVideoOptions } from '../types/index.js';
 import fs from 'node:fs/promises';
 import { headers as HEADERS } from './config.js';
-import { getEntries } from 'coraline';
+import { getEntries } from 'coraline/typed-object';
 
 type MediaOptions = SendPhotoOptions | SendVideoOptions;
 

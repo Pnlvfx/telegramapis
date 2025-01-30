@@ -2,10 +2,10 @@ import type { Message } from './types/webhook.js';
 import type { CommandResponse, TelegramResponse, WebhookResponse } from './types/response.js';
 import type { BotCommand, ChatId, SendMessageOptions, SendPhotoOptions, SendVideoOptions } from './types/index.js';
 import type { InputMedia, SendMediaGroupOptions } from './types/media-group.js';
-import fs from 'node:fs/promises';
 import { addMediaOptions, getMedia, InputMediaType } from './lib/media.js';
 import { telegramError, headers } from './lib/config.js';
-import { getEntries } from 'coraline';
+import { getEntries } from 'coraline/typed-object';
+import fs from 'node:fs/promises';
 
 const BASE_URL = 'https://api.telegram.org';
 
