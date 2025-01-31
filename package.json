@@ -26,6 +26,7 @@
     "import": "./dist/telegram.js"
   },
   "scripts": {
+    "tsc": "tsc --noEmit true",
     "unused": "node ./tools/unused.ts",
     "test": "rimraf coverage && jest --coverage",
     "lint": "eslint",
