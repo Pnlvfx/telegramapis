@@ -27,7 +27,7 @@ npm install telegramapis
 
 The Telegram APIs package was developed to address the shortcomings of the original Telegram Bot API, which often included deprecated packages and bugs. We designed this package to provide a reliable and streamlined solution. Key features include:
 
-    Simplicity: A lightweight package with minimal dependencies.
+    Simplicity: A lightweight package with 0 dependencies.
     Robustness: Avoids deprecated packages and known issues.
     TypeScript Support: Includes TypeScript typings for enhanced development.
 
