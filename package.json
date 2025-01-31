@@ -32,7 +32,7 @@
     "lint": "eslint",
     "dev": "tsc -p tsconfig.build.json --w & node --env-file .env --watch ./dist/cli.js",
     "build": "rimraf dist && eslint && tsc -p tsconfig.build.json",
-    "prepare": "husky",
+    "prepare": "husky && yarn build",
     "prepack": "yarn build",
     "prepublishOnly": "yarn test && yarn lint"
   },
