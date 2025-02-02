@@ -1,5 +1,5 @@
 import { describe, it } from '@jest/globals';
-import telegramapis from '../src/telegram.js';
+import { telegramapis } from '../src/telegram.js';
 import path from 'node:path';
 
 if (!process.env.TELEGRAM_TOKEN || !process.env.TELEGRAM_GROUP_LOG) throw new Error('No env found.');

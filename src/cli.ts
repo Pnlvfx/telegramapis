@@ -1,5 +1,5 @@
-import { input } from 'coraline/node/input';
-import telegramapis from './telegram.js';
+import { input } from '@goatjs/node/input';
+import { telegramapis } from './telegram.js';
 import path from 'node:path';
 
 if (!process.env.TELEGRAM_TOKEN || !process.env.TELEGRAM_GROUP_LOG) throw new Error('No env found.');
