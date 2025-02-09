@@ -6611,7 +6611,6 @@ __metadata:
     typescript-eslint: "npm:^8.22.0"
   peerDependencies:
     "@goatjs/core": "*"
-    "@goatjs/node": "*"
   languageName: unknown
   linkType: soft
 
