@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
-// @ts-check
-
 import eslint from '@eslint/js';
 import globals from 'globals';
 import sonarjs from 'eslint-plugin-sonarjs';
@@ -12,7 +9,7 @@ export default tseslint.config(
     ignores: ['dist', 'coverage'],
   },
   eslint.configs.recommended,
-  unicorn.configs['flat/all'],
+  unicorn.configs.all,
   sonarjs.configs.recommended,
   ...tseslint.configs.recommendedTypeChecked,
   ...tseslint.configs.strictTypeChecked,
@@ -51,13 +48,18 @@ export default tseslint.config(
       'no-unsafe-negation': 'error',
       'prefer-const': 'error',
       'no-console': 'warn',
+      'sonarjs/todo-tag': 'warn',
 
       'no-unused-vars': 'off',
       '@typescript-eslint/no-unused-vars': 'off',
-      'sonarjs/sonar-no-unused-vars': 'off',
+      'sonarjs/no-unused-vars': 'off',
       'unicorn/prevent-abbreviations': 'off',
       'unicorn/catch-error-name': 'off',
+
+      // duplicates of tseslint
       'sonarjs/no-misused-promises': 'off',
+      'sonarjs/sonar-prefer-optional-chain': 'off',
+      'sonarjs/unused-import': 'off',
     },
   },
   {

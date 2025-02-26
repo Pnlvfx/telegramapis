@@ -2,7 +2,7 @@ import type { Message } from './types/webhook.js';
 import type { CommandResponse, TelegramResponse, WebhookResponse } from './types/response.js';
 import type { BotCommand, ChatId, SendMessageOptions, SendPhotoOptions, SendVideoOptions } from './types/index.js';
 import type { InputMedia, SendMediaGroupOptions } from './types/media-group.js';
-import { addMediaOptions, getMedia, InputMediaType } from './lib/media.js';
+import { addMediaOptions, getMedia, type InputMediaType } from './lib/media.js';
 import { telegramError, headers } from './lib/config.js';
 import fs from 'node:fs/promises';
 import { getEntries } from '@goatjs/core/typed-object';
