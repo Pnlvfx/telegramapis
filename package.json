@@ -45,7 +45,7 @@
     "@eslint/js": "^9.21.0",
     "@goatjs/core": "github:Pnlvfx/goatjs#workspace=@goatjs/core",
     "@goatjs/node": "github:Pnlvfx/goatjs#workspace=@goatjs/node",
-    "@types/node": "^22.13.5",
+    "@types/node": "^22.13.8",
     "dotenv": "^16.4.7",
     "eslint": "^9.21.0",
     "eslint-plugin-sonarjs": "^3.0.2",
@@ -58,7 +58,7 @@
     "ts-jest": "^29.2.6",
     "ts-node": "^10.9.2",
     "ts-unused-exports": "^11.0.1",
-    "typescript": "^5.7.3",
+    "typescript": "^5.8.2",
     "typescript-eslint": "^8.25.0"
   },
   "peerDependencies": {

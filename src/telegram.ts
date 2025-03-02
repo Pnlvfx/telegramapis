@@ -20,8 +20,9 @@ export const telegramapis = (token: string) => {
   const sendMedia = async (endpoint: MediaEndpoint, headers?: HeadersInit, form?: FormData, query?: URLSearchParams) => {
     if (!form && !query) throw new Error('One between query and form has to be provided.');
     const res = await fetch(buildUrl(endpoint, query), { method: 'POST', body: form, headers });
-    if (!res.ok) throw new Error(`${res.status.toString()}: ${res.statusText}`);
-    return res.json() as Promise<TelegramResponse<Message>>;
+    const data = (await res.json()) as TelegramResponse<Message>;
+    if (!data.ok) throw new Error(telegramError(data));
+    return data;
   };
 
   return {
@@ -72,10 +73,7 @@ export const telegramapis = (token: string) => {
     },
     setWebHook: async (url: string): Promise<WebhookResponse> => {
       const _url = buildUrl('setWebhook', new URLSearchParams({ url }));
-      const res = await fetch(_url, {
-        method: 'POST',
-        headers,
-      });
+      const res = await fetch(_url, { method: 'POST', headers });
       const data = (await res.json()) as WebhookResponse;
       if (!data.ok) throw new Error(telegramError(data));
       return data;
@@ -111,16 +109,11 @@ export const telegramapis = (token: string) => {
     deleteMessage: async (chatId: ChatId, message_id: string | number) => {
       const q = new URLSearchParams({ chat_id: chatId.toString(), message_id: message_id.toString() });
       const url = buildUrl('deleteMessage', q);
-      const res = await fetch(url, {
-        method: 'DELETE',
-        headers,
-      });
+      const res = await fetch(url, { method: 'DELETE', headers });
       if (!res.ok) throw new Error(`${res.status.toString()} ${res.statusText}`);
     },
   };
 };
-
-export type TelegramApi = ReturnType<typeof telegramapis>;
 
 export type {
   BotCommand,
