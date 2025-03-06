@@ -1,4 +1,4 @@
-import { findUnusedExports } from '@goatjs/node/ts-unused-exports';
+import { findUnusedExports } from '@goatjs/ts-unused-exports';
 
 const unused = findUnusedExports({
   ignoreFiles: ['telegram.ts', 'eslint.config.js', 'jest.config.ts'],

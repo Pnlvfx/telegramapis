@@ -1,5 +1,5 @@
 import { input } from '@goatjs/node/input';
-import { telegramapis } from './telegram.js';
+import { telegramapis } from '../src/telegram.js';
 import path from 'node:path';
 
 if (!process.env.TELEGRAM_TOKEN || !process.env.TELEGRAM_GROUP_LOG) throw new Error('No env found.');
@@ -29,4 +29,4 @@ const run = async () => {
   void run();
 };
 
-void run();
+await run();
