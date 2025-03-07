@@ -649,14 +649,14 @@ __metadata:
 
 "@goatjs/core@github:Pnlvfx/goatjs#workspace=@goatjs/core":
   version: 2025.1.30
-  resolution: "@goatjs/core@https://github.com/Pnlvfx/goatjs.git#workspace=%40goatjs%2Fcore&commit=0d729089e52fcc4e5671c3f175fa906d55c67035"
-  checksum: 10c0/68e9677638f463a514479263c340b1fd04a38faeae63d6f49a55f9688e64b79fe96933e694d1db518059a42fd23854e2f65ab056307262a9a997df223d1b6f32
+  resolution: "@goatjs/core@https://github.com/Pnlvfx/goatjs.git#workspace=%40goatjs%2Fcore&commit=98d595a3bc65cdbd325908c1f4d69b0bacbd344a"
+  checksum: 10c0/06cd6f302e1a0c97f5fed2b91ec01cf46caf592ec0a41baf408000b77318589741d37ee9048338095ae7f504f901057c00349f3256929358e438ebaf27688809
   languageName: node
   linkType: hard
 
 "@goatjs/node@github:Pnlvfx/goatjs#workspace=@goatjs/node":
   version: 2025.1.30
-  resolution: "@goatjs/node@https://github.com/Pnlvfx/goatjs.git#workspace=%40goatjs%2Fnode&commit=0d729089e52fcc4e5671c3f175fa906d55c67035"
+  resolution: "@goatjs/node@https://github.com/Pnlvfx/goatjs.git#workspace=%40goatjs%2Fnode&commit=98d595a3bc65cdbd325908c1f4d69b0bacbd344a"
   peerDependencies:
     mime-types: "*"
   peerDependenciesMeta:
@@ -668,7 +668,7 @@ __metadata:
 
 "@goatjs/ts-unused-exports@github:Pnlvfx/goatjs#workspace=@goatjs/ts-unused-exports":
   version: 2025.3.3
-  resolution: "@goatjs/ts-unused-exports@https://github.com/Pnlvfx/goatjs.git#workspace=%40goatjs%2Fts-unused-exports&commit=0d729089e52fcc4e5671c3f175fa906d55c67035"
+  resolution: "@goatjs/ts-unused-exports@https://github.com/Pnlvfx/goatjs.git#workspace=%40goatjs%2Fts-unused-exports&commit=98d595a3bc65cdbd325908c1f4d69b0bacbd344a"
   dependencies:
     ts-unused-exports: "npm:^11.0.1"
   checksum: 10c0/de8a399b479922485e6a128ce834249684999949fb7b16ddc36c017ad172cf32c1cb6306ae09e9e9ed7a11009c245dd8df6e7a4eddd4ce440a97da702bc78551
