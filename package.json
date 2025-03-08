@@ -42,13 +42,13 @@
     "README.md"
   ],
   "devDependencies": {
-    "@eslint/js": "^9.21.0",
+    "@eslint/js": "^9.22.0",
     "@goatjs/core": "github:Pnlvfx/goatjs#workspace=@goatjs/core",
     "@goatjs/node": "github:Pnlvfx/goatjs#workspace=@goatjs/node",
     "@goatjs/ts-unused-exports": "github:Pnlvfx/goatjs#workspace=@goatjs/ts-unused-exports",
-    "@types/node": "^22.13.9",
+    "@types/node": "^22.13.10",
     "dotenv": "^16.4.7",
-    "eslint": "^9.21.0",
+    "eslint": "^9.22.0",
     "eslint-plugin-sonarjs": "^3.0.2",
     "eslint-plugin-unicorn": "^57.0.0",
     "globals": "^16.0.0",
