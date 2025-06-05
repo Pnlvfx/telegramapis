@@ -47,6 +47,7 @@
     "@goatjs/eslint": "github:Pnlvfx/eslint",
     "@goatjs/node": "github:Pnlvfx/goatjs#workspace=@goatjs/node",
     "@goatjs/ts-unused-exports": "github:Pnlvfx/goatjs#workspace=@goatjs/ts-unused-exports",
+    "@goatjs/typescript-config": "github:Pnlvfx/typescript-config",
     "@types/node": "^22.15.30",
     "dotenv": "^16.5.0",
     "eslint": "^9.28.0",

@@ -735,6 +735,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@goatjs/typescript-config@github:Pnlvfx/typescript-config":
+  version: 2025.4.21
+  resolution: "@goatjs/typescript-config@https://github.com/Pnlvfx/typescript-config.git#commit=7220bf40ec0e7ba5d405ade0f401768c9f5f942e"
+  checksum: 10c0/e9c5b94007651b5f75d5017cc4d0800d4f3b7321962c7e2e07f00d3c509814b6ba1713e176d5d633ddf358715a51a367ed275ac51670351da7513caadaa80dc1
+  languageName: node
+  linkType: hard
+
 "@humanfs/core@npm:^0.19.1":
   version: 0.19.1
   resolution: "@humanfs/core@npm:0.19.1"
@@ -5674,6 +5681,7 @@ __metadata:
     "@goatjs/eslint": "github:Pnlvfx/eslint"
     "@goatjs/node": "github:Pnlvfx/goatjs#workspace=@goatjs/node"
     "@goatjs/ts-unused-exports": "github:Pnlvfx/goatjs#workspace=@goatjs/ts-unused-exports"
+    "@goatjs/typescript-config": "github:Pnlvfx/typescript-config"
     "@types/node": "npm:^22.15.30"
     dotenv: "npm:^16.5.0"
     eslint: "npm:^9.28.0"
