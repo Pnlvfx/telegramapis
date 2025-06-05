@@ -1,1 +1,3 @@
-yarn up @goatjs/core@github:Pnlvfx/goatjs#workspace=@goatjs/core @goatjs/node@github:Pnlvfx/goatjs#workspace=@goatjs/node @goatjs/ts-unused-exports@github:Pnlvfx/goatjs#workspace=@goatjs/ts-unused-exports
+yarn up @goatjs/core@github:Pnlvfx/goatjs#workspace=@goatjs/core @goatjs/node@github:Pnlvfx/goatjs#workspace=@goatjs/node @goatjs/ts-unused-exports@github:Pnlvfx/goatjs#workspace=@goatjs/ts-unused-exports @goatjs/eslint@github:Pnlvfx/eslint
+
+yarn upgrade-interactive
