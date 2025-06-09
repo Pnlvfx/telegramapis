@@ -1,7 +1,7 @@
 import type { ChatId, SendPhotoOptions, SendVideoOptions } from '../types/index.js';
 import fs from 'node:fs/promises';
 import { headers as HEADERS } from './config.js';
-import { getEntries } from '@goatjs/core/typed-object';
+import { getEntries } from '@goatjs/core/object';
 
 type MediaOptions = SendPhotoOptions | SendVideoOptions;
 

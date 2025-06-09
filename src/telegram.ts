@@ -5,7 +5,7 @@ import type { InputMedia, SendMediaGroupOptions } from './types/media-group.js';
 import { addMediaOptions, getMedia, type InputMediaType } from './lib/media.js';
 import { telegramError, headers } from './lib/config.js';
 import fs from 'node:fs/promises';
-import { getEntries } from '@goatjs/core/typed-object';
+import { getEntries } from '@goatjs/core/object';
 
 const BASE_URL = 'https://api.telegram.org';
 
