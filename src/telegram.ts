@@ -80,10 +80,7 @@ export const telegramapis = (token: string) => {
     },
     deleteWebHook: async (): Promise<WebhookResponse> => {
       const _url = buildUrl('deleteWebhook');
-      const res = await fetch(_url, {
-        method: 'POST',
-        headers,
-      });
+      const res = await fetch(_url, { method: 'POST', headers });
       const data = (await res.json()) as WebhookResponse;
       if (!data.ok) throw new Error(telegramError(data));
       return data;
@@ -97,9 +94,7 @@ export const telegramapis = (token: string) => {
       const url = buildUrl('setMyCommands');
       const res = await fetch(url, {
         method: 'POST',
-        headers: {
-          'content-type': 'application/json',
-        },
+        headers: { 'content-type': 'application/json' },
         body: JSON.stringify({ commands }),
       });
       const data = (await res.json()) as CommandResponse;
