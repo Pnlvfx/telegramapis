@@ -12,7 +12,7 @@ const videoUrl = 'https://samplelib.com/lib/preview/mp4/sample-5s.mp4';
 
 describe('sendMessage', () => {
   it('Should send a message successfully.', async () => {
-    await telegram.sendMessage(process.env.TELEGRAM_GROUP_LOG, `Testing send message...`);
+    await telegram.sendMessage(process.env.TELEGRAM_GROUP_LOG, 'Testing send message...');
   });
 });
 
