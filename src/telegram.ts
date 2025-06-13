@@ -26,20 +26,15 @@ export const telegramapis = (token: string) => {
   };
 
   return {
-    sendMessage: async (chatId: ChatId, text: string, options?: SendMessageOptions) => {
+    sendMessage: async (chatId: ChatId, text: string, options: SendMessageOptions = {}) => {
       const query = new URLSearchParams({ chat_id: chatId.toString(), text });
-      if (options) {
-        for (const [key, value] of getEntries(options)) {
-          if (!value) continue;
-          const parsed = typeof value === 'string' ? value : JSON.stringify(value);
-          query.append(key, parsed);
-        }
+      for (const [key, value] of getEntries(options)) {
+        if (value === undefined) continue;
+        const parsed = typeof value === 'string' ? value : JSON.stringify(value);
+        query.append(key, parsed);
       }
       const url = buildUrl('sendMessage', query);
-      const res = await fetch(url, {
-        method: 'POST',
-        headers,
-      });
+      const res = await fetch(url, { method: 'POST', headers });
       const data = (await res.json()) as TelegramResponse<Message>;
       if (!data.ok) throw new Error(telegramError(data));
       return data;
@@ -71,14 +66,14 @@ export const telegramapis = (token: string) => {
       }
       return sendMedia('sendMediaGroup', {}, form);
     },
-    setWebHook: async (url: string): Promise<WebhookResponse> => {
+    setWebHook: async (url: string) => {
       const _url = buildUrl('setWebhook', new URLSearchParams({ url }));
       const res = await fetch(_url, { method: 'POST', headers });
       const data = (await res.json()) as WebhookResponse;
       if (!data.ok) throw new Error(telegramError(data));
       return data;
     },
-    deleteWebHook: async (): Promise<WebhookResponse> => {
+    deleteWebHook: async () => {
       const _url = buildUrl('deleteWebhook');
       const res = await fetch(_url, { method: 'POST', headers });
       const data = (await res.json()) as WebhookResponse;

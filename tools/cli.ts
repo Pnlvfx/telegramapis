@@ -11,13 +11,17 @@ const photoUrl = 'https://res.cloudinary.com/bbabystyle/image/upload/v1724335266
 const videoUrl = 'https://samplelib.com/lib/preview/mp4/sample-5s.mp4';
 
 const run = async () => {
-  const text = await input.create();
+  const text = await input.create({ title: '1. Send a telegram message\n2.Send a photo\n3. Send media group' });
   switch (text) {
-    case '0': {
+    case '1': {
+      await telegram.sendMessage(process.env.TELEGRAM_GROUP_LOG, 'Testing a message from telegramapis cli.');
+      break;
+    }
+    case '2': {
       await telegram.sendPhoto(process.env.TELEGRAM_GROUP_LOG, photoUrl, { caption: 'Testing send photo url...' });
       break;
     }
-    case '1': {
+    case '3': {
       await telegram.sendMediaGroup(process.env.TELEGRAM_GROUP_LOG, [
         { type: 'photo', media: photoUrl, caption: 'Testing send media group, photo url...' },
         { type: 'video', media: videoUrl, caption: 'Testing send media group, video url...' },
