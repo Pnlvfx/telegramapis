@@ -3,9 +3,10 @@ import type { CommandResponse, TelegramResponse, WebhookResponse } from './types
 import type { BotCommand, ChatId, SendMessageOptions, SendPhotoOptions, SendVideoOptions } from './types/index.js';
 import type { InputMedia, SendMediaGroupOptions } from './types/media-group.js';
 import { addMediaOptions, getMedia, type InputMediaType } from './lib/media.js';
-import { telegramError, headers } from './lib/config.js';
+import { headers } from './lib/config.js';
 import fs from 'node:fs/promises';
 import { getEntries } from '@goatjs/core/object';
+import { telegramError } from './lib/error.js';
 
 const BASE_URL = 'https://api.telegram.org';
 
@@ -21,7 +22,7 @@ export const telegramapis = (token: string) => {
     if (!form && !query) throw new Error('One between query and form has to be provided.');
     const res = await fetch(buildUrl(endpoint, query), { method: 'POST', body: form, headers });
     const data = (await res.json()) as TelegramResponse<Message>;
-    if (!data.ok) throw new Error(telegramError(data));
+    if (!data.ok) throw telegramError(data);
     return data;
   };
 
@@ -36,7 +37,7 @@ export const telegramapis = (token: string) => {
       const url = buildUrl('sendMessage', query);
       const res = await fetch(url, { method: 'POST', headers });
       const data = (await res.json()) as TelegramResponse<Message>;
-      if (!data.ok) throw new Error(telegramError(data));
+      if (!data.ok) telegramError(data);
       return data;
     },
     sendPhoto: async (chatId: ChatId, photo: InputMediaType, options?: SendPhotoOptions) => {
@@ -70,14 +71,14 @@ export const telegramapis = (token: string) => {
       const _url = buildUrl('setWebhook', new URLSearchParams({ url }));
       const res = await fetch(_url, { method: 'POST', headers });
       const data = (await res.json()) as WebhookResponse;
-      if (!data.ok) throw new Error(telegramError(data));
+      if (!data.ok) telegramError(data);
       return data;
     },
     deleteWebHook: async () => {
       const _url = buildUrl('deleteWebhook');
       const res = await fetch(_url, { method: 'POST', headers });
       const data = (await res.json()) as WebhookResponse;
-      if (!data.ok) throw new Error(telegramError(data));
+      if (!data.ok) telegramError(data);
       return data;
     },
     setMyCommands: async (commands: BotCommand[]) => {
@@ -93,7 +94,7 @@ export const telegramapis = (token: string) => {
         body: JSON.stringify({ commands }),
       });
       const data = (await res.json()) as CommandResponse;
-      if (!data.ok) throw new Error(telegramError(data));
+      if (!data.ok) telegramError(data);
       return data;
     },
     deleteMessage: async (chatId: ChatId, message_id: string | number) => {
@@ -115,7 +116,8 @@ export type {
   SendVideoOptions,
   ParseMode,
 } from './types/index.js';
-export type { CommandResponse, TelegramError, ResOk, TelegramResponse, WebhookResponse } from './types/response.js';
+export type { CommandResponse, TelegramError, TelegramSuccess, TelegramResponse, WebhookResponse } from './types/response.js';
 export type { FileBase, Message, Update, CallbackQuery, MessageEntity, User } from './types/webhook.js';
 export type { InputMedia, SendMediaGroupOptions } from './types/media-group.js';
 export type { InputMediaType } from './lib/media.js';
+export { isTelegramError } from './lib/error.js';
