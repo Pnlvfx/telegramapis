@@ -27,14 +27,15 @@
   },
   "scripts": {
     "tsc": "tsc --noEmit true",
-    "unused": "node ./tools/unused.ts",
+    "unused": "node tools/unused.ts",
     "test": "rimraf coverage && jest --coverage",
     "lint": "eslint",
-    "dev": "tsx --env-file .env --watch ./tools/cli.ts",
+    "dev": "tsx --env-file .env --watch tools/cli.ts",
     "build": "rimraf dist && eslint && tsc -p tsconfig.build.json",
     "prepare": "husky && npm run build",
     "prepack": "yarn build",
-    "prepublishOnly": "yarn test && yarn lint"
+    "prepublishOnly": "yarn test && yarn lint",
+    "update": "node tools/update.ts && yarn upgrade-interactive"
   },
   "files": [
     "dist",
@@ -42,27 +43,28 @@
     "README.md"
   ],
   "devDependencies": {
-    "@eslint/js": "^9.28.0",
+    "@eslint/js": "^9.30.1",
     "@goatjs/core": "github:Pnlvfx/goatjs#workspace=@goatjs/core",
     "@goatjs/eslint": "github:Pnlvfx/eslint",
     "@goatjs/node": "github:Pnlvfx/goatjs#workspace=@goatjs/node",
+    "@goatjs/rimraf": "github:Pnlvfx/goatjs#workspace=@goatjs/rimraf",
     "@goatjs/ts-unused-exports": "github:Pnlvfx/goatjs#workspace=@goatjs/ts-unused-exports",
     "@goatjs/typescript-config": "github:Pnlvfx/typescript-config",
-    "@types/node": "^24.0.1",
-    "dotenv": "^16.5.0",
-    "eslint": "^9.28.0",
-    "eslint-plugin-sonarjs": "^3.0.2",
+    "@goatjs/updater": "github:Pnlvfx/goatjs#workspace=@goatjs/updater",
+    "@types/node": "^24.0.10",
+    "dotenv": "^17.0.1",
+    "eslint": "^9.30.1",
+    "eslint-plugin-sonarjs": "^3.0.4",
     "eslint-plugin-unicorn": "^59.0.1",
-    "globals": "^16.2.0",
+    "globals": "^16.3.0",
     "husky": "^9.1.7",
-    "jest": "^30.0.0",
-    "prettier": "^3.5.3",
-    "rimraf": "^6.0.1",
+    "jest": "^30.0.4",
+    "prettier": "^3.6.2",
     "ts-jest": "^29.4.0",
     "ts-node": "^10.9.2",
-    "tsx": "^4.20.2",
+    "tsx": "^4.20.3",
     "typescript": "^5.8.3",
-    "typescript-eslint": "^8.34.0"
+    "typescript-eslint": "^8.35.1"
   },
   "peerDependencies": {
     "@goatjs/core": "*"
