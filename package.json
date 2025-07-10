@@ -51,8 +51,8 @@
     "@goatjs/ts-unused-exports": "github:Pnlvfx/goatjs#workspace=@goatjs/ts-unused-exports",
     "@goatjs/typescript-config": "github:Pnlvfx/typescript-config",
     "@goatjs/updater": "github:Pnlvfx/goatjs#workspace=@goatjs/updater",
-    "@types/node": "^24.0.10",
-    "dotenv": "^17.0.1",
+    "@types/node": "^24.0.12",
+    "dotenv": "^17.2.0",
     "eslint": "^9.30.1",
     "eslint-plugin-sonarjs": "^3.0.4",
     "eslint-plugin-unicorn": "^59.0.1",
@@ -64,7 +64,7 @@
     "ts-node": "^10.9.2",
     "tsx": "^4.20.3",
     "typescript": "^5.8.3",
-    "typescript-eslint": "^8.35.1"
+    "typescript-eslint": "^8.36.0"
   },
   "peerDependencies": {
     "@goatjs/core": "*"
