@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-empty-object-type */
-import type { InlineKeyboardMarkup, PollType } from './index.js';
+import type { InlineKeyboardMarkup, PollType } from './telegram.js';
 
 export interface CallbackQuery {
   id: string;

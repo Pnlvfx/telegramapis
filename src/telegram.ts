@@ -1,6 +1,6 @@
 import type { Message } from './types/webhook.js';
 import type { CommandResponse, TelegramResponse, WebhookResponse } from './types/response.js';
-import type { BotCommand, ChatId, SendMessageOptions, SendPhotoOptions, SendVideoOptions } from './types/index.js';
+import type { BotCommand, ChatId, SendMessageOptions, SendPhotoOptions, SendVideoOptions } from './types/telegram.js';
 import type { InputMedia, SendMediaGroupOptions } from './types/media-group.js';
 import { addMediaOptions, getMedia, type InputMediaType } from './lib/media.js';
 import { headers } from './lib/config.js';
@@ -115,7 +115,7 @@ export type {
   SendPhotoOptions,
   SendVideoOptions,
   ParseMode,
-} from './types/index.js';
+} from './types/telegram.js';
 export type { CommandResponse, TelegramError, TelegramSuccess, TelegramResponse, WebhookResponse } from './types/response.js';
 export type { FileBase, Message, Update, CallbackQuery, MessageEntity, User } from './types/webhook.js';
 export type { InputMedia, SendMediaGroupOptions } from './types/media-group.js';

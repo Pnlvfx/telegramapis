@@ -1,4 +1,4 @@
-import type { ParseMode } from './index.js';
+import type { ParseMode } from './telegram.js';
 import type { MessageEntity } from './webhook.js';
 
 export interface SendMediaGroupOptions {
