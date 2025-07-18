@@ -35,7 +35,8 @@
     "prepare": "husky",
     "prepack": "yarn build",
     "prepublishOnly": "yarn test && yarn lint",
-    "update": "yarn upgrade-interactive"
+    "update": "yarn upgrade-interactive",
+    "publish": "node tools/publish.ts"
   },
   "files": [
     "dist",
