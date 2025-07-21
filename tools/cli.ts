@@ -1,4 +1,4 @@
-import { input } from '@goatjs/node/input';
+import { input } from '@goatjs/dev/input';
 import { telegramapis } from '../src/telegram.js';
 import path from 'node:path';
 
