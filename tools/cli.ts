@@ -1,4 +1,5 @@
-import { input } from '@goatjs/dev/input';
+/* eslint-disable no-restricted-properties */
+import { input } from '@goatjs/node/input';
 import { telegramapis } from '../src/telegram.js';
 import path from 'node:path';
 

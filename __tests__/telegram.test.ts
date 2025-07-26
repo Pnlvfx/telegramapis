@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-properties */
 import { describe, it } from '@jest/globals';
 import { telegramapis } from '../src/telegram.js';
 import path from 'node:path';
