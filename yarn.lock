@@ -910,16 +910,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@goatjs/dev@npm:^1.0.11":
-  version: 1.0.11
-  resolution: "@goatjs/dev@npm:1.0.11"
-  peerDependencies:
-    "@goatjs/node": "*"
-    zod: "*"
-  checksum: 10c0/c260b53f6bcd291e5ca3ede679a753cc222ef0019fca5e3ebec81566eae31f61caf401161e7b0b9e66af348ae367e3a3db456a07bc9d59f1120929c7ad2f6495
-  languageName: node
-  linkType: hard
-
 "@goatjs/node-eslint@npm:^1.0.9":
   version: 1.0.9
   resolution: "@goatjs/node-eslint@npm:1.0.9"
@@ -955,6 +945,32 @@ __metadata:
   checksum: 10c0/bd784aade71877ffbfdf5d3602dedcedc0e361ebaf5eb866afdc3ba37bdfdde6c5667bff30231654cc2ab0a3044f16a77da15879499ff6ca7dbc7cc7f6122e6b
   languageName: node
   linkType: hard
+
+"@goatjs/telegram@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "@goatjs/telegram@workspace:."
+  dependencies:
+    "@goatjs/core": "npm:^1.0.11"
+    "@goatjs/node": "npm:^1.0.11"
+    "@goatjs/node-eslint": "npm:^1.0.9"
+    "@goatjs/rimraf": "npm:^1.0.11"
+    "@goatjs/ts-unused-exports": "npm:^1.0.11"
+    "@goatjs/typescript-config": "npm:^1.0.11"
+    "@types/node": "npm:^24.0.15"
+    dotenv: "npm:^17.2.0"
+    eslint: "npm:^9.31.0"
+    globals: "npm:^16.3.0"
+    husky: "npm:^9.1.7"
+    jest: "npm:^30.0.4"
+    prettier: "npm:^3.6.2"
+    ts-jest: "npm:^29.4.0"
+    ts-node: "npm:^10.9.2"
+    tsx: "npm:^4.20.3"
+    typescript: "npm:^5.8.3"
+  peerDependencies:
+    "@goatjs/core": "*"
+  languageName: unknown
+  linkType: soft
 
 "@goatjs/ts-unused-exports@npm:^1.0.11":
   version: 1.0.11
@@ -6012,33 +6028,6 @@ __metadata:
   checksum: 10c0/d4679609bb2a9b48eeaf84632b6d844128d2412b95b6de07d53d8ee8baf4ca0857c9331dfa510390a0727b550fd543d4d1a10995ad86cdf078423fbb8d99831d
   languageName: node
   linkType: hard
-
-"telegramapis@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "telegramapis@workspace:."
-  dependencies:
-    "@goatjs/core": "npm:^1.0.11"
-    "@goatjs/dev": "npm:^1.0.11"
-    "@goatjs/node": "npm:^1.0.11"
-    "@goatjs/node-eslint": "npm:^1.0.9"
-    "@goatjs/rimraf": "npm:^1.0.11"
-    "@goatjs/ts-unused-exports": "npm:^1.0.11"
-    "@goatjs/typescript-config": "npm:^1.0.11"
-    "@types/node": "npm:^24.0.15"
-    dotenv: "npm:^17.2.0"
-    eslint: "npm:^9.31.0"
-    globals: "npm:^16.3.0"
-    husky: "npm:^9.1.7"
-    jest: "npm:^30.0.4"
-    prettier: "npm:^3.6.2"
-    ts-jest: "npm:^29.4.0"
-    ts-node: "npm:^10.9.2"
-    tsx: "npm:^4.20.3"
-    typescript: "npm:^5.8.3"
-  peerDependencies:
-    "@goatjs/core": "*"
-  languageName: unknown
-  linkType: soft
 
 "test-exclude@npm:^6.0.0":
   version: 6.0.0

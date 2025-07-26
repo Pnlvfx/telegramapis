@@ -1,5 +1,5 @@
 {
-  "name": "telegramapis",
+  "name": "@goatjs/telegram",
   "description": "Node telegram Bot API.",
   "version": "1.0.3",
   "author": {
@@ -35,8 +35,7 @@
     "prepare": "husky",
     "prepack": "yarn build",
     "prepublishOnly": "yarn test && yarn lint",
-    "update": "yarn upgrade-interactive",
-    "publish": "node tools/publish.ts"
+    "update": "yarn upgrade-interactive"
   },
   "files": [
     "dist",
@@ -45,7 +44,6 @@
   ],
   "devDependencies": {
     "@goatjs/core": "^1.0.11",
-    "@goatjs/dev": "^1.0.11",
     "@goatjs/node": "^1.0.11",
     "@goatjs/node-eslint": "^1.0.9",
     "@goatjs/rimraf": "^1.0.11",
