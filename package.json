@@ -1,7 +1,7 @@
 {
   "name": "@goatjs/telegram",
   "description": "Node telegram Bot API.",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "author": {
     "email": "simonegauli@gmail.com",
     "name": "Simone Gauli"
