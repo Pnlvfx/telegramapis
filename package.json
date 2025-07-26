@@ -44,6 +44,7 @@
   ],
   "devDependencies": {
     "@goatjs/core": "^1.0.11",
+    "@goatjs/dbz": "^1.0.39",
     "@goatjs/node": "^1.0.11",
     "@goatjs/node-eslint": "^1.0.9",
     "@goatjs/rimraf": "^1.0.11",

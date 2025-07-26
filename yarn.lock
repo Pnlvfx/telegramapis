@@ -910,6 +910,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@goatjs/dbz@npm:^1.0.39":
+  version: 1.0.39
+  resolution: "@goatjs/dbz@npm:1.0.39::__archiveUrl=https%3A%2F%2Feurope-west8-npm.pkg.dev%2Fopen-gto-2%2Fgoat%2F%40goatjs%2Fdbz%2F-%2F%40goatjs%2Fdbz-1.0.39.tgz"
+  peerDependencies:
+    "@goatjs/node": "*"
+    "@goatjs/rimraf": "*"
+  bin:
+    dbz: dist/cli.js
+  checksum: 10c0/3624587177e6e7e982d08357104356f59270d18eda2dfb932d99a793d289aa8bd471cb9ebead71dd3114d9b3f8c48c03d3a1889a80ef6119932a2a2de5b9e808
+  languageName: node
+  linkType: hard
+
 "@goatjs/node-eslint@npm:^1.0.9":
   version: 1.0.9
   resolution: "@goatjs/node-eslint@npm:1.0.9"
@@ -951,6 +963,7 @@ __metadata:
   resolution: "@goatjs/telegram@workspace:."
   dependencies:
     "@goatjs/core": "npm:^1.0.11"
+    "@goatjs/dbz": "npm:^1.0.39"
     "@goatjs/node": "npm:^1.0.11"
     "@goatjs/node-eslint": "npm:^1.0.9"
     "@goatjs/rimraf": "npm:^1.0.11"
