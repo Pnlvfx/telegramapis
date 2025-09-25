@@ -56,7 +56,7 @@ export const telegramapis = (token: string) => {
         const payload = { ...input };
         if (input.media instanceof Blob || !input.media.startsWith('http')) {
           const attachName = `attach://${i.toString()}`;
-          form.append(i.toString(), input.media instanceof Blob ? input.media : new Blob([await fs.readFile(input.media)]));
+          form.append(i.toString(), input.media instanceof Blob ? input.media : new Blob([new Uint8Array(await fs.readFile(input.media))]));
           payload.media = attachName;
         }
         inputMedia.push(payload);
@@ -68,15 +68,15 @@ export const telegramapis = (token: string) => {
       return sendMedia('sendMediaGroup', {}, form);
     },
     setWebHook: async (url: string) => {
-      const _url = buildUrl('setWebhook', new URLSearchParams({ url }));
-      const res = await fetch(_url, { method: 'POST', headers });
+      const apiUrl = buildUrl('setWebhook', new URLSearchParams({ url }));
+      const res = await fetch(apiUrl, { method: 'POST', headers });
       const data = (await res.json()) as WebhookResponse;
       if (!data.ok) telegramError(data);
       return data;
     },
     deleteWebHook: async () => {
-      const _url = buildUrl('deleteWebhook');
-      const res = await fetch(_url, { method: 'POST', headers });
+      const url = buildUrl('deleteWebhook');
+      const res = await fetch(url, { method: 'POST', headers });
       const data = (await res.json()) as WebhookResponse;
       if (!data.ok) telegramError(data);
       return data;

@@ -23,7 +23,7 @@ export const getMedia = async (type: 'photo' | 'video', input: InputMediaType, c
   if (input instanceof Blob || !input.startsWith('http')) {
     form = new FormData();
     form.append('chat_id', chatId.toString());
-    form.append(type, input instanceof Blob ? input : new Blob([await fs.readFile(input)]));
+    form.append(type, input instanceof Blob ? input : new Blob([new Uint8Array(await fs.readFile(input))]));
     addMediaOptions(form, options);
   } else {
     query = new URLSearchParams();
