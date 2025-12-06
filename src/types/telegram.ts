@@ -113,6 +113,12 @@ export interface SendVideoOptions extends SendBasicOptions {
   caption?: string;
 }
 
+export interface SendDocumentOptions extends SendBasicOptions {
+  parse_mode?: ParseMode;
+  caption?: string;
+  thumbnail?: Blob | Buffer;
+}
+
 export interface BotCommand {
   command: string;
   description: string;

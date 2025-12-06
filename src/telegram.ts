@@ -1,6 +1,6 @@
 import type { Message } from './types/webhook.js';
 import type { CommandResponse, TelegramResponse, WebhookResponse } from './types/response.js';
-import type { BotCommand, ChatId, SendMessageOptions, SendPhotoOptions, SendVideoOptions } from './types/telegram.js';
+import type { BotCommand, ChatId, SendDocumentOptions, SendMessageOptions, SendPhotoOptions, SendVideoOptions } from './types/telegram.js';
 import type { InputMedia, SendMediaGroupOptions } from './types/media-group.js';
 import { addMediaOptions, getMedia, type InputMediaType } from './lib/media.js';
 import { headers } from './lib/config.js';
@@ -10,7 +10,7 @@ import { telegramError } from './lib/error.js';
 
 const BASE_URL = 'https://api.telegram.org';
 
-type MediaEndpoint = 'sendPhoto' | 'sendVideo' | 'sendMediaGroup';
+type MediaEndpoint = 'sendPhoto' | 'sendVideo' | 'sendMediaGroup' | 'sendDocument';
 
 export const telegramapis = (token: string) => {
   const buildUrl = (METHOD: string, query?: URLSearchParams) => {
@@ -40,15 +40,19 @@ export const telegramapis = (token: string) => {
       if (!data.ok) telegramError(data);
       return data;
     },
-    sendPhoto: async (chatId: ChatId, photo: InputMediaType, options?: SendPhotoOptions) => {
+    sendDocument: async (chatId: ChatId, document: InputMediaType, options: SendDocumentOptions = {}) => {
+      const { form, query, headers } = await getMedia('document', document, chatId, options);
+      return sendMedia('sendDocument', headers, form, query);
+    },
+    sendPhoto: async (chatId: ChatId, photo: InputMediaType, options: SendPhotoOptions = {}) => {
       const { form, query, headers } = await getMedia('photo', photo, chatId, options);
       return sendMedia('sendPhoto', headers, form, query);
     },
-    sendVideo: async (chatId: ChatId, video: InputMediaType, options?: SendVideoOptions) => {
+    sendVideo: async (chatId: ChatId, video: InputMediaType, options: SendVideoOptions = {}) => {
       const { form, query, headers } = await getMedia('video', video, chatId, options);
       return sendMedia('sendVideo', headers, form, query);
     },
-    sendMediaGroup: async (chatId: ChatId, media: readonly InputMedia[], options?: SendMediaGroupOptions) => {
+    sendMediaGroup: async (chatId: ChatId, media: readonly InputMedia[], options: SendMediaGroupOptions = {}) => {
       const inputMedia = [];
       const form = new FormData();
       form.append('chat_id', chatId.toString());
@@ -62,9 +66,7 @@ export const telegramapis = (token: string) => {
         inputMedia.push(payload);
       }
       form.append('media', JSON.stringify(inputMedia));
-      if (options) {
-        addMediaOptions(form, options);
-      }
+      addMediaOptions(form, options);
       return sendMedia('sendMediaGroup', {}, form);
     },
     setWebHook: async (url: string) => {

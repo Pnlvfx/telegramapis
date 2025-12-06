@@ -7,8 +7,7 @@ type MediaOptions = SendPhotoOptions | SendVideoOptions;
 
 export type InputMediaType = string | Blob;
 
-export const addMediaOptions = (collector: FormData | URLSearchParams, options?: MediaOptions) => {
-  if (!options) return;
+export const addMediaOptions = (collector: FormData | URLSearchParams, options: MediaOptions = {}) => {
   for (const [key, value] of getEntries(options)) {
     if (value === undefined) continue;
     const parsed = typeof value === 'string' ? value : JSON.stringify(value);
@@ -16,14 +15,21 @@ export const addMediaOptions = (collector: FormData | URLSearchParams, options?:
   }
 };
 
-export const getMedia = async (type: 'photo' | 'video', input: InputMediaType, chatId: ChatId, options?: MediaOptions) => {
+export const getMedia = async (type: 'photo' | 'video' | 'document', input: InputMediaType, chatId: ChatId, options: MediaOptions = {}) => {
   let form;
   let query;
   let headers: HeadersInit | undefined;
   if (input instanceof Blob || !input.startsWith('http')) {
     form = new FormData();
     form.append('chat_id', chatId.toString());
-    form.append(type, input instanceof Blob ? input : new Blob([new Uint8Array(await fs.readFile(input))]));
+    if (input instanceof Blob) {
+      form.append(type, input);
+    } else {
+      const fileBuffer = await fs.readFile(input);
+      const blob = new Blob([new Uint8Array(fileBuffer)]);
+      form.append(type, blob, input);
+    }
+
     addMediaOptions(form, options);
   } else {
     query = new URLSearchParams();
