@@ -19,11 +19,15 @@
   ],
   "license": "MIT",
   "type": "module",
-  "module": "./dist/telegram.js",
-  "types": "./dist/telegram.d.ts",
   "exports": {
-    "types": "./dist/telegram.d.ts",
-    "import": "./dist/telegram.js"
+    ".": {
+      "types": "./dist/telegram.d.ts",
+      "import": "./dist/telegram.js"
+    },
+    "./types/*": {
+      "types": "./dist/types/*.d.ts",
+      "import": "./dist/types/*.js"
+    }
   },
   "scripts": {
     "tsc": "tsc --noEmit",
@@ -43,14 +47,14 @@
     "README.md"
   ],
   "devDependencies": {
-    "@goatjs/core": "^1.45.0",
-    "@goatjs/dbz": "^1.45.0",
-    "@goatjs/node": "^1.45.0",
-    "@goatjs/node-eslint": "^1.26.0",
-    "@goatjs/rimraf": "^1.45.0",
-    "@goatjs/ts-unused-exports": "^1.45.0",
-    "@goatjs/typescript-config": "^1.45.0",
-    "@types/node": "^24.10.1",
+    "@goatjs/core": "^1.46.0",
+    "@goatjs/dbz": "^1.46.0",
+    "@goatjs/node": "^1.46.0",
+    "@goatjs/node-eslint": "^1.27.0",
+    "@goatjs/rimraf": "^1.46.0",
+    "@goatjs/ts-unused-exports": "^1.46.0",
+    "@goatjs/typescript-config": "^1.46.0",
+    "@types/node": "^25.0.0",
     "dotenv": "^17.2.3",
     "eslint": "^9.39.1",
     "husky": "^9.1.7",

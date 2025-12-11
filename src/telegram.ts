@@ -107,19 +107,4 @@ export const telegramapis = (token: string) => {
     },
   };
 };
-
-export type {
-  BotCommand,
-  ChatId,
-  InlineKeyboardMarkup,
-  PollType,
-  SendMessageOptions,
-  SendPhotoOptions,
-  SendVideoOptions,
-  ParseMode,
-} from './types/telegram.js';
-export type { CommandResponse, TelegramError, TelegramSuccess, TelegramResponse, WebhookResponse } from './types/response.js';
-export type { FileBase, Message, Update, CallbackQuery, MessageEntity, User } from './types/webhook.js';
-export type { InputMedia, SendMediaGroupOptions } from './types/media-group.js';
-export type { InputMediaType } from './lib/media.js';
 export { isTelegramError } from './lib/error.js';
