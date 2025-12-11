@@ -1,11 +1,10 @@
+import type { InputMediaType } from '../types/media-group.js';
 import type { ChatId, SendPhotoOptions, SendVideoOptions } from '../types/telegram.js';
-import fs from 'node:fs/promises';
 import { headers as HEADERS } from './config.js';
 import { getEntries } from '@goatjs/core/object';
+import fs from 'node:fs/promises';
 
 type MediaOptions = SendPhotoOptions | SendVideoOptions;
-
-export type InputMediaType = string | Blob;
 
 export const addMediaOptions = (collector: FormData | URLSearchParams, options: MediaOptions = {}) => {
   for (const [key, value] of getEntries(options)) {

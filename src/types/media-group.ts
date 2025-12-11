@@ -27,3 +27,4 @@ interface InputMediaVideo extends InputMediaBase {
 }
 
 export type InputMedia = InputMediaPhoto | InputMediaVideo;
+export type InputMediaType = string | Blob;

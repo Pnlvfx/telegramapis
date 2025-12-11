@@ -1,8 +1,8 @@
 import type { Message } from './types/webhook.js';
 import type { CommandResponse, TelegramResponse, WebhookResponse } from './types/response.js';
 import type { BotCommand, ChatId, SendDocumentOptions, SendMessageOptions, SendPhotoOptions, SendVideoOptions } from './types/telegram.js';
-import type { InputMedia, SendMediaGroupOptions } from './types/media-group.js';
-import { addMediaOptions, getMedia, type InputMediaType } from './lib/media.js';
+import type { InputMedia, InputMediaType, SendMediaGroupOptions } from './types/media-group.js';
+import { addMediaOptions, getMedia } from './lib/media.js';
 import { headers } from './lib/config.js';
 import fs from 'node:fs/promises';
 import { getEntries } from '@goatjs/core/object';
