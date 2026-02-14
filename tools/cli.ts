@@ -1,11 +1,11 @@
 /* eslint-disable no-restricted-properties */
 import { input } from '@goatjs/node/input';
-import { telegramapis } from '../src/telegram.js';
+import { createTelegramClient } from '../src/telegram.ts';
 import path from 'node:path';
 
 if (!process.env.TELEGRAM_TOKEN || !process.env.TELEGRAM_GROUP_LOG) throw new Error('No env found.');
 
-const telegram = telegramapis(process.env.TELEGRAM_TOKEN);
+const telegram = createTelegramClient(process.env.TELEGRAM_TOKEN, { debug: true });
 const localImage = path.resolve('test-media', 'image.jpg');
 const localVideo = path.resolve('test-media', 'video.mp4');
 const localDocument = path.resolve('test-media', 'Juice WRLD - Smile (OG Version).mp3.zip');
@@ -27,8 +27,8 @@ const run = async () => {
       await telegram.sendMediaGroup(process.env.TELEGRAM_GROUP_LOG, [
         { type: 'photo', media: photoUrl, caption: 'Testing send media group, photo url...' },
         { type: 'video', media: videoUrl, caption: 'Testing send media group, video url...' },
-        { type: 'photo', media: localImage, caption: 'Testing send media group, local photo...' },
-        { type: 'video', media: localVideo, caption: 'Testing send media group, local video...' },
+        // { type: 'photo', media: localImage, caption: 'Testing send media group, local photo...' },
+        // { type: 'video', media: localVideo, caption: 'Testing send media group, local video...' },
       ]);
       break;
     }

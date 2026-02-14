@@ -1,44 +1,66 @@
-import type { Message } from './types/webhook.js';
-import type { CommandResponse, TelegramResponse, WebhookResponse } from './types/response.js';
-import type { BotCommand, ChatId, SendDocumentOptions, SendMessageOptions, SendPhotoOptions, SendVideoOptions } from './types/telegram.js';
-import type { InputMedia, InputMediaType, SendMediaGroupOptions } from './types/media-group.js';
-import { addMediaOptions, getMedia } from './lib/media.js';
-import { headers } from './lib/config.js';
+import { messageSchema } from './types/webhook.ts';
+import { createResponseSchema, booleanResultSchema, webhookResponseSchema } from './types/response.ts';
+import {
+  sendMessageOptionsSchema,
+  botCommandSchema,
+  type BotCommand,
+  type ChatId,
+  type SendDocumentOptions,
+  type SendMessageOptions,
+  type SendPhotoOptions,
+  type SendVideoOptions,
+} from './types/params.ts';
+import { type InputMedia, type InputMediaType, type SendMediaGroupOptions } from './types/media-group.ts';
+import { addMediaOptions, getMedia } from './lib/media.ts';
+import { baseHeaders } from './lib/config.ts';
 import fs from 'node:fs/promises';
 import { getEntries } from '@goatjs/core/object';
-import { telegramError } from './lib/error.js';
-
-const BASE_URL = 'https://api.telegram.org';
+import * as z from 'zod';
+import { fetchError } from '@goatjs/core/errors/fetch';
 
 type MediaEndpoint = 'sendPhoto' | 'sendVideo' | 'sendMediaGroup' | 'sendDocument';
 
-export const telegramapis = (token: string) => {
-  const buildUrl = (METHOD: string, query?: URLSearchParams) => {
-    const url = `${BASE_URL}/bot${token}/${METHOD}`;
-    return query ? `${url}?${query.toString()}` : url;
+export interface TelegramOptions {
+  debug?: boolean;
+}
+
+interface RequestOptions {
+  body?: BodyInit;
+  headers?: Headers;
+}
+
+export const createTelegramClient = (token: string, { debug }: TelegramOptions = {}) => {
+  const baseUrl = `https://api.telegram.org/bot${token}`;
+
+  const request = async <T extends z.ZodType>(endpoint: `/${string}`, schema: T, { body, headers = baseHeaders }: RequestOptions = {}) => {
+    const url = `${baseUrl}${endpoint}`;
+    if (debug) {
+      // eslint-disable-next-line no-console
+      console.log('Sending request to', url, 'headers:', headers, body);
+    }
+    const res = await fetch(url, { headers: headers, method: 'POST', body });
+    if (!res.ok) throw fetchError(res.statusText, { status: res.status });
+    const response = await schema.parseAsync(await res.json());
+    return response;
   };
 
-  const sendMedia = async (endpoint: MediaEndpoint, headers?: HeadersInit, form?: FormData, query?: URLSearchParams) => {
+  const sendMedia = async (endpoint: MediaEndpoint, headers?: Headers, form?: FormData, query?: URLSearchParams) => {
     if (!form && !query) throw new Error('One between query and form has to be provided.');
-    const res = await fetch(buildUrl(endpoint, query), { method: 'POST', body: form, headers });
-    const data = (await res.json()) as TelegramResponse<Message>;
-    if (!data.ok) throw telegramError(data);
-    return data;
+    const responseSchema = createResponseSchema(messageSchema);
+    return request(query ? `/${endpoint}?${query.toString()}` : `/${endpoint}`, responseSchema, { body: form, headers });
   };
 
   return {
-    sendMessage: async (chatId: ChatId, text: string, options: SendMessageOptions = {}) => {
+    sendMessage: async (chatId: ChatId, text: string, o: SendMessageOptions = {}) => {
+      const options = await sendMessageOptionsSchema.parseAsync(o);
       const query = new URLSearchParams({ chat_id: chatId.toString(), text });
       for (const [key, value] of getEntries(options)) {
         if (value === undefined) continue;
         const parsed = typeof value === 'string' ? value : JSON.stringify(value);
         query.append(key, parsed);
       }
-      const url = buildUrl('sendMessage', query);
-      const res = await fetch(url, { method: 'POST', headers });
-      const data = (await res.json()) as TelegramResponse<Message>;
-      if (!data.ok) telegramError(data);
-      return data;
+      const responseSchema = createResponseSchema(messageSchema);
+      return request(`/sendMessage?${query.toString()}`, responseSchema);
     },
     sendDocument: async (chatId: ChatId, document: InputMediaType, options: SendDocumentOptions = {}) => {
       const { form, query, headers } = await getMedia('document', document, chatId, options);
@@ -67,44 +89,29 @@ export const telegramapis = (token: string) => {
       }
       form.append('media', JSON.stringify(inputMedia));
       addMediaOptions(form, options);
-      return sendMedia('sendMediaGroup', {}, form);
+      return sendMedia('sendMediaGroup', undefined, form);
     },
     setWebHook: async (url: string) => {
-      const apiUrl = buildUrl('setWebhook', new URLSearchParams({ url }));
-      const res = await fetch(apiUrl, { method: 'POST', headers });
-      const data = (await res.json()) as WebhookResponse;
-      if (!data.ok) telegramError(data);
-      return data;
+      const query = new URLSearchParams({ url });
+      return request(`/setWebhook?${query.toString()}`, webhookResponseSchema);
     },
     deleteWebHook: async () => {
-      const url = buildUrl('deleteWebhook');
-      const res = await fetch(url, { method: 'POST', headers });
-      const data = (await res.json()) as WebhookResponse;
-      if (!data.ok) telegramError(data);
-      return data;
+      return request('/deleteWebhook', webhookResponseSchema);
     },
     setMyCommands: async (commands: BotCommand[]) => {
-      for (const a of commands) {
-        if (!a.command.includes('/')) {
-          a.command = '/' + a.command;
+      const validatedCommands = await z.array(botCommandSchema).parseAsync(commands);
+      for (const cmd of validatedCommands) {
+        if (!cmd.command.includes('/')) {
+          cmd.command = '/' + cmd.command;
         }
       }
-      const url = buildUrl('setMyCommands');
-      const res = await fetch(url, {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ commands }),
-      });
-      const data = (await res.json()) as CommandResponse;
-      if (!data.ok) telegramError(data);
-      return data;
+      const body = JSON.stringify({ commands: validatedCommands });
+      const headers = new Headers({ 'content-type': 'application/json' });
+      return request('/setMyCommands', booleanResultSchema, { body, headers });
     },
     deleteMessage: async (chatId: ChatId, message_id: string | number) => {
-      const q = new URLSearchParams({ chat_id: chatId.toString(), message_id: message_id.toString() });
-      const url = buildUrl('deleteMessage', q);
-      const res = await fetch(url, { method: 'DELETE', headers });
-      if (!res.ok) throw new Error(`${res.status.toString()} ${res.statusText}`);
+      const query = new URLSearchParams({ chat_id: chatId.toString(), message_id: message_id.toString() });
+      return request(`/deleteMessage?${query.toString()}`, booleanResultSchema, { headers: baseHeaders });
     },
   };
 };
-export { isTelegramError } from './lib/error.js';

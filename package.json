@@ -34,7 +34,7 @@
     "unused": "node tools/unused.ts",
     "test": "rimraf coverage && jest --coverage",
     "lint": "eslint",
-    "dev": "tsx --env-file .env --watch tools/cli.ts",
+    "dev": "node --env-file .env --watch tools/cli.ts",
     "build": "rimraf dist && eslint && tsc -p tsconfig.build.json",
     "prepare": "husky",
     "prepack": "yarn build",
@@ -47,26 +47,27 @@
     "README.md"
   ],
   "devDependencies": {
-    "@goatjs/core": "^1.46.0",
-    "@goatjs/dbz": "^1.46.0",
-    "@goatjs/node": "^1.46.0",
-    "@goatjs/node-eslint": "^1.27.0",
-    "@goatjs/rimraf": "^1.46.0",
-    "@goatjs/ts-unused-exports": "^1.46.0",
-    "@goatjs/typescript-config": "^1.46.0",
-    "@types/node": "^25.0.0",
-    "dotenv": "^17.2.3",
-    "eslint": "^9.39.1",
+    "@goatjs/core": "^1.68.0",
+    "@goatjs/dbz": "^1.68.0",
+    "@goatjs/node": "^1.68.0",
+    "@goatjs/node-eslint": "^1.37.0",
+    "@goatjs/rimraf": "^1.68.0",
+    "@goatjs/ts-unused-exports": "^1.68.0",
+    "@goatjs/typescript-config": "^1.68.0",
+    "@types/node": "^25.2.3",
+    "dotenv": "^17.3.1",
+    "eslint": "^9.39.2",
     "husky": "^9.1.7",
     "jest": "^30.2.0",
-    "prettier": "^3.7.4",
+    "prettier": "^3.8.1",
     "ts-jest": "^29.4.6",
     "ts-node": "^10.9.2",
-    "tsx": "^4.21.0",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "zod": "^4.3.6"
   },
   "peerDependencies": {
-    "@goatjs/core": "*"
+    "@goatjs/core": "*",
+    "zod": "*"
   },
   "packageManager": "yarn@4.12.0+sha512.f45ab632439a67f8bc759bf32ead036a1f413287b9042726b7cc4818b7b49e14e9423ba49b18f9e06ea4941c1ad062385b1d8760a8d5091a1a31e5f6219afca8"
 }

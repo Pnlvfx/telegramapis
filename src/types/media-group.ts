@@ -1,30 +1,35 @@
-import type { ParseMode } from './telegram.js';
-import type { MessageEntity } from './webhook.js';
+import * as z from 'zod';
+import { parseModeSchema } from './params.ts';
+import { messageEntitySchema } from './webhook.ts';
 
-export interface SendMediaGroupOptions {
-  disable_notification?: boolean;
-  reply_to_message_id?: number;
-}
+export const sendMediaGroupOptionsSchema = z.strictObject({
+  disable_notification: z.boolean().optional(),
+  reply_to_message_id: z.number().optional(),
+});
+export type SendMediaGroupOptions = z.infer<typeof sendMediaGroupOptionsSchema>;
 
-interface InputMediaBase {
-  media: string | Blob;
-  has_spoiler?: boolean;
-  caption?: string;
-  caption_entities?: MessageEntity[];
-  parse_mode?: ParseMode;
-}
+const inputMediaBaseSchema = z.strictObject({
+  media: z.union([z.string(), z.instanceof(Blob)]),
+  has_spoiler: z.boolean().optional(),
+  caption: z.string().optional(),
+  caption_entities: z.array(messageEntitySchema).optional(),
+  parse_mode: parseModeSchema.optional(),
+});
 
-interface InputMediaPhoto extends InputMediaBase {
-  type: 'photo';
-}
+const inputMediaPhotoSchema = inputMediaBaseSchema.extend({
+  type: z.literal('photo'),
+});
 
-interface InputMediaVideo extends InputMediaBase {
-  type: 'video';
-  width?: number;
-  height?: number;
-  duration?: number;
-  supports_streaming?: boolean;
-}
+const inputMediaVideoSchema = inputMediaBaseSchema.extend({
+  type: z.literal('video'),
+  width: z.number().optional(),
+  height: z.number().optional(),
+  duration: z.number().optional(),
+  supports_streaming: z.boolean().optional(),
+});
 
-export type InputMedia = InputMediaPhoto | InputMediaVideo;
-export type InputMediaType = string | Blob;
+export const inputMediaSchema = z.discriminatedUnion('type', [inputMediaPhotoSchema, inputMediaVideoSchema]);
+export type InputMedia = z.infer<typeof inputMediaSchema>;
+
+export const inputMediaTypeSchema = z.union([z.string(), z.instanceof(Blob)]);
+export type InputMediaType = z.infer<typeof inputMediaTypeSchema>;

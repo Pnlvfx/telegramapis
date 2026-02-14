@@ -1,28 +1,38 @@
-export interface TelegramError {
-  ok: false;
-  error_code: number;
-  description: string;
-  parameters?: ResponseParameters;
-}
+import * as z from 'zod';
+
+const parametersSchema = z.strictObject({});
+
+export const errorResponseSchema = z.strictObject({
+  ok: z.literal(false),
+  error_code: z.number(),
+  description: z.string(),
+  parameters: parametersSchema,
+});
+
+export type ErrorResponse = z.infer<typeof errorResponseSchema>;
+
+export const createResponseSchema = <T extends z.ZodObject>(schema: T) => {
+  const successResponse = z.strictObject({
+    ok: z.literal(true),
+    result: schema,
+  });
+
+  const responseSchema = z.discriminatedUnion('ok', [successResponse, errorResponseSchema]);
+  return responseSchema as z.ZodType<{ ok: true; result: z.infer<T> } | ErrorResponse>;
+};
 
 export interface TelegramSuccess<T> {
   ok: true;
   result: T;
 }
 
-/** The response contains an object, which always has a Boolean field 'ok' and may have an optional String field 'description' with a human-readable description of the result. If 'ok' equals true, the request was successful and the result of the query can be found in the 'result' field. In case of an unsuccessful request, 'ok' equals false and the error is explained in the 'description'. An Integer 'error_code' field is also returned, but its contents are subject to change in the future. Some errors may also have an optional field 'parameters' of the type ResponseParameters, which can help to automatically handle the error.
+// Simple boolean result schemas
+export const booleanResultSchema = z.strictObject({ ok: z.literal(true), result: z.boolean() });
+export type BooleanResult = z.infer<typeof booleanResultSchema>;
 
-All methods in the Bot API are case-insensitive.
-All queries must be made using UTF-8. */
-export type TelegramResponse<T> = TelegramError | TelegramSuccess<T>;
-
-/** Describes why a request was unsuccessful. */
-export interface ResponseParameters {
-  /** The group has been migrated to a supergroup with the specified identifier. */
-  migrate_to_chat_id?: number;
-  /** In case of exceeding flood control, the number of seconds left to wait before the request can be repeated */
-  retry_after?: number;
-}
-
-export type WebhookResponse = TelegramError | (TelegramSuccess<true> & { description: string });
-export type CommandResponse = TelegramError | TelegramSuccess<true>;
+// Webhook response schema
+export const webhookResponseSchema = z.discriminatedUnion('ok', [
+  z.strictObject({ ok: z.literal(true), result: z.boolean(), description: z.string() }),
+  errorResponseSchema,
+]);
+export type WebhookResponse = z.infer<typeof webhookResponseSchema>;

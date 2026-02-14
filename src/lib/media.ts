@@ -1,8 +1,8 @@
-import type { InputMediaType } from '../types/media-group.js';
-import type { ChatId, SendPhotoOptions, SendVideoOptions } from '../types/telegram.js';
-import { headers as HEADERS } from './config.js';
+import type { InputMediaType } from '../types/media-group.ts';
+import type { ChatId, SendPhotoOptions, SendVideoOptions } from '../types/params.ts';
 import { getEntries } from '@goatjs/core/object';
 import fs from 'node:fs/promises';
+import { baseHeaders } from './config.ts';
 
 type MediaOptions = SendPhotoOptions | SendVideoOptions;
 
@@ -17,7 +17,7 @@ export const addMediaOptions = (collector: FormData | URLSearchParams, options: 
 export const getMedia = async (type: 'photo' | 'video' | 'document', input: InputMediaType, chatId: ChatId, options: MediaOptions = {}) => {
   let form;
   let query;
-  let headers: HeadersInit | undefined;
+  let headers: Headers | undefined;
   if (input instanceof Blob || !input.startsWith('http')) {
     form = new FormData();
     form.append('chat_id', chatId.toString());
@@ -35,10 +35,9 @@ export const getMedia = async (type: 'photo' | 'video' | 'document', input: Inpu
     query.append(type, input);
     query.append('chat_id', chatId.toString());
     addMediaOptions(query, options);
-    headers = {
-      ...HEADERS,
-      'content-length': Buffer.byteLength(query.toString()).toString(),
-    };
+    headers = new Headers(baseHeaders);
+    headers.append('content-length', Buffer.byteLength(query.toString()).toString());
   }
+
   return { form, query, headers };
 };

@@ -1,11 +1,11 @@
 /* eslint-disable no-restricted-properties */
 import { describe, it } from '@jest/globals';
-import { telegramapis } from '../src/telegram.js';
+import { createTelegramClient } from '../src/telegram.ts';
 import path from 'node:path';
 
 if (!process.env.TELEGRAM_TOKEN || !process.env.TELEGRAM_GROUP_LOG) throw new Error('No env found.');
 
-const telegram = telegramapis(process.env.TELEGRAM_TOKEN);
+const telegram = createTelegramClient(process.env.TELEGRAM_TOKEN);
 const localImage = path.resolve(process.cwd(), 'test-media', 'image.jpg');
 const localVideo = path.resolve(process.cwd(), 'test-media', 'video.mp4');
 const photoUrl = 'https://res.cloudinary.com/bbabystyle/image/upload/v1724335266/ninja_art_qu3kkj.webp';

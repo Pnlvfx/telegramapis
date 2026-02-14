@@ -1,498 +1,446 @@
-/* eslint-disable @typescript-eslint/no-empty-object-type */
-import type { InlineKeyboardMarkup, PollType } from './telegram.js';
+import * as z from 'zod';
+import { inlineKeyboardMarkupSchema, pollTypeSchema } from './params.ts';
+import { locationSchema } from './shared.ts';
+import { userSchema } from './user.ts';
+import { chatSchema } from './chat.ts';
 
-export interface CallbackQuery {
-  id: string;
-  from: User;
-  message?: Message;
-  inline_message_id?: string;
-  chat_instance: string;
-  data?: string;
-  game_short_name?: string;
-}
+const messageEntityTypeSchema = z.literal([
+  'mention',
+  'hashtag',
+  'cashtag',
+  'bot_command',
+  'url',
+  'email',
+  'phone_number',
+  'bold',
+  'italic',
+  'underline',
+  'strikethrough',
+  'code',
+  'pre',
+  'text_link',
+  'text_mention',
+  'spoiler',
+  'custom_emoji',
+]);
 
-export interface Update {
-  update_id: number;
-  message?: Message;
-  edited_message?: Message;
-  channel_post?: Message;
-  edited_channel_post?: Message;
-  inline_query?: InlineQuery;
-  chosen_inline_result?: ChosenInlineResult;
-  callback_query?: CallbackQuery;
-  shipping_query?: ShippingQuery;
-  pre_checkout_query?: PreCheckoutQuery;
-  poll?: Poll;
-  poll_answer?: PollAnswer;
-  my_chat_member?: ChatMemberUpdated;
-  chat_member?: ChatMemberUpdated;
-  chat_join_request?: ChatJoinRequest;
-}
+export const messageEntitySchema = z.strictObject({
+  type: messageEntityTypeSchema,
+  offset: z.number(),
+  length: z.number(),
+  url: z.string().optional(),
+  user: userSchema.optional(),
+  language: z.string().optional(),
+  custom_emoji_id: z.string().optional(),
+});
 
-interface InlineQuery {
-  id: string;
-  from: User;
-  location?: Location;
-  query: string;
-  offset: string;
-}
+const fileBaseSchema = z.strictObject({ file_id: z.string(), file_unique_id: z.string(), file_size: z.number().optional() });
+export const photoSizeSchema = z.strictObject({ ...fileBaseSchema.shape, width: z.number(), height: z.number() });
 
-interface ChosenInlineResult {
-  result_id: string;
-  from: User;
-  location?: Location;
-  inline_message_id?: string;
-  query: string;
-}
+export const audioSchema = z.strictObject({
+  ...fileBaseSchema.shape,
+  duration: z.number(),
+  performer: z.string().optional(),
+  title: z.string().optional(),
+  mime_type: z.string().optional(),
+  thumb: photoSizeSchema.optional(),
+});
 
-interface ShippingAddress {
-  country_code: string;
-  state: string;
-  city: string;
-  street_line1: string;
-  street_line2: string;
-  post_code: string;
-}
+export const animationSchema = z.strictObject({
+  ...fileBaseSchema.shape,
+  width: z.number(),
+  height: z.number(),
+  duration: z.number(),
+  thumb: photoSizeSchema.optional(),
+  file_name: z.string().optional(),
+  mime_type: z.string().optional(),
+});
+export type Animation = z.infer<typeof animationSchema>;
 
-interface ShippingQuery {
-  id: string;
-  from: User;
-  invoice_payload: string;
-  shipping_address: ShippingAddress;
-}
+export const gameSchema = z.strictObject({
+  title: z.string(),
+  description: z.string(),
+  photo: z.array(photoSizeSchema),
+  text: z.string().optional(),
+  text_entities: z.array(messageEntitySchema).optional(),
+  animation: z.lazy(() => animationSchema).optional(),
+});
+export type Game = z.infer<typeof gameSchema>;
 
-interface OrderInfo {
-  name?: string;
-  phone_number?: string;
-  email?: string;
-  shipping_address?: ShippingAddress;
-}
+const maskPositionSchema = z.strictObject({
+  point: z.string(),
+  x_shift: z.number(),
+  y_shift: z.number(),
+  scale: z.number(),
+});
+export type MaskPosition = z.infer<typeof maskPositionSchema>;
 
-interface PreCheckoutQuery {
-  id: string;
-  from: User;
-  currency: string;
-  total_amount: number;
-  invoice_payload: string;
-  shipping_option_id?: string;
-  order_info?: OrderInfo;
-}
+export const stickerTypeSchema = z.literal(['regular', 'mask', 'custom_emoji']);
+export type StickerType = z.infer<typeof stickerTypeSchema>;
 
-interface PollOption {
-  text: string;
-  voter_count: number;
-}
+const fileSchema = fileBaseSchema.extend({ file_path: z.string().optional() });
+export type File = z.infer<typeof fileSchema>;
 
-interface Poll {
-  id: string;
-  question: string;
-  options: PollOption[];
-  is_closed: boolean;
-  is_anonymous: boolean;
-  allows_multiple_answers: boolean;
-  type: PollType;
-  total_voter_count: number;
-}
+export const stickerSchema = fileBaseSchema.extend({
+  type: stickerTypeSchema,
+  is_animated: z.boolean(),
+  is_video: z.boolean(),
+  width: z.number(),
+  height: z.number(),
+  thumb: photoSizeSchema.optional(),
+  emoji: z.string().optional(),
+  set_name: z.string().optional(),
+  premium_animation: fileSchema.optional(),
+  mask_position: maskPositionSchema.optional(),
+  custom_emoji_id: z.string().optional(),
+});
+export type Sticker = z.infer<typeof stickerSchema>;
 
-interface PollAnswer {
-  poll_id: string;
-  user: User;
-  option_ids: number[];
-}
+export const videoSchema = fileBaseSchema.extend({
+  width: z.number(),
+  height: z.number(),
+  duration: z.number(),
+  thumb: photoSizeSchema.optional(),
+  mime_type: z.string().optional(),
+});
+export type Video = z.infer<typeof videoSchema>;
 
-type ChatMemberStatus = 'creator' | 'administrator' | 'member' | 'restricted' | 'left' | 'kicked';
+export const voiceSchema = fileBaseSchema.extend({
+  duration: z.number(),
+  mime_type: z.string().optional(),
+});
+export type Voice = z.infer<typeof voiceSchema>;
 
-interface ChatInviteLink {
-  invite_link: string;
-  creator: User;
-  is_primary: boolean;
-  is_revoked: boolean;
-  expire_date?: number;
-  member_limit?: number;
-  name?: string;
-}
+export const videoNoteSchema = fileBaseSchema.extend({ length: z.number(), duration: z.number(), thumb: photoSizeSchema.optional() });
+export type VideoNote = z.infer<typeof videoNoteSchema>;
 
-interface ChatMember {
-  user: User;
-  status: ChatMemberStatus;
-  until_date?: number;
-  can_be_edited?: boolean;
-  can_post_messages?: boolean;
-  can_edit_messages?: boolean;
-  can_delete_messages?: boolean;
-  can_restrict_members?: boolean;
-  can_promote_members?: boolean;
-  can_change_info?: boolean;
-  can_invite_users?: boolean;
-  can_pin_messages?: boolean;
-  is_member?: boolean;
-  can_send_messages?: boolean;
-  can_send_media_messages?: boolean;
-  can_send_polls?: boolean;
-  can_send_other_messages?: boolean;
-  can_add_web_page_previews?: boolean;
-}
+export const contactSchema = z.strictObject({
+  phone_number: z.string(),
+  first_name: z.string(),
+  last_name: z.string().optional(),
+  user_id: z.number().optional(),
+  vcard: z.string().optional(),
+});
+export type Contact = z.infer<typeof contactSchema>;
 
-interface ChatMemberUpdated {
-  chat: Chat;
-  from: User;
-  date: number;
-  old_chat_member: ChatMember;
-  new_chat_member: ChatMember;
-  invite_link?: ChatInviteLink;
-}
+export const venueSchema = z.strictObject({
+  location: locationSchema,
+  title: z.string(),
+  address: z.string(),
+  foursquare_id: z.string().optional(),
+  foursquare_type: z.string().optional(),
+});
+export type Venue = z.infer<typeof venueSchema>;
 
-interface ChatJoinRequest {
-  chat: Chat;
-  from: User;
-  user_chat_id: number;
-  date: number;
-  bio?: string;
-  invite_link?: ChatInviteLink;
-}
+const pollOptionSchema = z.strictObject({ text: z.string(), voter_count: z.number() });
+export type PollOption = z.infer<typeof pollOptionSchema>;
 
-export interface Message {
-  message_id: number;
-  message_thread_id?: number;
-  from?: User;
-  date: number;
-  chat: Chat;
-  sender_chat?: Chat;
-  forward_from?: User;
-  forward_from_chat?: Chat;
-  forward_from_message_id?: number;
-  forward_signature?: string;
-  forward_sender_name?: string;
-  forward_date?: number;
-  is_topic_message?: boolean;
-  reply_to_message?: Message;
-  edit_date?: number;
-  media_group_id?: string;
-  author_signature?: string;
-  text?: string;
-  entities?: MessageEntity[];
-  caption_entities?: MessageEntity[];
-  audio?: Audio;
-  document?: Document;
-  animation?: Animation;
-  game?: Game;
-  photo?: PhotoSize[];
-  sticker?: Sticker;
-  video?: Video;
-  voice?: Voice;
-  video_note?: VideoNote;
-  caption?: string;
-  contact?: Contact;
-  location?: Location;
-  venue?: Venue;
-  poll?: Poll;
-  new_chat_members?: User[];
-  left_chat_member?: User;
-  new_chat_title?: string;
-  new_chat_photo?: PhotoSize[];
-  delete_chat_photo?: boolean;
-  group_chat_created?: boolean;
-  supergroup_chat_created?: boolean;
-  channel_chat_created?: boolean;
-  migrate_to_chat_id?: number;
-  migrate_from_chat_id?: number;
-  pinned_message?: Message;
-  invoice?: Invoice;
-  successful_payment?: SuccessfulPayment;
-  connected_website?: string;
-  passport_data?: PassportData;
-  reply_markup?: InlineKeyboardMarkup;
-  web_app_data?: WebAppData;
-  is_automatic_forward?: boolean;
-  has_protected_content?: boolean;
-  dice?: Dice;
-  forum_topic_created?: ForumTopicCreated;
-  forum_topic_edited?: ForumTopicEdited;
-  forum_topic_closed?: ForumTopicClosed;
-  forum_topic_reopened?: ForumTopicReopened;
-  general_forum_topic_hidden?: GeneralForumTopicHidden;
-  general_forum_topic_unhidden?: GeneralForumTopicUnhidden;
-  has_media_spoiler?: boolean;
-  user_shared?: UserShared;
-  chat_shared?: ChatShared;
-}
+const pollSchema = z.strictObject({
+  id: z.string(),
+  question: z.string(),
+  options: z.array(pollOptionSchema),
+  is_closed: z.boolean(),
+  is_anonymous: z.boolean(),
+  allows_multiple_answers: z.boolean(),
+  type: pollTypeSchema,
+  total_voter_count: z.number(),
+});
+export type Poll = z.infer<typeof pollSchema>;
 
-export interface User {
-  id: number;
-  is_bot: boolean;
-  first_name: string;
-  last_name?: string;
-  username?: string;
-  language_code?: string;
-}
+const shippingAddressSchema = z.strictObject({
+  country_code: z.string(),
+  state: z.string(),
+  city: z.string(),
+  street_line1: z.string(),
+  street_line2: z.string(),
+  post_code: z.string(),
+});
+export type ShippingAddress = z.infer<typeof shippingAddressSchema>;
 
-type ChatType = 'private' | 'group' | 'supergroup' | 'channel';
+const orderInfoSchema = z.strictObject({
+  name: z.string().optional(),
+  phone_number: z.string().optional(),
+  email: z.string().optional(),
+  shipping_address: shippingAddressSchema.optional(),
+});
+export type OrderInfo = z.infer<typeof orderInfoSchema>;
 
-interface ChatPhoto {
-  small_file_id: string;
-  big_file_id: string;
-}
+export const invoiceSchema = z.strictObject({
+  title: z.string(),
+  description: z.string(),
+  start_parameter: z.string(),
+  currency: z.string(),
+  total_amount: z.number(),
+});
+export type Invoice = z.infer<typeof invoiceSchema>;
 
-interface ChatPermissions {
-  can_send_messages?: boolean;
-  can_send_audios?: boolean;
-  can_send_documents?: boolean;
-  can_send_photos?: boolean;
-  can_send_videos?: boolean;
-  can_send_video_notes?: boolean;
-  can_send_voice_notes?: boolean;
-  can_send_polls?: boolean;
-  can_send_other_messages?: boolean;
-  can_add_web_page_previews?: boolean;
-  can_change_info?: boolean;
-  can_invite_users?: boolean;
-  can_pin_messages?: boolean;
-  can_manage_topics?: boolean;
-}
+export const successfulPaymentSchema = z.strictObject({
+  currency: z.string(),
+  total_amount: z.number(),
+  invoice_payload: z.string(),
+  shipping_option_id: z.string().optional(),
+  order_info: orderInfoSchema.optional(),
+  telegram_payment_charge_id: z.string(),
+  provider_payment_charge_id: z.string(),
+});
+export type SuccessfulPayment = z.infer<typeof successfulPaymentSchema>;
 
-interface ChatLocation {
-  location: Location;
-  address: string;
-}
+export const passportFileSchema = z.strictObject({ file_id: z.string(), file_size: z.number(), file_date: z.number() });
+export type PassportFile = z.infer<typeof passportFileSchema>;
 
-interface Location {
-  longitude: number;
-  latitude: number;
-}
+export const encryptedPassportElementSchema = z.strictObject({
+  type: z.string(),
+  data: z.string().optional(),
+  phone_number: z.string().optional(),
+  email: z.string().optional(),
+  files: z.array(passportFileSchema).optional(),
+  front_side: passportFileSchema.optional(),
+  reverse_side: passportFileSchema.optional(),
+  selfie: passportFileSchema.optional(),
+  translation: z.array(passportFileSchema).optional(),
+  hash: z.string(),
+});
+export type EncryptedPassportElement = z.infer<typeof encryptedPassportElementSchema>;
 
-interface Chat {
-  id: number;
-  type: ChatType;
-  title?: string;
-  username?: string;
-  first_name?: string;
-  last_name?: string;
-  is_forum?: boolean;
-  photo?: ChatPhoto;
-  active_usernames?: string[];
-  emoji_status_custom_emoji_id?: string;
-  bio?: string;
-  has_restricted_voice_and_video_messages?: boolean;
-  join_to_send_messages?: boolean;
-  join_by_request?: boolean;
-  description?: string;
-  invite_link?: string;
-  has_aggressive_anti_spam_enabled?: boolean;
-  has_hidden_members?: boolean;
-  pinned_message?: Message;
-  permissions?: ChatPermissions;
-  can_set_sticker_set?: boolean;
-  sticker_set_name?: string;
-  has_private_forwards?: boolean;
-  has_protected_content?: boolean;
-  slow_mode_delay?: number;
-  message_auto_delete_time?: number;
-  linked_chat_id?: number;
-  location?: ChatLocation;
-  /**
-   * @deprecated since version Telegram Bot API 4.4 - July 29, 2019
-   */
-  all_members_are_administrators?: boolean;
-}
+export const encryptedCredentialsSchema = z.strictObject({ data: z.string(), hash: z.string(), secret: z.string() });
+export type EncryptedCredentials = z.infer<typeof encryptedCredentialsSchema>;
 
-type MessageEntityType =
-  | 'mention'
-  | 'hashtag'
-  | 'cashtag'
-  | 'bot_command'
-  | 'url'
-  | 'email'
-  | 'phone_number'
-  | 'bold'
-  | 'italic'
-  | 'underline'
-  | 'strikethrough'
-  | 'code'
-  | 'pre'
-  | 'text_link'
-  | 'text_mention'
-  | 'spoiler'
-  | 'custom_emoji';
+export const passportDataSchema = z.strictObject({ data: z.array(encryptedPassportElementSchema), credentials: encryptedCredentialsSchema });
+export type PassportData = z.infer<typeof passportDataSchema>;
 
-export interface MessageEntity {
-  type: MessageEntityType;
-  offset: number;
-  length: number;
-  url?: string;
-  user?: User;
-  language?: string;
-  custom_emoji_id?: string;
-}
+export const webAppDataSchema = z.strictObject({ data: z.string(), button_text: z.string() });
+export type WebAppData = z.infer<typeof webAppDataSchema>;
 
-export interface FileBase {
-  file_id: string;
-  file_unique_id: string;
-  file_size?: number;
-}
+export const diceSchema = z.strictObject({ emoji: z.string(), value: z.number() });
+export type Dice = z.infer<typeof diceSchema>;
 
-interface PhotoSize extends FileBase {
-  width: number;
-  height: number;
-}
+export const forumTopicCreatedSchema = z.strictObject({ name: z.string(), icon_color: z.number(), icon_custom_emoji_id: z.string() });
+export type ForumTopicCreated = z.infer<typeof forumTopicCreatedSchema>;
 
-interface Audio extends FileBase {
-  duration: number;
-  performer?: string;
-  title?: string;
-  mime_type?: string;
-  thumb?: PhotoSize;
-}
+export const forumTopicClosedSchema = z.strictObject({});
+export type ForumTopicClosed = z.infer<typeof forumTopicClosedSchema>;
 
-interface Game {
-  title: string;
-  description: string;
-  photo: PhotoSize[];
-  text?: string;
-  text_entities?: MessageEntity[];
-  animation?: Animation;
-}
+export const forumTopicEditedSchema = z.strictObject({ name: z.string(), icon_custom_emoji_id: z.string() });
+export type ForumTopicEdited = z.infer<typeof forumTopicEditedSchema>;
 
-interface MaskPosition {
-  point: string;
-  x_shift: number;
-  y_shift: number;
-  scale: number;
-}
+export const forumTopicReopenedSchema = z.strictObject({});
+export type ForumTopicReopened = z.infer<typeof forumTopicReopenedSchema>;
 
-type StickerType = 'regular' | 'mask' | 'custom_emoji';
+export const generalForumTopicHiddenSchema = z.strictObject({});
+export type GeneralForumTopicHidden = z.infer<typeof generalForumTopicHiddenSchema>;
 
-interface Sticker extends FileBase {
-  type: StickerType;
-  is_animated: boolean;
-  is_video: boolean;
-  width: number;
-  height: number;
-  thumb?: PhotoSize;
-  emoji?: string;
-  set_name?: string;
-  premium_animation?: File;
-  mask_position?: MaskPosition;
-  custom_emoji_id?: string;
-}
+export const generalForumTopicUnhiddenSchema = z.strictObject({});
+export type GeneralForumTopicUnhidden = z.infer<typeof generalForumTopicUnhiddenSchema>;
 
-interface Invoice {
-  title: string;
-  description: string;
-  start_parameter: string;
-  currency: string;
-  total_amount: number;
-}
+export const userSharedSchema = z.strictObject({ request_id: z.number(), user_id: z.number() });
+export type UserShared = z.infer<typeof userSharedSchema>;
 
-interface Video extends FileBase {
-  width: number;
-  height: number;
-  duration: number;
-  thumb?: PhotoSize;
-  mime_type?: string;
-}
+export const chatSharedSchema = z.strictObject({ request_id: z.number(), chat_id: z.number() });
+export type ChatShared = z.infer<typeof chatSharedSchema>;
 
-interface Voice extends FileBase {
-  duration: number;
-  mime_type?: string;
-}
+export const documentSchema = fileBaseSchema.extend({
+  thumb: photoSizeSchema.optional(),
+  file_name: z.string().optional(),
+  mime_type: z.string().optional(),
+});
+export type Document = z.infer<typeof documentSchema>;
 
-interface VideoNote extends FileBase {
-  length: number;
-  duration: number;
-  thumb?: PhotoSize;
-}
+const inlineQuerySchema = z.strictObject({
+  id: z.string(),
+  from: userSchema,
+  location: locationSchema.optional(),
+  query: z.string(),
+  offset: z.string(),
+});
+export type InlineQuery = z.infer<typeof inlineQuerySchema>;
 
-interface Contact {
-  phone_number: string;
-  first_name: string;
-  last_name?: string;
-  user_id?: number;
-  vcard?: string;
-}
+const chosenInlineResultSchema = z.strictObject({
+  result_id: z.string(),
+  from: userSchema,
+  location: locationSchema.optional(),
+  inline_message_id: z.string().optional(),
+  query: z.string(),
+});
+export type ChosenInlineResult = z.infer<typeof chosenInlineResultSchema>;
 
-interface Venue {
-  location: Location;
-  title: string;
-  address: string;
-  foursquare_id?: string;
-  foursquare_type?: string;
-}
+const shippingQuerySchema = z.strictObject({
+  id: z.string(),
+  from: userSchema,
+  invoice_payload: z.string(),
+  shipping_address: shippingAddressSchema,
+});
+export type ShippingQuery = z.infer<typeof shippingQuerySchema>;
 
-interface SuccessfulPayment {
-  currency: string;
-  total_amount: number;
-  invoice_payload: string;
-  shipping_option_id?: string;
-  order_info?: OrderInfo;
-  telegram_payment_charge_id: string;
-  provider_payment_charge_id: string;
-}
+const preCheckoutQuerySchema = z.strictObject({
+  id: z.string(),
+  from: userSchema,
+  currency: z.string(),
+  total_amount: z.number(),
+  invoice_payload: z.string(),
+  shipping_option_id: z.string().optional(),
+  order_info: orderInfoSchema.optional(),
+});
+export type PreCheckoutQuery = z.infer<typeof preCheckoutQuerySchema>;
 
-interface PassportFile {
-  file_id: string;
-  file_size: number;
-  file_date: number;
-}
+const pollAnswerSchema = z.strictObject({
+  poll_id: z.string(),
+  user: userSchema,
+  option_ids: z.array(z.number()),
+});
+export type PollAnswer = z.infer<typeof pollAnswerSchema>;
 
-interface EncryptedPassportElement {
-  type: string;
-  data?: string;
-  phone_number?: string;
-  email?: string;
-  files?: PassportFile[];
-  front_side?: PassportFile;
-  reverse_side?: PassportFile;
-  selfie?: PassportFile;
-  translation?: PassportFile[];
-  hash: string;
-}
+const chatMemberStatusSchema = z.literal(['creator', 'administrator', 'member', 'restricted', 'left', 'kicked']);
+export type ChatMemberStatus = z.infer<typeof chatMemberStatusSchema>;
 
-interface EncryptedCredentials {
-  data: string;
-  hash: string;
-  secret: string;
-}
+const chatInviteLinkSchema = z.strictObject({
+  invite_link: z.string(),
+  creator: userSchema,
+  is_primary: z.boolean(),
+  is_revoked: z.boolean(),
+  expire_date: z.number().optional(),
+  member_limit: z.number().optional(),
+  name: z.string().optional(),
+});
+export type ChatInviteLink = z.infer<typeof chatInviteLinkSchema>;
 
-interface PassportData {
-  data: EncryptedPassportElement[];
-  credentials: EncryptedCredentials;
-}
+const chatMemberSchema = z.strictObject({
+  user: userSchema,
+  status: chatMemberStatusSchema,
+  until_date: z.number().optional(),
+  can_be_edited: z.boolean().optional(),
+  can_post_messages: z.boolean().optional(),
+  can_edit_messages: z.boolean().optional(),
+  can_delete_messages: z.boolean().optional(),
+  can_restrict_members: z.boolean().optional(),
+  can_promote_members: z.boolean().optional(),
+  can_change_info: z.boolean().optional(),
+  can_invite_users: z.boolean().optional(),
+  can_pin_messages: z.boolean().optional(),
+  is_member: z.boolean().optional(),
+  can_send_messages: z.boolean().optional(),
+  can_send_media_messages: z.boolean().optional(),
+  can_send_polls: z.boolean().optional(),
+  can_send_other_messages: z.boolean().optional(),
+  can_add_web_page_previews: z.boolean().optional(),
+});
+export type ChatMember = z.infer<typeof chatMemberSchema>;
 
-interface WebAppData {
-  data: string;
-  button_text: string;
-}
+const chatMemberUpdatedSchema = z.strictObject({
+  chat: chatSchema,
+  from: userSchema,
+  date: z.number(),
+  old_chat_member: chatMemberSchema,
+  new_chat_member: chatMemberSchema,
+  invite_link: chatInviteLinkSchema.optional(),
+});
+export type ChatMemberUpdated = z.infer<typeof chatMemberUpdatedSchema>;
 
-interface Dice {
-  emoji: string;
-  value: number;
-}
+const chatJoinRequestSchema = z.strictObject({
+  chat: chatSchema,
+  from: userSchema,
+  user_chat_id: z.number(),
+  date: z.number(),
+  bio: z.string().optional(),
+  invite_link: chatInviteLinkSchema.optional(),
+});
 
-interface ForumTopicCreated {
-  name: string;
-  icon_color: number;
-  icon_custom_emoji_id: string;
-}
+export const messageSchema = z.strictObject({
+  message_id: z.number(),
+  message_thread_id: z.number().optional(),
+  from: userSchema.optional(),
+  date: z.number(),
+  chat: chatSchema,
+  sender_chat: chatSchema.optional(),
+  forward_from: userSchema.optional(),
+  forward_from_chat: chatSchema.optional(),
+  forward_from_message_id: z.number().optional(),
+  forward_signature: z.string().optional(),
+  forward_sender_name: z.string().optional(),
+  forward_date: z.number().optional(),
+  is_topic_message: z.boolean().optional(),
+  edit_date: z.number().optional(),
+  media_group_id: z.string().optional(),
+  author_signature: z.string().optional(),
+  text: z.string().optional(),
+  entities: z.array(messageEntitySchema).optional(),
+  caption_entities: z.array(messageEntitySchema).optional(),
+  audio: audioSchema.optional(),
+  document: documentSchema.optional(),
+  animation: animationSchema.optional(),
+  game: gameSchema.optional(),
+  photo: z.array(photoSizeSchema).optional(),
+  sticker: stickerSchema.optional(),
+  video: videoSchema.optional(),
+  voice: voiceSchema.optional(),
+  video_note: videoNoteSchema.optional(),
+  caption: z.string().optional(),
+  contact: contactSchema.optional(),
+  location: locationSchema.optional(),
+  venue: venueSchema.optional(),
+  poll: pollSchema.optional(),
+  new_chat_members: z.array(userSchema).optional(),
+  left_chat_member: userSchema.optional(),
+  new_chat_title: z.string().optional(),
+  new_chat_photo: z.array(photoSizeSchema).optional(),
+  delete_chat_photo: z.boolean().optional(),
+  group_chat_created: z.boolean().optional(),
+  supergroup_chat_created: z.boolean().optional(),
+  channel_chat_created: z.boolean().optional(),
+  migrate_to_chat_id: z.number().optional(),
+  migrate_from_chat_id: z.number().optional(),
+  invoice: invoiceSchema.optional(),
+  successful_payment: successfulPaymentSchema.optional(),
+  connected_website: z.string().optional(),
+  passport_data: passportDataSchema.optional(),
+  reply_markup: inlineKeyboardMarkupSchema.optional(),
+  web_app_data: webAppDataSchema.optional(),
+  is_automatic_forward: z.boolean().optional(),
+  has_protected_content: z.boolean().optional(),
+  dice: diceSchema.optional(),
+  forum_topic_created: forumTopicCreatedSchema.optional(),
+  forum_topic_edited: forumTopicEditedSchema.optional(),
+  forum_topic_closed: forumTopicClosedSchema.optional(),
+  forum_topic_reopened: forumTopicReopenedSchema.optional(),
+  general_forum_topic_hidden: generalForumTopicHiddenSchema.optional(),
+  general_forum_topic_unhidden: generalForumTopicUnhiddenSchema.optional(),
+  has_media_spoiler: z.boolean().optional(),
+  user_shared: userSharedSchema.optional(),
+  chat_shared: chatSharedSchema.optional(),
+});
 
-interface ForumTopicClosed {}
+export const callbackQuerySchema = z.strictObject({
+  id: z.string(),
+  from: userSchema,
+  message: z.lazy(() => messageSchema).optional(),
+  inline_message_id: z.string().optional(),
+  chat_instance: z.string(),
+  data: z.string().optional(),
+  game_short_name: z.string().optional(),
+});
 
-interface ForumTopicEdited {
-  name: string;
-  icon_custom_emoji_id: string;
-}
+export const updateSchema = z.strictObject({
+  update_id: z.number(),
+  message: z.lazy(() => messageSchema).optional(),
+  edited_message: z.lazy(() => messageSchema).optional(),
+  channel_post: z.lazy(() => messageSchema).optional(),
+  edited_channel_post: z.lazy(() => messageSchema).optional(),
+  inline_query: inlineQuerySchema.optional(),
+  chosen_inline_result: chosenInlineResultSchema.optional(),
+  callback_query: callbackQuerySchema.optional(),
+  shipping_query: shippingQuerySchema.optional(),
+  pre_checkout_query: preCheckoutQuerySchema.optional(),
+  poll: pollSchema.optional(),
+  poll_answer: pollAnswerSchema.optional(),
+  my_chat_member: chatMemberUpdatedSchema.optional(),
+  chat_member: chatMemberUpdatedSchema.optional(),
+  chat_join_request: chatJoinRequestSchema.optional(),
+});
 
-interface ForumTopicReopened {}
-
-interface GeneralForumTopicHidden {}
-
-interface GeneralForumTopicUnhidden {}
-
-interface UserShared {
-  request_id: number;
-  user_id: number;
-}
-
-interface ChatShared {
-  request_id: number;
-  chat_id: number;
-}
+export type CallbackQuery = z.infer<typeof callbackQuerySchema>;
+export type ChatJoinRequest = z.infer<typeof chatJoinRequestSchema>;
+export type Audio = z.infer<typeof audioSchema>;
+export type MessageEntityType = z.infer<typeof messageEntityTypeSchema>;
+export type MessageEntity = z.infer<typeof messageEntitySchema>;
+export type PhotoSize = z.infer<typeof photoSizeSchema>;
+export type Message = z.infer<typeof messageSchema>;
+export type Update = z.infer<typeof updateSchema>;
