@@ -101,6 +101,8 @@ export const videoSchema = fileBaseSchema.extend({
   height: z.number(),
   duration: z.number(),
   thumb: photoSizeSchema.optional(),
+  thumbnail: photoSizeSchema.optional(),
+  file_name: z.string().optional(),
   mime_type: z.string().optional(),
 });
 export type Video = z.infer<typeof videoSchema>;

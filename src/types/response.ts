@@ -21,6 +21,16 @@ export const createResponseSchema = <T extends z.ZodObject>(schema: T) => {
   return responseSchema as z.ZodType<{ ok: true; result: z.infer<T> } | ErrorResponse>;
 };
 
+export const createArrayResponseSchema = <T extends z.ZodObject>(schema: T) => {
+  const successResponse = z.strictObject({
+    ok: z.literal(true),
+    result: z.array(schema),
+  });
+
+  const responseSchema = z.discriminatedUnion('ok', [successResponse, errorResponseSchema]);
+  return responseSchema as z.ZodType<{ ok: true; result: z.infer<T>[] } | ErrorResponse>;
+};
+
 export interface TelegramSuccess<T> {
   ok: true;
   result: T;

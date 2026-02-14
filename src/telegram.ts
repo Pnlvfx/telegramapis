@@ -1,5 +1,5 @@
 import { messageSchema } from './types/webhook.ts';
-import { createResponseSchema, booleanResultSchema, webhookResponseSchema } from './types/response.ts';
+import { createResponseSchema, createArrayResponseSchema, booleanResultSchema, webhookResponseSchema } from './types/response.ts';
 import {
   sendMessageOptionsSchema,
   botCommandSchema,
@@ -11,9 +11,10 @@ import {
   type SendVideoOptions,
 } from './types/params.ts';
 import { type InputMedia, type InputMediaType, type SendMediaGroupOptions } from './types/media-group.ts';
-import { addMediaOptions, getMedia } from './lib/media.ts';
+import { addMediaOptions, getMedia, getMimeType } from './lib/media.ts';
 import { baseHeaders } from './lib/config.ts';
 import fs from 'node:fs/promises';
+import path from 'node:path';
 import { getEntries } from '@goatjs/core/object';
 import * as z from 'zod';
 import { fetchError } from '@goatjs/core/errors/fetch';
@@ -32,21 +33,23 @@ interface RequestOptions {
 export const createTelegramClient = (token: string, { debug }: TelegramOptions = {}) => {
   const baseUrl = `https://api.telegram.org/bot${token}`;
 
-  const request = async <T extends z.ZodType>(endpoint: `/${string}`, schema: T, { body, headers = baseHeaders }: RequestOptions = {}) => {
+  const request = async <T extends z.ZodType>(endpoint: `/${string}`, schema: T, { body, headers }: RequestOptions = {}) => {
     const url = `${baseUrl}${endpoint}`;
+    // Use baseHeaders only if headers is not explicitly provided
+    const requestHeaders = headers !== undefined ? headers : body instanceof FormData ? undefined : baseHeaders;
     if (debug) {
       // eslint-disable-next-line no-console
-      console.log('Sending request to', url, 'headers:', headers, body);
+      console.log('Sending request to', url, 'headers:', requestHeaders, body);
     }
-    const res = await fetch(url, { headers: headers, method: 'POST', body });
+    const res = await fetch(url, { headers: requestHeaders, method: 'POST', body });
     if (!res.ok) throw fetchError(res.statusText, { status: res.status });
     const response = await schema.parseAsync(await res.json());
     return response;
   };
 
-  const sendMedia = async (endpoint: MediaEndpoint, headers?: Headers, form?: FormData, query?: URLSearchParams) => {
+  const sendMedia = async (endpoint: MediaEndpoint, headers?: Headers, form?: FormData, query?: URLSearchParams, schema?: z.ZodType) => {
     if (!form && !query) throw new Error('One between query and form has to be provided.');
-    const responseSchema = createResponseSchema(messageSchema);
+    const responseSchema = schema || createResponseSchema(messageSchema);
     return request(query ? `/${endpoint}?${query.toString()}` : `/${endpoint}`, responseSchema, { body: form, headers });
   };
 
@@ -82,14 +85,23 @@ export const createTelegramClient = (token: string, { debug }: TelegramOptions =
         const payload = { ...input };
         if (input.media instanceof Blob || !input.media.startsWith('http')) {
           const attachName = `attach://${i.toString()}`;
-          form.append(i.toString(), input.media instanceof Blob ? input.media : new Blob([new Uint8Array(await fs.readFile(input.media))]));
+          if (input.media instanceof Blob) {
+            form.append(i.toString(), input.media);
+          } else {
+            const fileBuffer = await fs.readFile(input.media);
+            const filename = path.basename(input.media);
+            const mimeType = getMimeType(filename);
+            const blob = new Blob([new Uint8Array(fileBuffer)], { type: mimeType });
+            form.append(i.toString(), blob, filename);
+          }
           payload.media = attachName;
         }
         inputMedia.push(payload);
       }
       form.append('media', JSON.stringify(inputMedia));
       addMediaOptions(form, options);
-      return sendMedia('sendMediaGroup', undefined, form);
+      const arrayResponseSchema = createArrayResponseSchema(messageSchema);
+      return sendMedia('sendMediaGroup', undefined, form, undefined, arrayResponseSchema);
     },
     setWebHook: async (url: string) => {
       const query = new URLSearchParams({ url });
