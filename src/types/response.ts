@@ -1,14 +1,16 @@
 import * as z from 'zod';
 
-const parametersSchema = z.strictObject({
+const errorParametersSchema = z.strictObject({
   retry_after: z.number().optional(),
 });
+
+export type TelegramErrorParameters = z.infer<typeof errorParametersSchema>;
 
 export const errorResponseSchema = z.strictObject({
   ok: z.literal(false),
   error_code: z.number(),
   description: z.string(),
-  parameters: parametersSchema,
+  parameters: errorParametersSchema,
 });
 
 export type ErrorResponse = z.infer<typeof errorResponseSchema>;
@@ -47,4 +49,5 @@ export const webhookResponseSchema = z.discriminatedUnion('ok', [
   z.strictObject({ ok: z.literal(true), result: z.boolean(), description: z.string() }),
   errorResponseSchema,
 ]);
+
 export type WebhookResponse = z.infer<typeof webhookResponseSchema>;

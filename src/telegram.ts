@@ -1,5 +1,7 @@
+/* eslint-disable unicorn/no-null */
 import { messageSchema } from './types/webhook.ts';
 import { createResponseSchema, createArrayResponseSchema, booleanResultSchema, webhookResponseSchema } from './types/response.ts';
+import { TelegramError } from './errors/telegram-error.ts';
 import {
   sendMessageOptionsSchema,
   editMessageTextOptionsSchema,
@@ -44,8 +46,17 @@ export const createTelegramClient = (token: string, { debug, skipValidation = tr
       console.log('Sending request to', url, 'headers:', requestHeaders, body);
     }
     const res = await fetch(url, { headers: requestHeaders, method: 'POST', body });
-    if (!res.ok) throw fetchError(res.statusText, { status: res.status });
     const json = (await res.json()) as z.infer<T>;
+
+    // Check Telegram API response status
+    if (typeof json === 'object' && json != null && 'ok' in json && json.ok === false) {
+      const errorResponse = json as unknown as { ok: false; error_code: number; description: string; parameters?: { retry_after?: number } };
+      throw new TelegramError(errorResponse.error_code, errorResponse.description, errorResponse.parameters);
+    }
+
+    // If HTTP status is not ok and it's not a Telegram error format, throw fetch error
+    if (!res.ok) throw fetchError(res.statusText, { status: res.status });
+
     if (skipValidation) return json;
     const response = await schema.parseAsync(json);
     return response;
@@ -154,3 +165,5 @@ export const createTelegramClient = (token: string, { debug, skipValidation = tr
     },
   };
 };
+
+export { isTelegramError, TelegramError } from './errors/telegram-error.ts';

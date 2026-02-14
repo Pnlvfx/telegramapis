@@ -1,7 +1,8 @@
 /* eslint-disable no-restricted-properties */
 import { describe, it } from 'node:test';
-import { createTelegramClient } from '../src/telegram.ts';
+import { createTelegramClient, isTelegramError } from '../src/telegram.ts';
 import path from 'node:path';
+import assert from 'node:assert';
 
 if (!process.env.TELEGRAM_TOKEN || !process.env.TELEGRAM_GROUP_LOG) throw new Error('No env found.');
 
@@ -45,5 +46,36 @@ await describe('sendMediaGroup', async () => {
       { type: 'photo', media: localImage, caption: 'Testing send media group, local photo...' },
       { type: 'video', media: localVideo, caption: 'Testing send media group, local video...' },
     ]);
+  });
+});
+
+await describe('Error handling', async () => {
+  await it('Should throw TelegramError for invalid chat_id', async () => {
+    try {
+      await telegram.sendMessage('invalid_chat_id', 'Test message');
+      assert.fail('Should have thrown an error');
+    } catch (err) {
+      assert.ok(isTelegramError(err), 'Error should be a TelegramError');
+      if (isTelegramError(err)) {
+        // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
+        assert.ok(err.error_code, 'Should have error_code');
+        assert.ok(err.description, 'Should have description');
+        assert.strictEqual(err.name, 'TelegramError');
+      }
+    }
+  });
+
+  await it('Should throw TelegramError for invalid token', async () => {
+    const invalidTelegram = createTelegramClient('invalid_token');
+    try {
+      await invalidTelegram.sendMessage(process.env.TELEGRAM_GROUP_LOG, 'Test message');
+      assert.fail('Should have thrown an error');
+    } catch (err) {
+      assert.ok(isTelegramError(err), 'Error should be a TelegramError');
+      if (isTelegramError(err)) {
+        assert.ok(err.error_code === 401 || err.error_code === 404, 'Should have 401 or 404 error code');
+        assert.ok(err.description, 'Should have error description');
+      }
+    }
   });
 });
