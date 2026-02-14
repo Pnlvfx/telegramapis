@@ -3,7 +3,7 @@ import { prettier } from '@goatjs/node/prettier';
 import path from 'node:path';
 
 const unused = await findUnusedExports({
-  ignoreFiles: ['telegram.ts', 'eslint.config.js', 'jest.config.ts'],
+  ignoreFiles: ['telegram.ts', 'eslint.config.js'],
   ignoreFolders: [path.join('src', 'types')],
 });
 

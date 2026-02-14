@@ -32,7 +32,7 @@
   "scripts": {
     "tsc": "tsc --noEmit",
     "unused": "node tools/unused.ts",
-    "test": "rimraf coverage && jest --coverage",
+    "test": "node --env-file .env --test --experimental-strip-types __tests__/**/*.test.ts",
     "lint": "eslint",
     "dev": "node --env-file .env --watch tools/cli.ts",
     "build": "rimraf dist && eslint && tsc -p tsconfig.build.json",
@@ -55,13 +55,9 @@
     "@goatjs/ts-unused-exports": "^1.68.0",
     "@goatjs/typescript-config": "^1.68.0",
     "@types/node": "^25.2.3",
-    "dotenv": "^17.3.1",
     "eslint": "^9.39.2",
     "husky": "^9.1.7",
-    "jest": "^30.2.0",
     "prettier": "^3.8.1",
-    "ts-jest": "^29.4.6",
-    "ts-node": "^10.9.2",
     "typescript": "^5.9.3",
     "zod": "^4.3.6"
   },

@@ -27,8 +27,8 @@ const run = async () => {
       await telegram.sendMediaGroup(process.env.TELEGRAM_GROUP_LOG, [
         { type: 'photo', media: photoUrl, caption: 'Testing send media group, photo url...' },
         { type: 'video', media: videoUrl, caption: 'Testing send media group, video url...' },
-        // { type: 'photo', media: localImage, caption: 'Testing send media group, local photo...' },
-        // { type: 'video', media: localVideo, caption: 'Testing send media group, local video...' },
+        { type: 'photo', media: localImage, caption: 'Testing send media group, local photo...' },
+        { type: 'video', media: localVideo, caption: 'Testing send media group, local video...' },
       ]);
       break;
     }
