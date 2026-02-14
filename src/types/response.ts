@@ -1,6 +1,8 @@
 import * as z from 'zod';
 
-const parametersSchema = z.strictObject({});
+const parametersSchema = z.strictObject({
+  retry_after: z.number().optional(),
+});
 
 export const errorResponseSchema = z.strictObject({
   ok: z.literal(false),
