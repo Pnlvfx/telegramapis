@@ -28,7 +28,7 @@ The Telegram APIs package was developed to address the shortcomings of the origi
 ## 🚀 Usage
 
 ```js
-import telegramapis from 'telegramapis';
+import telegramapis, { TelegramError, isTelegramError } from 'telegramapis';
 
 // replace the value below with the Telegram token you receive from @BotFather
 const token = 'YOUR_TELEGRAM_BOT_TOKEN';
@@ -40,6 +40,43 @@ const resp = "Hello, you're great";
 // send back the matched "whatever" to the chat
 await bot.sendMessage(chatId, resp);
 ```
+
+## ⚠️ Error Handling
+
+The package provides a `TelegramError` class for handling Telegram API errors:
+
+```js
+import telegramapis, { TelegramError, isTelegramError } from 'telegramapis';
+
+const bot = telegramapis('YOUR_TELEGRAM_BOT_TOKEN');
+
+try {
+  await bot.sendMessage(chatId, 'Hello');
+} catch (error) {
+  if (isTelegramError(error)) {
+    console.log('Telegram API Error:', error.error_code, error.description);
+    // Error codes: https://core.telegram.org/bots/api#making-requests
+  } else {
+    console.log('Network or other error:', error);
+  }
+}
+```
+
+### TelegramError Properties
+
+| Property      | Type      | Description                               |
+| ------------- | --------- | ----------------------------------------- |
+| `error_code`  | `number`  | Error code returned by Telegram           |
+| `description` | `string`  | Human-readable error description          |
+| `parameters`  | `object?` | Optional parameters (e.g., `retry_after`) |
+
+### Common Error Codes
+
+- `400` - Bad Request (invalid parameters)
+- `401` - Unauthorized (invalid token)
+- `403` - Forbidden (bot blocked by user)
+- `404` - Not Found
+- `429` - Too Many Requests (retry after `parameters.retry_after` seconds)
 
 ## License
 
