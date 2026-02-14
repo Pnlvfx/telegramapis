@@ -2,6 +2,7 @@ import { messageSchema } from './types/webhook.ts';
 import { createResponseSchema, createArrayResponseSchema, booleanResultSchema, webhookResponseSchema } from './types/response.ts';
 import {
   sendMessageOptionsSchema,
+  editMessageTextOptionsSchema,
   botCommandSchema,
   type BotCommand,
   type ChatId,
@@ -9,6 +10,7 @@ import {
   type SendMessageOptions,
   type SendPhotoOptions,
   type SendVideoOptions,
+  type EditMessageTextOptions,
 } from './types/params.ts';
 import { type InputMedia, type InputMediaType, type SendMediaGroupOptions } from './types/media-group.ts';
 import { addMediaOptions, getMedia } from './lib/media.ts';
@@ -125,6 +127,30 @@ export const createTelegramClient = (token: string, { debug, skipValidation = tr
     deleteMessage: async (chatId: ChatId, message_id: string | number) => {
       const query = new URLSearchParams({ chat_id: chatId.toString(), message_id: message_id.toString() });
       return request(`/deleteMessage?${query.toString()}`, booleanResultSchema, { headers: baseHeaders });
+    },
+    editMessageText: async (chatId: ChatId, messageId: number, text: string, options: EditMessageTextOptions = {}) => {
+      const validatedOptions = await editMessageTextOptionsSchema.parseAsync(options);
+      const query = new URLSearchParams({
+        chat_id: chatId.toString(),
+        message_id: messageId.toString(),
+        text,
+      });
+      if (validatedOptions.message_thread_id !== undefined) {
+        query.append('message_thread_id', validatedOptions.message_thread_id.toString());
+      }
+      if (validatedOptions.parse_mode !== undefined) {
+        query.append('parse_mode', validatedOptions.parse_mode);
+      }
+      if (validatedOptions.entities !== undefined) {
+        query.append('entities', JSON.stringify(validatedOptions.entities));
+      }
+      if (validatedOptions.disable_web_page_preview !== undefined) {
+        query.append('disable_web_page_preview', validatedOptions.disable_web_page_preview.toString());
+      }
+      if (validatedOptions.reply_markup !== undefined) {
+        query.append('reply_markup', JSON.stringify(validatedOptions.reply_markup));
+      }
+      return request(`/editMessageText?${query.toString()}`, createResponseSchema(messageSchema));
     },
   };
 };

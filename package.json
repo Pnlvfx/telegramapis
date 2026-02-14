@@ -32,7 +32,8 @@
   "scripts": {
     "tsc": "tsc --noEmit",
     "unused": "node tools/unused.ts",
-    "test": "node --env-file .env --test --experimental-strip-types __tests__/**/*.test.ts",
+    "test": "node --env-file .env --test __tests__/**/*.test.ts",
+    "test:streaming": "node --env-file .env --test __tests__/**/streaming.test.ts",
     "lint": "eslint",
     "dev": "node --env-file .env --watch tools/cli.ts",
     "build": "rimraf dist && eslint && tsc -p tsconfig.build.json",

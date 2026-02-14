@@ -141,3 +141,12 @@ export type SendDocumentOptions = z.infer<typeof sendDocumentOptionsSchema>;
 
 export const botCommandSchema = z.strictObject({ command: z.string(), description: z.string() });
 export type BotCommand = z.infer<typeof botCommandSchema>;
+
+export const editMessageTextOptionsSchema = z.strictObject({
+  message_thread_id: z.number().optional(),
+  parse_mode: parseModeSchema.optional(),
+  entities: z.array(z.any()).optional(),
+  disable_web_page_preview: z.boolean().optional(),
+  reply_markup: z.any().optional(),
+});
+export type EditMessageTextOptions = z.infer<typeof editMessageTextOptionsSchema>;
