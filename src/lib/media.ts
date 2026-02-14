@@ -15,24 +15,6 @@ export const addMediaOptions = (collector: FormData | URLSearchParams, options: 
   }
 };
 
-export const getMimeType = (filename: string): string => {
-  const ext = path.extname(filename).toLowerCase();
-  const mimeTypes: Record<string, string> = {
-    '.jpg': 'image/jpeg',
-    '.jpeg': 'image/jpeg',
-    '.png': 'image/png',
-    '.gif': 'image/gif',
-    '.webp': 'image/webp',
-    '.mp4': 'video/mp4',
-    '.mov': 'video/quicktime',
-    '.avi': 'video/x-msvideo',
-    '.pdf': 'application/pdf',
-    '.doc': 'application/msword',
-    '.docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-  };
-  return mimeTypes[ext] || 'application/octet-stream';
-};
-
 export const getMedia = async (type: 'photo' | 'video' | 'document', input: InputMediaType, chatId: ChatId, options: MediaOptions = {}) => {
   let form;
   let query;
@@ -45,8 +27,7 @@ export const getMedia = async (type: 'photo' | 'video' | 'document', input: Inpu
     } else {
       const fileBuffer = await fs.readFile(input);
       const filename = path.basename(input);
-      const mimeType = getMimeType(filename);
-      const blob = new Blob([new Uint8Array(fileBuffer)], { type: mimeType });
+      const blob = new Blob([new Uint8Array(fileBuffer)]);
       form.append(type, blob, filename);
     }
 

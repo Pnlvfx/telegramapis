@@ -2,16 +2,10 @@
 
 <div align="center">
 
-A lightweight Node.js package for interacting with the official [Telegram Bot API](https://core.telegram.org/bots/api), created to address deprecated packages, bugs, and enhance usability.
+A lightweight, type-safe Node.js package for interacting with the official [Telegram Bot API](https://core.telegram.org/bots/api), built with TypeScript and Zod validation.
 
-[![Bot API](https://img.shields.io/badge/Bot%20API-v.6.8-00aced.svg?style=flat-square&logo=telegram)](https://core.telegram.org/bots/api)
-[![npm package](https://img.shields.io/npm/v/telegramapis?logo=npm&style=flat-square)](https://www.npmjs.org/package/telegramapis)
-[![Build Status](https://img.shields.io/travis/yourusername/telegramapis/master?style=flat-square&logo=travis)](https://travis-ci.org/yourusername/telegramapis)
-[![Coverage Status](https://img.shields.io/codecov/c/github/yourusername/telegramapis?style=flat-square&logo=codecov)](https://codecov.io/gh/yourusername/telegramapis)
-
-[![https://telegram.me/yourtelegramchannel](https://img.shields.io/badge/💬%20Telegram-Channel-blue.svg?style=flat-square)](https://telegram.me/yourtelegramchannel)
-[![https://t.me/yourtelegramgroup](https://img.shields.io/badge/💬%20Telegram-Group-blue.svg?style=flat-square)](https://t.me/yourtelegramgroup)
-[![https://telegram.me/YourName](https://img.shields.io/badge/💬%20Telegram-YourName-blue.svg?style=flat-square)](https://telegram.me/YourName)
+[![Bot API](https://img.shields.io/badge/Bot%20API-v.7.0-00aced.svg?style=flat-square&logo=telegram)](https://core.telegram.org/bots/api)
+[![npm package](https://img.shields.io/npm/v/@goatjs/telegram?logo=npm&style=flat-square)](https://www.npmjs.org/package/@goatjs/telegram)
 
 </div>
 
@@ -44,7 +38,7 @@ const chatId = 092; // The chat id
 const resp = "Hello, you're great";
 
 // send back the matched "whatever" to the chat
-bot.sendMessage(chatId, resp);
+await bot.sendMessage(chatId, resp);
 ```
 
 ## License

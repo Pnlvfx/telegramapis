@@ -11,7 +11,7 @@ import {
   type SendVideoOptions,
 } from './types/params.ts';
 import { type InputMedia, type InputMediaType, type SendMediaGroupOptions } from './types/media-group.ts';
-import { addMediaOptions, getMedia, getMimeType } from './lib/media.ts';
+import { addMediaOptions, getMedia } from './lib/media.ts';
 import { baseHeaders } from './lib/config.ts';
 import fs from 'node:fs/promises';
 import path from 'node:path';
@@ -23,6 +23,7 @@ type MediaEndpoint = 'sendPhoto' | 'sendVideo' | 'sendMediaGroup' | 'sendDocumen
 
 export interface TelegramOptions {
   debug?: boolean;
+  skipValidation?: boolean;
 }
 
 interface RequestOptions {
@@ -30,26 +31,27 @@ interface RequestOptions {
   headers?: Headers;
 }
 
-export const createTelegramClient = (token: string, { debug }: TelegramOptions = {}) => {
+export const createTelegramClient = (token: string, { debug, skipValidation = true }: TelegramOptions = {}) => {
   const baseUrl = `https://api.telegram.org/bot${token}`;
 
-  const request = async <T extends z.ZodType>(endpoint: `/${string}`, schema: T, { body, headers }: RequestOptions = {}) => {
+  const request = async <T extends z.ZodType>(endpoint: `/${string}`, schema: T, { body, headers }: RequestOptions = {}): Promise<z.infer<T>> => {
     const url = `${baseUrl}${endpoint}`;
-    // Use baseHeaders only if headers is not explicitly provided
-    const requestHeaders = headers !== undefined ? headers : body instanceof FormData ? undefined : baseHeaders;
+    const requestHeaders = headers ?? (body instanceof FormData ? undefined : baseHeaders);
     if (debug) {
       // eslint-disable-next-line no-console
       console.log('Sending request to', url, 'headers:', requestHeaders, body);
     }
     const res = await fetch(url, { headers: requestHeaders, method: 'POST', body });
     if (!res.ok) throw fetchError(res.statusText, { status: res.status });
-    const response = await schema.parseAsync(await res.json());
+    const json = (await res.json()) as z.infer<T>;
+    if (skipValidation) return json;
+    const response = await schema.parseAsync(json);
     return response;
   };
 
   const sendMedia = async (endpoint: MediaEndpoint, headers?: Headers, form?: FormData, query?: URLSearchParams, schema?: z.ZodType) => {
     if (!form && !query) throw new Error('One between query and form has to be provided.');
-    const responseSchema = schema || createResponseSchema(messageSchema);
+    const responseSchema = schema ?? createResponseSchema(messageSchema);
     return request(query ? `/${endpoint}?${query.toString()}` : `/${endpoint}`, responseSchema, { body: form, headers });
   };
 
@@ -90,8 +92,7 @@ export const createTelegramClient = (token: string, { debug }: TelegramOptions =
           } else {
             const fileBuffer = await fs.readFile(input.media);
             const filename = path.basename(input.media);
-            const mimeType = getMimeType(filename);
-            const blob = new Blob([new Uint8Array(fileBuffer)], { type: mimeType });
+            const blob = new Blob([new Uint8Array(fileBuffer)]);
             form.append(i.toString(), blob, filename);
           }
           payload.media = attachName;
