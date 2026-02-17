@@ -78,7 +78,7 @@ export type MaskPosition = z.infer<typeof maskPositionSchema>;
 export const stickerTypeSchema = z.literal(['regular', 'mask', 'custom_emoji']);
 export type StickerType = z.infer<typeof stickerTypeSchema>;
 
-const fileSchema = fileBaseSchema.extend({ file_path: z.string().optional() });
+export const fileSchema = fileBaseSchema.extend({ file_path: z.string().optional() });
 export type File = z.infer<typeof fileSchema>;
 
 export const stickerSchema = fileBaseSchema.extend({

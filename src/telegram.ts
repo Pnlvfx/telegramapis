@@ -1,5 +1,5 @@
 /* eslint-disable unicorn/no-null */
-import { messageSchema, updateSchema } from './types/webhook.ts';
+import { messageSchema, updateSchema, fileSchema } from './types/webhook.ts';
 import { createResponseSchema, createArrayResponseSchema, booleanResultSchema, webhookResponseSchema } from './types/response.ts';
 import { TelegramError } from './errors/telegram-error.ts';
 import {
@@ -182,6 +182,10 @@ export const createTelegramClient = (token: string, { debug, skipValidation = tr
       }
       const responseSchema = createArrayResponseSchema(updateSchema);
       return request(`/getUpdates?${query.toString()}`, responseSchema);
+    },
+    getFile: async (fileId: string) => {
+      const query = new URLSearchParams({ file_id: fileId });
+      return request(`/getFile?${query.toString()}`, createResponseSchema(fileSchema));
     },
   };
 };
