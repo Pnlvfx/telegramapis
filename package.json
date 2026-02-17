@@ -51,7 +51,7 @@
     "@goatjs/core": "^1.68.0",
     "@goatjs/dbz": "^1.68.0",
     "@goatjs/node": "^1.68.0",
-    "@goatjs/node-eslint": "^1.37.0",
+    "@goatjs/node-eslint": "^1.38.0",
     "@goatjs/rimraf": "^1.68.0",
     "@goatjs/ts-unused-exports": "^1.68.0",
     "@goatjs/typescript-config": "^1.68.0",

@@ -1,11 +1,12 @@
 /* eslint-disable unicorn/no-null */
-import { messageSchema } from './types/webhook.ts';
+import { messageSchema, updateSchema } from './types/webhook.ts';
 import { createResponseSchema, createArrayResponseSchema, booleanResultSchema, webhookResponseSchema } from './types/response.ts';
 import { TelegramError } from './errors/telegram-error.ts';
 import {
   sendMessageOptionsSchema,
   editMessageTextOptionsSchema,
   botCommandSchema,
+  getUpdatesOptionsSchema,
   type BotCommand,
   type ChatId,
   type SendDocumentOptions,
@@ -13,6 +14,7 @@ import {
   type SendPhotoOptions,
   type SendVideoOptions,
   type EditMessageTextOptions,
+  type GetUpdatesOptions,
 } from './types/params.ts';
 import { type InputMedia, type InputMediaType, type SendMediaGroupOptions } from './types/media-group.ts';
 import { addMediaOptions, getMedia } from './lib/media.ts';
@@ -162,6 +164,24 @@ export const createTelegramClient = (token: string, { debug, skipValidation = tr
         query.append('reply_markup', JSON.stringify(validatedOptions.reply_markup));
       }
       return request(`/editMessageText?${query.toString()}`, createResponseSchema(messageSchema));
+    },
+    getUpdates: async (options: GetUpdatesOptions = {}) => {
+      const validatedOptions = await getUpdatesOptionsSchema.parseAsync(options);
+      const query = new URLSearchParams();
+      if (validatedOptions.offset !== undefined) {
+        query.append('offset', validatedOptions.offset.toString());
+      }
+      if (validatedOptions.limit !== undefined) {
+        query.append('limit', validatedOptions.limit.toString());
+      }
+      if (validatedOptions.timeout !== undefined) {
+        query.append('timeout', validatedOptions.timeout.toString());
+      }
+      if (validatedOptions.allowed_updates !== undefined) {
+        query.append('allowed_updates', JSON.stringify(validatedOptions.allowed_updates));
+      }
+      const responseSchema = createArrayResponseSchema(updateSchema);
+      return request(`/getUpdates?${query.toString()}`, responseSchema);
     },
   };
 };

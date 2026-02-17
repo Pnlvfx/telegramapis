@@ -150,3 +150,11 @@ export const editMessageTextOptionsSchema = z.strictObject({
   reply_markup: z.any().optional(),
 });
 export type EditMessageTextOptions = z.infer<typeof editMessageTextOptionsSchema>;
+
+export const getUpdatesOptionsSchema = z.strictObject({
+  offset: z.number().optional(),
+  limit: z.number().min(1).max(100).optional(),
+  timeout: z.number().optional(),
+  allowed_updates: z.array(z.string()).optional(),
+});
+export type GetUpdatesOptions = z.infer<typeof getUpdatesOptionsSchema>;

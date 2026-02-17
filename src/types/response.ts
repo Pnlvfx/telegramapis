@@ -51,3 +51,10 @@ export const webhookResponseSchema = z.discriminatedUnion('ok', [
 ]);
 
 export type WebhookResponse = z.infer<typeof webhookResponseSchema>;
+
+// GetUpdates response schema
+export const getUpdatesResponseSchema = z.discriminatedUnion('ok', [
+  z.strictObject({ ok: z.literal(true), result: z.array(z.any()) }),
+  errorResponseSchema,
+]);
+export type GetUpdatesResponse = z.infer<typeof getUpdatesResponseSchema>;
