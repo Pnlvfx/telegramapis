@@ -187,6 +187,12 @@ export const createTelegramClient = (token: string, { debug, skipValidation = tr
       const query = new URLSearchParams({ file_id: fileId });
       return request(`/getFile?${query.toString()}`, createResponseSchema(fileSchema));
     },
+    getFileContent: async (filePath: string) => {
+      const url = `https://api.telegram.org/file/bot${token}/${filePath}`;
+      const res = await fetch(url);
+      if (!res.ok) throw fetchError(res.statusText, { status: res.status });
+      return res;
+    },
   };
 };
 

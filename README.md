@@ -78,6 +78,58 @@ try {
 - `404` - Not Found
 - `429` - Too Many Requests (retry after `parameters.retry_after` seconds)
 
+## 📁 File Operations
+
+### getFile
+
+Retrieves basic information about a file and prepares it for downloading. Returns a standard Telegram response where the file data is under the `.result` property.
+
+```js
+import telegramapis from 'telegramapis';
+
+const bot = telegramapis('YOUR_TELEGRAM_BOT_TOKEN');
+
+const file = await bot.getFile('YOUR_FILE_ID');
+const filePath = file.result.file_path;
+console.log('File path:', filePath);
+```
+
+### getFileContent
+
+Fetches the actual file content from Telegram's servers as a Blob.
+
+```js
+import telegramapis from 'telegramapis';
+
+const bot = telegramapis('YOUR_TELEGRAM_BOT_TOKEN');
+
+const fileContent = await bot.getFileContent('path/to/file.mp3');
+// fileContent is a Blob
+console.log('File size:', fileContent.size);
+```
+
+### Combined Example
+
+To download a file, first call `getFile` to get the path, then use `getFileContent` to fetch the actual data:
+
+```js
+import telegramapis from 'telegramapis';
+
+const bot = telegramapis('YOUR_TELEGRAM_BOT_TOKEN');
+
+const fileId = 'YOUR_FILE_ID';
+
+const file = await bot.getFile(fileId);
+const filePath = file.result.file_path;
+
+const fileContent = await bot.getFileContent(filePath);
+
+// Save the file
+const buffer = await fileContent.arrayBuffer();
+const fs = require('fs');
+fs.writeFileSync('downloaded_file', Buffer.from(buffer));
+```
+
 ## License
 
 **The MIT License (MIT)**
