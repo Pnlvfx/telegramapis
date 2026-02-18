@@ -101,26 +101,26 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@goatjs/core@npm:1.68.0, @goatjs/core@npm:^1.68.0":
-  version: 1.68.0
-  resolution: "@goatjs/core@npm:1.68.0::__archiveUrl=https%3A%2F%2Feurope-west8-npm.pkg.dev%2Fopen-gto-2%2Fgoat%2F%40goatjs%2Fcore%2F-%2F%40goatjs%2Fcore-1.68.0.tgz"
-  checksum: 10c0/ef2be08755fae60793471d8f5e96bb40f0c7c24f23e1150ce8c3a87f903f9313331d013601137ccf006044af0526ed3a5fb54e08be88d090d98258394118effd
+"@goatjs/core@npm:1.70.0, @goatjs/core@npm:^1.70.0":
+  version: 1.70.0
+  resolution: "@goatjs/core@npm:1.70.0::__archiveUrl=https%3A%2F%2Feurope-west8-npm.pkg.dev%2Fopen-gto-2%2Fgoat%2F%40goatjs%2Fcore%2F-%2F%40goatjs%2Fcore-1.70.0.tgz"
+  checksum: 10c0/a941b5e10abefa86f1eb3af87e245ee30110f85f73f6aaa6c6f449c2668a16124303c001fc785cc33237cb021bfd2b630785541086e1b306a6a813e2d8a507a9
   languageName: node
   linkType: hard
 
-"@goatjs/dbz@npm:^1.68.0":
-  version: 1.68.0
-  resolution: "@goatjs/dbz@npm:1.68.0::__archiveUrl=https%3A%2F%2Feurope-west8-npm.pkg.dev%2Fopen-gto-2%2Fgoat%2F%40goatjs%2Fdbz%2F-%2F%40goatjs%2Fdbz-1.68.0.tgz"
+"@goatjs/dbz@npm:^1.70.0":
+  version: 1.70.0
+  resolution: "@goatjs/dbz@npm:1.70.0::__archiveUrl=https%3A%2F%2Feurope-west8-npm.pkg.dev%2Fopen-gto-2%2Fgoat%2F%40goatjs%2Fdbz%2F-%2F%40goatjs%2Fdbz-1.70.0.tgz"
   dependencies:
-    "@goatjs/node": "npm:1.68.0"
-    "@goatjs/rimraf": "npm:1.68.0"
+    "@goatjs/node": "npm:1.70.0"
+    "@goatjs/rimraf": "npm:1.70.0"
     "@types/cross-spawn": "npm:^6.0.6"
     cross-spawn: "npm:^7.0.6"
     execa: "npm:^9.6.1"
     yargs: "npm:^18.0.0"
   bin:
     dbz: dist/cli.js
-  checksum: 10c0/b22a8b9eb3aedcbca0ed9407b13f398a906eba7f866f08739f1c1df83514daa994bbe1da24e7c1e194ed841f0b1bf102bf6b7aa1dee63321a0172acee8132bbd
+  checksum: 10c0/e4c3c6f29492fd6690c3e4677c13d0f4926a64908ce94b807d811c1e08d4669df2fce61a5176785350ea789806178b2b1a95d3ecbf8001a4c3f1e6cc24bea11b
   languageName: node
   linkType: hard
 
@@ -134,27 +134,27 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@goatjs/node@npm:1.68.0, @goatjs/node@npm:^1.68.0":
-  version: 1.68.0
-  resolution: "@goatjs/node@npm:1.68.0::__archiveUrl=https%3A%2F%2Feurope-west8-npm.pkg.dev%2Fopen-gto-2%2Fgoat%2F%40goatjs%2Fnode%2F-%2F%40goatjs%2Fnode-1.68.0.tgz"
+"@goatjs/node@npm:1.70.0, @goatjs/node@npm:^1.70.0":
+  version: 1.70.0
+  resolution: "@goatjs/node@npm:1.70.0::__archiveUrl=https%3A%2F%2Feurope-west8-npm.pkg.dev%2Fopen-gto-2%2Fgoat%2F%40goatjs%2Fnode%2F-%2F%40goatjs%2Fnode-1.70.0.tgz"
   dependencies:
-    "@goatjs/core": "npm:1.68.0"
+    "@goatjs/core": "npm:1.70.0"
     sanitize-filename: "npm:1.6.3"
   peerDependencies:
     prettier: "*"
   peerDependenciesMeta:
     prettier:
       optional: true
-  checksum: 10c0/ca0e8ada26bed334ff06f92f508221a63e5d38cbbcf344082e595f997efd8115fa01f03fc5d9aff32ff0024f76c5dde102e24329a570a20d34cf105c3b58f8b8
+  checksum: 10c0/aa5b82091cc6ffb86f253e81bd9dfddfbf4847d24b94009d92a361fd742d4ee19a63e296df96650c52bd8de479558e2049b7c0d2d92501c7dc485924e081763b
   languageName: node
   linkType: hard
 
-"@goatjs/rimraf@npm:1.68.0, @goatjs/rimraf@npm:^1.68.0":
-  version: 1.68.0
-  resolution: "@goatjs/rimraf@npm:1.68.0::__archiveUrl=https%3A%2F%2Feurope-west8-npm.pkg.dev%2Fopen-gto-2%2Fgoat%2F%40goatjs%2Frimraf%2F-%2F%40goatjs%2Frimraf-1.68.0.tgz"
+"@goatjs/rimraf@npm:1.70.0, @goatjs/rimraf@npm:^1.70.0":
+  version: 1.70.0
+  resolution: "@goatjs/rimraf@npm:1.70.0::__archiveUrl=https%3A%2F%2Feurope-west8-npm.pkg.dev%2Fopen-gto-2%2Fgoat%2F%40goatjs%2Frimraf%2F-%2F%40goatjs%2Frimraf-1.70.0.tgz"
   bin:
     rimraf: dist/cli/rimraf.js
-  checksum: 10c0/b7d52648a04706da32e4ad63b679b956dbe4c5f5c5c7d2d71a4eb140b7fe6613fffaf166e507f033767e1de8abb4cd3e83b4f43b2bffedd743581e1dbd42d097
+  checksum: 10c0/3318b19cff30946c1e46b3fd12be2417e47c94964048e2bf5e9c54ee09e1f6f671755cb8c3b5fe80487abb6e17515c4fc8f5650fbb2f4524dba0e5f7329f4ab1
   languageName: node
   linkType: hard
 
@@ -162,13 +162,13 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@goatjs/telegram@workspace:."
   dependencies:
-    "@goatjs/core": "npm:^1.68.0"
-    "@goatjs/dbz": "npm:^1.68.0"
-    "@goatjs/node": "npm:^1.68.0"
+    "@goatjs/core": "npm:^1.70.0"
+    "@goatjs/dbz": "npm:^1.70.0"
+    "@goatjs/node": "npm:^1.70.0"
     "@goatjs/node-eslint": "npm:^1.38.0"
-    "@goatjs/rimraf": "npm:^1.68.0"
-    "@goatjs/ts-unused-exports": "npm:^1.68.0"
-    "@goatjs/typescript-config": "npm:^1.68.0"
+    "@goatjs/rimraf": "npm:^1.70.0"
+    "@goatjs/ts-unused-exports": "npm:^1.70.0"
+    "@goatjs/typescript-config": "npm:^1.70.0"
     "@types/node": "npm:^25.2.3"
     eslint: "npm:^10.0.0"
     husky: "npm:^9.1.7"
@@ -181,24 +181,24 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@goatjs/ts-unused-exports@npm:^1.68.0":
-  version: 1.68.0
-  resolution: "@goatjs/ts-unused-exports@npm:1.68.0::__archiveUrl=https%3A%2F%2Feurope-west8-npm.pkg.dev%2Fopen-gto-2%2Fgoat%2F%40goatjs%2Fts-unused-exports%2F-%2F%40goatjs%2Fts-unused-exports-1.68.0.tgz"
+"@goatjs/ts-unused-exports@npm:^1.70.0":
+  version: 1.70.0
+  resolution: "@goatjs/ts-unused-exports@npm:1.70.0::__archiveUrl=https%3A%2F%2Feurope-west8-npm.pkg.dev%2Fopen-gto-2%2Fgoat%2F%40goatjs%2Fts-unused-exports%2F-%2F%40goatjs%2Fts-unused-exports-1.70.0.tgz"
   dependencies:
-    "@goatjs/node": "npm:1.68.0"
+    "@goatjs/node": "npm:1.70.0"
     ts-unused-exports: "npm:^11.0.1"
   peerDependencies:
     typescript: "*"
-  checksum: 10c0/72950e2b805a4980932484006f48bad3822c1e7673e19145ed201eea2c36d734aa857646e291095d9dda500f587287d311655c86c6fa36fceebef0d5c13186f0
+  checksum: 10c0/8d1b5c47fadc774d33bbb9249211e17e7a451b9c6a06599baa74df75958715ac1b86b96b159f3621fab0274d64f3702efd61c51dae765f3ae73315d5158b2d6f
   languageName: node
   linkType: hard
 
-"@goatjs/typescript-config@npm:^1.68.0":
-  version: 1.68.0
-  resolution: "@goatjs/typescript-config@npm:1.68.0::__archiveUrl=https%3A%2F%2Feurope-west8-npm.pkg.dev%2Fopen-gto-2%2Fgoat%2F%40goatjs%2Ftypescript-config%2F-%2F%40goatjs%2Ftypescript-config-1.68.0.tgz"
+"@goatjs/typescript-config@npm:^1.70.0":
+  version: 1.70.0
+  resolution: "@goatjs/typescript-config@npm:1.70.0::__archiveUrl=https%3A%2F%2Feurope-west8-npm.pkg.dev%2Fopen-gto-2%2Fgoat%2F%40goatjs%2Ftypescript-config%2F-%2F%40goatjs%2Ftypescript-config-1.70.0.tgz"
   peerDependencies:
     typescript: "*"
-  checksum: 10c0/cfd3ecd2de72b445316337df2bb67bcc7b2926dc84d1fa0068721285fcdf2b233a78ac07a6203fa1cd90b5e9c6289371f9f45c8d5996dc6823ae49d13cfee8f2
+  checksum: 10c0/3878c6734141243fcf698717a957e2a8e1da5db4bc445e5736236ddcb70261ee3049b60a11f4d0da4b96defdf08c9594495603dd94cc9fd58b16cd541288fe21
   languageName: node
   linkType: hard
 

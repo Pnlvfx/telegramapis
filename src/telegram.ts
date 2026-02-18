@@ -193,6 +193,11 @@ export const createTelegramClient = (token: string, { debug, skipValidation = tr
       if (!res.ok) throw fetchError(res.statusText, { status: res.status });
       return res;
     },
+    answerCallbackQuery: async (callbackQueryId: string, text?: string) => {
+      const query = new URLSearchParams({ callback_query_id: callbackQueryId });
+      if (text !== undefined) query.append('text', text);
+      return request(`/answerCallbackQuery?${query.toString()}`, booleanResultSchema);
+    },
   };
 };
 
